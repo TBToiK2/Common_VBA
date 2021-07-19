@@ -1,16 +1,18 @@
 '----------------------------------------------------------------------------------------------------
-Public Function HasName(ByVal Parent As Names, ByVal NameName As String) As Boolean
+Public Function HasName(ByVal NameName As String, Optional ByVal Parent As Names) As Long
 On Error GoTo Err
 
+    If Parent Is Nothing Then Parent = ThisWorkbook.Names
+
     'Worksheet 判定
+    Dim Name As Name
     If TypeName(Parent.Parent) = "Worksheet" Then
         Dim ParentParent As Worksheet
         Set ParentParent = Parent.Parent
         '全名前 確認
-        Dim Name As Name
         For Each Name In Parent
             If Name.Name = ParentParent.Name & "!" & NameName Then
-                HasName = True
+                HasName = 2
                 Exit Function
             End If
         Next Name
@@ -18,7 +20,7 @@ On Error GoTo Err
         '全名前 確認
         For Each Name In Parent
             If Name.Name = NameName Then
-                HasName = True
+                HasName = -1
                 Exit Function
             End If
         Next Name
