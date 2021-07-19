@@ -1,0 +1,24 @@
+'----------------------------------------------------------------------------------------------------
+Public Function BackupFile(ByVal FileSpec As String) As Boolean
+On Error GoTo Err
+
+    Dim FSO As New FileSystemObject
+    Dim BaseName As String, ExtensionName As String
+
+    'ファイル名・拡張子 取得
+    BaseName = FSO.GetBaseName(FileSpec)
+    ExtensionName = FSO.GetExtensionName(FileSpec)
+
+    Call FileCopy(FileSpec, ThisWorkbook.Path & "\" & BaseName & "_" & CStr(Format(Now(), "yymmddhhmmss")) & "." & ExtensionName)
+
+    BackupFile = True
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg("ファイルのコピー(バックアップ)が失敗しました。" & vbCrLf & Err.Description, Err.Number)
+
+End Function
+'----------------------------------------------------------------------------------------------------

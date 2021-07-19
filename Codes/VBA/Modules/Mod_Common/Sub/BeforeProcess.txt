@@ -1,0 +1,28 @@
+'----------------------------------------------------------------------------------------------------
+Public Sub BeforeProcess(ByRef Calculation As XlCalculation, Optional ByRef ExcelApp As Application)
+
+    'オブジェクト有無 判定
+    If IsBlank(ExcelApp) Then
+        With Application
+            Calculation = .Calculation
+            .Calculation = xlCalculationManual
+            .ScreenUpdating = False
+            .DisplayAlerts = False
+            .EnableEvents = False
+        End With
+        DoEvents
+    Else
+        With ExcelApp
+            If .Workbooks.Count > 0 Then
+                Calculation = .Calculation
+                .Calculation = xlCalculationManual
+            End If
+            .ScreenUpdating = False
+            .DisplayAlerts = False
+            .EnableEvents = False
+        End With
+        DoEvents
+    End If
+
+End Sub
+'----------------------------------------------------------------------------------------------------

@@ -1,0 +1,26 @@
+'----------------------------------------------------------------------------------------------------
+Private Sub UserForm_Activate()
+
+    '閉じるボタン 消去
+    #If VBA7 Then
+        Dim hWnd As LongPtr
+        Dim Wnd_STYLE As LongPtr
+    #Else
+        Dim hWnd As Long
+        Dim Wnd_STYLE As Long
+    #End If
+
+    hWnd = GetActiveWindow()
+    Wnd_STYLE = GetWindowLong(hWnd, GWL_STYLE)
+    Wnd_STYLE = Wnd_STYLE And (Not WS_SYSMENU)
+
+    #If VBA7 Then
+        Call SetWindowLongPtr(hWnd, GWL_STYLE, Wnd_STYLE)
+    #Else
+        Call SetWindowLong(hWnd, GWL_STYLE, Wnd_STYLE)
+    #End If
+
+    DrawMenuBar hWnd
+
+End Sub
+'----------------------------------------------------------------------------------------------------

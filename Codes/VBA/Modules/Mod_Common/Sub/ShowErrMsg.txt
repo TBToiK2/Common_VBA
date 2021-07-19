@@ -1,0 +1,16 @@
+'----------------------------------------------------------------------------------------------------
+Public Sub ShowErrMsg(ByVal Description As String, Optional ByVal Number As Long)
+On Error Resume Next
+
+    'メッセージプロンプト 設定
+    Dim Prompt As String
+    Prompt = "エラー内容:[" & vbCrLf & Description & vbCrLf & "]"
+    If Number <> 0 Then Prompt = "エラー番号:[" & Number & "]" & vbCrLf & Prompt
+
+    'メッセージ 表示
+    Call MsgBox(Prompt, vbOKOnly + vbCritical, "エラー")
+
+    Err.Clear
+
+End Sub
+'----------------------------------------------------------------------------------------------------

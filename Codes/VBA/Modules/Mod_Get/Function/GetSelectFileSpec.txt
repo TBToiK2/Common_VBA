@@ -1,0 +1,28 @@
+'----------------------------------------------------------------------------------------------------
+Public Function GetSelectFileSpec() As String
+On Error GoTo Err
+
+    'ダイアログボックス 設定
+    With Application.FileDialog(msoFileDialogFilePicker)
+        .AllowMultiSelect = False
+        With .Filters
+            .Clear
+            Call .Add("Excel ファイル", "*.xls*", 1)
+        End With
+        .FilterIndex = 1
+        .Title = "Excel ファイル 選択"
+        .InitialFileName = CurDir()
+
+        'フォルダ選択状態 判定
+        If .Show = -1 Then GetSelectFileSpec = .SelectedItems(1)
+    End With
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number)
+
+End Function
+'----------------------------------------------------------------------------------------------------

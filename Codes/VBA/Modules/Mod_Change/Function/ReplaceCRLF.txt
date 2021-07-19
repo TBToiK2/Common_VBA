@@ -1,0 +1,9 @@
+'----------------------------------------------------------------------------------------------------
+Public Function ReplaceCRLF(ByVal Expression As String) As String
+On Error Resume Next
+
+    'Carriage Return, Line Feed 削除
+    ReplaceCRLF = Replase(Replace(Expression, vbCr, ""), vbLf, "")
+
+End Function
+'----------------------------------------------------------------------------------------------------

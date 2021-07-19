@@ -1,0 +1,39 @@
+'----------------------------------------------------------------------------------------------------
+Public Function HasWorksheet(ByVal Parent As Sheets, ByVal wsName As String, Optional ByVal CodeNameFLG As Boolean) As Boolean
+On Error GoTo Err
+
+    'コードネーム 判定
+    Dim sh As Object
+    If CodeNameFLG Then
+
+        '全シート 確認
+        For Each sh In Parent
+            If TypeName(sh) = "Worksheet" And sh.CodeName = wsName Then
+                HasWorksheet = True
+                Exit Function
+            End If
+        Next sh
+
+        Exit Function
+
+    Else
+
+        '全シート 確認
+        For Each sh In Parent
+            If TypeName(sh) = "Worksheet" And sh.Name = wsName Then
+                HasWorksheet = True
+                Exit Function
+            End If
+        Next sh
+
+        Exit Function
+
+    End If
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number)
+
+End Function
+'----------------------------------------------------------------------------------------------------

@@ -1,0 +1,96 @@
+Excel VBAについて
+・Valueプロパティ
+　→最大文字数 = 32767文字
+　　オーバー→不可
+
+・セル
+　→Valueプロパティに準ずる
+
+・Formulaプロパティ
+　→最大文字数 = 8221文字
+　　オーバー→エラー
+
+・関数
+　→最大文字数(全体) = 8192文字
+　　オーバー→エラー(無視した場合、Valueとして扱われる)
+　→最大文字数(文字列) = 255文字
+　　オーバー→エラー
+　→最大セル参照数 = 2048組
+　→連続半角スペース入力可能数→255文字
+　　オーバー→256文字目 = 0文字目としてリスタート
+　→全角スペース = 半角スペースに変換され、それに準ずる
+
+Parameter
+   0 vbOKOnly
+   1 vbOKCancel
+   2 vbAbortRetryIgnore
+   3 vbYesNoCancel
+   4 vbYesNo
+   5 vbRetryCancel
+  16 vbCritical
+  32 vbQuestion
+  48 vbExclamation
+  64 vbInfomation
+   0 vbDefaultButton1
+ 256 vbDefaultButton2
+ 512 vbDefaultButton3
+ 768 vbDefaultButton4
+   0 vbApplicationModal
+4098 vbSystemModal
+
+Retrun Value
+   1 vbOk
+   2 vbCancel
+   3 vbAbort
+   4 vbRetry
+   5 vbIgnore
+   6 vbYes
+   7 vbNo
+
+
+vbOKOnly(Information, Critical)
+→エラーを含む情報のみを伝える時に使用。
+
+vbOKCancel(Critical , Exclamation, Question)
+→処理を行うか否かを選択する時に使用。
+
+vbYesNo(Question)
+→条件付きで処理を行う時に使用。
+
+vbYesNoCancel(Question)
+→条件付きで処理を行うか否かを選択する時に使用。
+
+vbAbortRetryIgnore(Question)
+→条件にそぐわなくとも処理を続行できる時に使用。
+
+vbRetryCancel(Critical)
+→条件にそぐわないと処理を続行できない時に使用。
+
+
+vbCritical
+→警告。Xマーク
+
+vbQuestion
+→質問。クエスチョンマーク
+
+vbExclamation
+→注意。エクスクラメーションマーク
+
+vbInformation
+→情報。iマーク
+
+
+vbCritical(警告情報, 警告質問)
+vbQuestion(通常質問)
+vbExclamation(注意情報, 注意質問)
+vbInfomation(通常情報)
+
+意図的範疇内
+    通常質問()
+    通常情報(vbOKOnly)
+偶然的範疇内
+    注意質問()
+    注意情報(vbOKOnly)
+慮外的範疇内
+    警告質問()
+    警告情報(vbOKOnly)

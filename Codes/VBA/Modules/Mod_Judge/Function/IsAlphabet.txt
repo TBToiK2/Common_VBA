@@ -1,0 +1,24 @@
+'----------------------------------------------------------------------------------------------------
+Public Function IsAlphabet(ByVal Expression As Variant) As Boolean
+On Error GoTo Err
+
+    '空判定
+    If IsBlank(Expression) Then Exit Function
+
+    '全文字 確認
+    Dim LetterCount As Long
+    For LetterCount = 1 To Len(Expression)
+        If Mid(Expression, LetterCount, 1) Like "[!A-zＡ-ｚ]" Then Exit Function
+    Next LetterCount
+
+    IsAlphabet = True
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number)
+
+End Function
+'----------------------------------------------------------------------------------------------------

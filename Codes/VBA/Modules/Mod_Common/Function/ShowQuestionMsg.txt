@@ -1,0 +1,9 @@
+'----------------------------------------------------------------------------------------------------
+Public Function ShowQuestionMsg(ByVal Prompt As String) As Long
+On Error Resume Next
+
+    'メッセージ 表示
+    ShowInfoMsg = MsgBox(Prompt, vbOKCancel + vbQuestion, "確認")
+
+End Function
+'----------------------------------------------------------------------------------------------------

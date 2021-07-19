@@ -1,0 +1,16 @@
+'----------------------------------------------------------------------------------------------------
+Public Function CompareAttr(ByVal FilePath As String, ByVal Attr As VbFileAttribute) As Boolean
+On Error GoTo Err
+
+    'ファイル属性 比較(ビット演算)
+    CompareAttr = (GetAttr(FilePath) And Attr) > 0
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number)
+
+End Function
+'----------------------------------------------------------------------------------------------------

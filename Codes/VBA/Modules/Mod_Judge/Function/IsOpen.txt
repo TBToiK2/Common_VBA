@@ -1,0 +1,12 @@
+'----------------------------------------------------------------------------------------------------
+Public Function IsOpen(ByVal FileSpec As String) As Boolean
+On Error Resume Next
+
+    '開閉確認
+    Open FileSpec For Append As #FreeFile
+    Close #FreeFile - 1
+
+    IsOpen = Err.Number = 0
+
+End Function
+'----------------------------------------------------------------------------------------------------

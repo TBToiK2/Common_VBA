@@ -1,0 +1,17 @@
+'----------------------------------------------------------------------------------------------------
+Public Function FileExists(ByVal FilePath As String) As Boolean
+On Error GoTo Err
+
+    'ファイルの存在チェック
+    Dim FSO As New FileSystemObject
+    FileExists = FSO.FileExists(FilePath)
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number)
+
+End Function
+'----------------------------------------------------------------------------------------------------

@@ -1,0 +1,26 @@
+'----------------------------------------------------------------------------------------------------
+Public Function IsNumber(ByVal Expression As Variant) As Boolean
+On Error GoTo Err
+
+    '空判定
+    If IsBlank(Expression) Then Exit Function
+
+    If IsNumeric(Expression) Then
+        '全文字 確認
+        Dim NumberCount As Long
+        For NumberCount = 1 To Len(Expression)
+            If Mid(Expression, NumberCount, 1) Like "[!-.0-9]" Then Exit Function
+        Next NumberCount
+
+        IsNumber = True
+    End If
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number)
+
+End Function
+'----------------------------------------------------------------------------------------------------

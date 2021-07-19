@@ -1,0 +1,17 @@
+'----------------------------------------------------------------------------------------------------
+Public Function FolderExists(ByVal FolderPath As String) As Boolean
+On Error GoTo Err
+
+    'フォルダの存在チェック
+    Dim FSO As New FileSystemObject
+    FolderExists = FSO.FolderExists(FolderPath)
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number)
+
+End Function
+'----------------------------------------------------------------------------------------------------
