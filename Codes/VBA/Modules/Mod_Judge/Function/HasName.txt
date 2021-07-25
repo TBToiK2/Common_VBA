@@ -1,5 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-Public Function HasName(ByVal NameName As String, Optional ByVal Parent As Names) As Long
+2021/7/26 01:28:58
+'----------------------------------------------------------------------------------------------------
+Public Function HasName(ByVal NameName As String, Optional ByVal Parent As Names) As Boolean
 On Error GoTo Err
 
     '引数 規定値設定
