@@ -3,11 +3,11 @@
 '----------------------------------------------------------------------------------------------------
 Public Sub AfterProcess(ByVal Calculation As XlCalculation, Optional ByRef ExcelApp As Application)
 
-    '引数 規定値判定
+    '引数 既定値判定
     If IsBlank(ExcelApp) Then Set ExcelApp = Application
 
-    'オブジェクト有無 判定
-    With Excel.Application
+    '各プロセス 再開
+    With ExcelApp
         If .Workbooks.Count > 0 Then
             .Calculation = Calculation
         End If
