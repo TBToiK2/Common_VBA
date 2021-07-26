@@ -1,4 +1,6 @@
 '----------------------------------------------------------------------------------------------------
+2021/07/26 10:48:35
+'----------------------------------------------------------------------------------------------------
 Public Function ConvertTrueFalse(ByVal TrueFalse As String, ByRef ConvertedTrueFalse As Boolean) As Boolean
 On Error GoTo Err
 

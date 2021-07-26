@@ -1,4 +1,6 @@
 '----------------------------------------------------------------------------------------------------
+2021/07/26 10:48:35
+'----------------------------------------------------------------------------------------------------
 Public Function ConvertColumnReference(ByVal ToReferenceStyle As XlReferenceStyle, ByRef A1 As String, ByRef R1C1 As Long) As Boolean
 On Error GoTo Err
 
