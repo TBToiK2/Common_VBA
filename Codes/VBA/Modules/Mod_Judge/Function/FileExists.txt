@@ -1,16 +1,16 @@
 '----------------------------------------------------------------------------------------------------
-2021/7/26 01:28:58
+2021/07/27 02:11:24
 '----------------------------------------------------------------------------------------------------
-Public Function FileExists(ByVal FilePath As String) As Boolean
+Public Function FileExists(ByVal FileSpec As String) As Boolean
 On Error GoTo Err
 
-    'ƒtƒ@ƒCƒ‹‚Ì‘¶İƒ`ƒFƒbƒN
+    'ãƒ•ã‚¡ã‚¤ãƒ«ã®å­˜åœ¨ç¢ºèª
     Dim FSO As New FileSystemObject
-    FileExists = FSO.FileExists(FilePath)
+    FileExists = FSO.FileExists(FileSpec)
 
     Exit Function
 
-'ƒGƒ‰[ˆ—
+'ã‚¨ãƒ©ãƒ¼å‡¦ç†
 Err:
 
     Call ShowErrMsg(Err.Description, Err.Number)

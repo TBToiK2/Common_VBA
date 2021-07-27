@@ -1,15 +1,15 @@
 '----------------------------------------------------------------------------------------------------
-2021/7/26 01:28:58
+2021/07/27 02:11:24
 '----------------------------------------------------------------------------------------------------
-Public Function CompareAttr(ByVal FilePath As String, ByVal Attr As VbFileAttribute) As Boolean
+Public Function CompareAttr(ByVal FileSpec As String, ByVal Attr As VbFileAttribute) As Boolean
 On Error GoTo Err
 
-    'ƒtƒ@ƒCƒ‹‘®« ”äŠr(ƒrƒbƒg‰‰Z)
-    CompareAttr = (GetAttr(FilePath) And Attr) > 0
+    'ãƒ•ã‚¡ã‚¤ãƒ«å±æ€§ æ¯”è¼ƒ(ãƒ“ãƒƒãƒˆæ¼”ç®—)
+    CompareAttr = (GetAttr(FileSpec) And Attr) > 0
 
     Exit Function
 
-'ƒGƒ‰[ˆ—
+'ã‚¨ãƒ©ãƒ¼å‡¦ç†
 Err:
 
     Call ShowErrMsg(Err.Description, Err.Number)

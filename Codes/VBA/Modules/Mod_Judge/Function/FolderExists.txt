@@ -1,12 +1,12 @@
 '----------------------------------------------------------------------------------------------------
-2021/7/26 01:28:58
+2021/07/27 02:11:24
 '----------------------------------------------------------------------------------------------------
-Public Function FolderExists(ByVal FolderPath As String) As Boolean
+Public Function FolderExists(ByVal FolderSpec As String) As Boolean
 On Error GoTo Err
 
     'フォルダの存在チェック
     Dim FSO As New FileSystemObject
-    FolderExists = FSO.FolderExists(FolderPath)
+    FolderExists = FSO.FolderExists(FolderSpec)
 
     Exit Function
 
