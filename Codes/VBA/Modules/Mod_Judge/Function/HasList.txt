@@ -1,8 +1,11 @@
 '----------------------------------------------------------------------------------------------------
-2021/7/26 01:28:58
+2021/7/28 02:08:34
 '----------------------------------------------------------------------------------------------------
-Public Function HasList(ByVal Parent As ListObjects, ByVal ListName As String) As Boolean
+Public Function HasList(ByVal ListName As String, Optional ByVal Parent As ListObjects) As Boolean
 On Error GoTo Err
+
+    '引数 規定値設定
+    If Parent Is Nothing Then Parent = ActiveSheet.ListObjects
 
     '全リスト 確認
     Dim List As ListObject

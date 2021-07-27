@@ -1,8 +1,11 @@
 '----------------------------------------------------------------------------------------------------
-2021/7/26 01:28:58
+2021/7/28 02:08:47
 '----------------------------------------------------------------------------------------------------
-Public Function HasWorkbook(ByVal Parent As Workbooks, ByVal wbName As String) As Boolean
+Public Function HasWorkbook(ByVal wbName As String, Optional ByVal Parent As Workbooks) As Boolean
 On Error GoTo Err
+
+    '引数 規定値設定
+    If Parent Is Nothing Then Parent = ThisWorkbook
 
     '全ワークブック 確認
     Dim wb As Workbook

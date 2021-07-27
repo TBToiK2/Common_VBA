@@ -1,8 +1,11 @@
 '----------------------------------------------------------------------------------------------------
 2021/7/26 01:28:58
 '----------------------------------------------------------------------------------------------------
-Public Function HasWorksheet(ByVal Parent As Sheets, ByVal wsName As String, Optional ByVal CodeNameFLG As Boolean) As Boolean
+Public Function HasWorksheet(ByVal wsName As String, Optional ByVal Parent As Sheets, Optional ByVal CodeNameFLG As Boolean ) As Boolean
 On Error GoTo Err
+
+    '引数 規定値設定
+    If Parent Is Nothing Then Parent = ActiveSheet
 
     'コードネーム 判定
     Dim sh As Object
