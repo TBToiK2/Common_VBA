@@ -1,3 +1,18 @@
+変数の適用範囲(スコープ)について
+・全プロシージャ
+　→プロシージャレベル
+・Object Module
+　Public
+　→Private(モジュールレベル)
+　Private
+　→モジュールレベル
+
+・標準 Module
+　Public
+　→パブリックレベル
+　Private
+　→モジュールレベル
+
 Excel VBAについて
 ・Valueプロパティ
 　→最大文字数 = 32767文字
