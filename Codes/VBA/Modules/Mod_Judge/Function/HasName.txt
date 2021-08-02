@@ -1,11 +1,11 @@
 '----------------------------------------------------------------------------------------------------
-2021/7/26 01:28:58
+'2021/7/26 01:28:58
 '----------------------------------------------------------------------------------------------------
 Public Function HasName(ByVal NameName As String, Optional ByVal Parent As Names) As Boolean
 On Error GoTo Err
 
-    '引数 規定値設定
-    If Parent Is Nothing Then Parent = ThisWorkbook.Names
+    '引数 既定値判定
+    If IsBlank(Parent) Then Parent = ThisWorkbook.Names
 
     Dim Name As Name
     'Worksheet 判定

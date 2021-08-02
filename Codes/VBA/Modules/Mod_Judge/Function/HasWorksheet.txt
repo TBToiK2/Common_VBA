@@ -1,41 +1,35 @@
 '----------------------------------------------------------------------------------------------------
-2021/7/26 01:28:58
+'2021/7/26 01:28:58
 '----------------------------------------------------------------------------------------------------
 Public Function HasWorksheet(ByVal wsName As String, Optional ByVal Parent As Sheets, Optional ByVal CodeNameFLG As Boolean ) As Boolean
 On Error GoTo Err
 
-    'ˆø” ‹K’è’lİ’è
-    If Parent Is Nothing Then Parent = ActiveSheet
+    'å¼•æ•° æ—¢å®šå€¤åˆ¤å®š
+    If IsBlank(Parent) Then Parent = ActiveSheet
 
-    'ƒR[ƒhƒl[ƒ€ ”»’è
+    'ã‚³ãƒ¼ãƒ‰ãƒãƒ¼ãƒ  åˆ¤å®š
     Dim sh As Object
     If CodeNameFLG Then
-
-        '‘SƒV[ƒg Šm”F
+        'å…¨ã‚·ãƒ¼ãƒˆ ç¢ºèª
         For Each sh In Parent
             If TypeName(sh) = "Worksheet" And sh.CodeName = wsName Then
                 HasWorksheet = True
                 Exit Function
             End If
         Next sh
-
         Exit Function
-
     Else
-
-        '‘SƒV[ƒg Šm”F
+        'å…¨ã‚·ãƒ¼ãƒˆ ç¢ºèª
         For Each sh In Parent
             If TypeName(sh) = "Worksheet" And sh.Name = wsName Then
                 HasWorksheet = True
                 Exit Function
             End If
         Next sh
-
         Exit Function
-
     End If
 
-'ƒGƒ‰[ˆ—
+'ã‚¨ãƒ©ãƒ¼å‡¦ç†
 Err:
 
     Call ShowErrMsg(Err.Description, Err.Number)
