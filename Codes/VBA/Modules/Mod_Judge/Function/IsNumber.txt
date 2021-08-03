@@ -1,21 +1,26 @@
 '----------------------------------------------------------------------------------------------------
 '2021/7/26 01:28:58
 '----------------------------------------------------------------------------------------------------
+'参照設定:Microsoft VBScript Regular Explession 5.5
+'ProgID:VBScript.RegExp
+'Name:VBScript_RegExp_55
+'FullPath:C:\Windows\System32\vbscript.dll\3
+'Major.Minor:5.5
 Public Function IsNumber(ByVal Expression As Variant) As Boolean
 On Error GoTo Err
 
     '空判定
     If IsBlank(Expression) Then Exit Function
 
-    If IsNumeric(Expression) Then
-        '全文字 確認
-        Dim NumberCount As Long
-        For NumberCount = 1 To Len(Expression)
-            If Mid(Expression, NumberCount, 1) Like "[!-.0-9]" Then Exit Function
-        Next NumberCount
-
-        IsNumber = True
-    End If
+    '正規表現 判定
+    Dim Reg As New RegExp
+    With Reg
+        .Global = False
+        .IgnoreCase = False
+        .MultiLine = False
+        .Pattern = "^(?:(?!-0$)|-?\d+)(?:\.\d*?[1-9])?$"
+        IsNumber = .Test(Expression)
+    End With
 
     Exit Function
 
