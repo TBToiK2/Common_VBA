@@ -1,11 +1,11 @@
 '----------------------------------------------------------------------------------------------------
 '2021/07/27 02:11:24
 '----------------------------------------------------------------------------------------------------
-Public Function CompareAttr(ByVal FileSpec As String, ByVal Attr As VbFileAttribute) As Boolean
+Public Function HasAttr(ByVal FileSpec As String, ByVal Attr As VbFileAttribute) As Boolean
 On Error GoTo Err
 
     'ファイル属性 比較(ビット演算)
-    CompareAttr = (GetAttr(FileSpec) And Attr) > 0
+    HasAttr = (GetAttr(FileSpec) And Attr) = Attr
 
     Exit Function
 
