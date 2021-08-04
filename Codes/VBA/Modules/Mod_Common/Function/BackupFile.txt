@@ -16,7 +16,7 @@ On Error GoTo Err
     BaseName = FSO.GetBaseName(FileSpec)
     ExtensionName = FSO.GetExtensionName(FileSpec)
 
-    Call FileCopy(FileSpec, ThisWorkbook.Path & "\" & BaseName & "_" & CStr(Format(Now(), "yymmddhhmmss")) & "." & ExtensionName)
+    Call FileCopy(FileSpec, ThisWorkbook.Path & "\" & BaseName & "_" & CStr(Format(Now(), "yyyymmddhhmmss")) & "." & ExtensionName)
 
     BackupFile = True
 
