@@ -8,7 +8,7 @@ On Error GoTo Err
     If IsBlank(Expression) Then Exit Function
 
     '全文字 確認
-    Dim LetterCount As Long
+    Dim LetterCount As LongPtr
     For LetterCount = 1 To Len(Expression)
         If Mid(Expression, LetterCount, 1) Like "[!A-zＡ-ｚ]" Then Exit Function
     Next LetterCount
