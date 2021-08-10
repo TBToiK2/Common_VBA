@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2021/07/26 10:48:35
+'2021/08/11 12:49:57
 '----------------------------------------------------------------------------------------------------
-Public Function ConvColRef(ByVal ToReferenceStyle As XlReferenceStyle, ByRef A1 As String, ByRef R1C1 As LongPtr) As Boolean
+Public Function ConvAddrRef(ByVal ToReferenceStyle As XlReferenceStyle, ByRef A1 As String, ByRef R1C1 As LongPtr) As Boolean
 On Error GoTo Err
 
     If ToReferenceStyle = xlA1 Then
@@ -10,7 +10,7 @@ On Error GoTo Err
         R1C1 = Range(A1 & "1").Column
     End If
 
-    ConvColRef = True
+    ConvAddrRef = True
 
     Exit Function
 

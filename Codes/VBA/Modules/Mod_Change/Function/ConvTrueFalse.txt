@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2021/07/26 10:48:35
+'2021/08/11 12:49:57
 '----------------------------------------------------------------------------------------------------
-Public Function ConvertTrueFalse(ByVal TrueFalse As String, ByRef ConvertedTrueFalse As Boolean) As Boolean
+Public Function ConvTrueFalse(ByVal TrueFalse As String, ByRef ConvertedTrueFalse As Boolean) As Boolean
 On Error GoTo Err
 
     '真偽判定用配列 作成
@@ -15,7 +15,7 @@ On Error GoTo Err
     'True 判定
     For Each T In TrueArr
         If UCase(TrueFalse) = UCase(T) Then
-            ConvertTrueFalse = True
+            ConvTrueFalse = True
             ConvertedTrueFalse = True
             Exit Function
         End If
@@ -23,7 +23,7 @@ On Error GoTo Err
     'False 判定
     For Each F In FalseArr
         If UCase(TrueFalse) = UCase(F) Then
-            ConvertTrueFalse = True
+            ConvTrueFalse = True
             ConvertedTrueFalse = False
             Exit Function
         End If
