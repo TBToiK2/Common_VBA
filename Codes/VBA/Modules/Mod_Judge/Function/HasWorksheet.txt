@@ -5,7 +5,7 @@ Public Function HasWorksheet(ByVal wsName As String, Optional ByVal Parent As Sh
 On Error GoTo Err
 
     '引数 既定値判定
-    If IsBlank(Parent) Then Parent = ActiveSheet
+    If IsBlank(Parent) Then Set Parent = ActiveSheet
 
     'コードネーム 判定
     Dim sh As Object

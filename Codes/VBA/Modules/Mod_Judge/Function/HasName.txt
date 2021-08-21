@@ -5,7 +5,7 @@ Public Function HasName(ByVal NameName As String, Optional ByVal Parent As Names
 On Error GoTo Err
 
     '引数 既定値判定
-    If IsBlank(Parent) Then Parent = ThisWorkbook.Names
+    If IsBlank(Parent) Then Set Parent = ThisWorkbook.Names
 
     Dim Name As Name
     'Worksheet 判定
