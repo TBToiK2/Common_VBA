@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
 '2021/08/22 23:44:14
 '----------------------------------------------------------------------------------------------------
-Public Function HasWorksheet(ByVal wsName As String, Optional ByVal Parent As Sheets, Optional ByVal CodeNameFLG As Boolean ) As Boolean
+Public Function GetWorksheet(ByVal wsName As String, Optional ByVal Parent As Sheets, Optional ByVal CodeNameFLG As Boolean ) As Worksheet
 On Error GoTo Err
 
     '引数 既定値判定
@@ -13,7 +13,7 @@ On Error GoTo Err
         '全シート 確認
         For Each sh In Parent
             If TypeName(sh) = "Worksheet" And sh.CodeName = wsName Then
-                HasWorksheet = True
+                Set GetWorksheet = sh
                 Exit Function
             End If
         Next sh
@@ -22,7 +22,7 @@ On Error GoTo Err
         '全シート 確認
         For Each sh In Parent
             If TypeName(sh) = "Worksheet" And sh.Name = wsName Then
-                HasWorksheet = True
+                Set GetWorksheet = sh
                 Exit Function
             End If
         Next sh

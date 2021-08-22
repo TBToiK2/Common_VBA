@@ -5,7 +5,7 @@ Public Function HasWorkbook(ByVal wbName As String, Optional ByVal Parent As Wor
 On Error GoTo Err
 
     '引数 既定値判定
-    If IsBlank(Parent) Then Set Parent = ThisWorkbook
+    If IsBlank(Parent) Then Set Parent = Workbooks
 
     '全ワークブック 確認
     Dim wb As Workbook
