@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2021/7/26 01:28:58
+'2021/08/26 03:23:40
 '----------------------------------------------------------------------------------------------------
 Public Function IsBlank(ByVal Expression As Variant) As Boolean
 On Error GoTo Err
@@ -10,8 +10,15 @@ On Error GoTo Err
         If Not Expression Is Nothing Then Exit Function
     '配列判定
     ElseIf IsArray(Expression) Then
+
+On Error GoTo Err_Array
+
         '空判定
-        If WorksheetFunction.CountA(Expression) > 0 Then Exit Function
+        If UBound(Expression) > -1 Then Exit Function
+
+Err_Resume_Array:
+On Error GoTo Err
+
     Else
         '空判定
         If CStr(Expression) <> "" Then Exit Function
@@ -22,6 +29,10 @@ On Error GoTo Err
     Exit Function
 
 'エラー処理
+Err_Array:
+
+    Resume Err_Resume_Array
+
 Err:
 
     Call ShowErrMsg(Err.Description, Err.Number)
