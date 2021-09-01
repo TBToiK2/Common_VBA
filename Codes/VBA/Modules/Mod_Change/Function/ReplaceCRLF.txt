@@ -1,11 +1,11 @@
 '----------------------------------------------------------------------------------------------------
-'2021/07/26 10:48:35
+'2021/08/31 10:38:47
 '----------------------------------------------------------------------------------------------------
 Public Function ReplaceCRLF(ByVal Expression As String) As String
 On Error Resume Next
 
     'Carriage Return, Line Feed 削除
-    ReplaceCRLF = Replase(Replace(Expression, vbCr, ""), vbLf, "")
+    ReplaceCRLF = Replace(Replace(Expression, vbCr, ""), vbLf, "")
 
 End Function
 '----------------------------------------------------------------------------------------------------

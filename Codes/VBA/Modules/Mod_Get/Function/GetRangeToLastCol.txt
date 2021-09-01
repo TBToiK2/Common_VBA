@@ -1,0 +1,44 @@
+'----------------------------------------------------------------------------------------------------
+'2021/09/02 02:56:50
+'----------------------------------------------------------------------------------------------------
+Public Function GetRangeToLastCol(ByVal ws As Worksheet, ByVal TargetRow As LongPtr, ByVal FirstCol As LongPtr) As Range
+On Error GoTo Err
+
+    With ws
+        '使用範囲最終行 取得
+        With .UsedRange
+            Dim UsedLastCol As LongPtr
+            UsedLastCol = .Columns(1).Column - 1 + .Columns.Count
+        End With
+
+        '使用範囲配列 取得
+        Dim UsedRangeArr() As Variant
+        With .Range(.Cells(TargetRow, 1), .Cells(TargetRow, UsedLastCol))
+            '配列 判定
+            If IsArray(.Value) Then
+                UsedRangeArr = .Value
+            Else
+                Redim UsedRangeArr(1 To 1, 1 To 1)
+                UsedRangeArr(1, 1) = .Value
+            End If
+        End With
+
+        '最終行 取得
+        Dim LastCol As LongPtr
+        For LastCol = UBound(UsedRangeArr, 2) To 1 Step -1
+            If Not IsBlank(UsedRangeArr(1, CLng(LastCol))) Then
+                Set GetRangeToLastCol = .Range(.Cells(TargetRow, FirstCol), .Cells(TargetRow, LastCol))
+                Exit Function
+            End If
+        Next LastCol
+    End With
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number)
+
+End Function
+'----------------------------------------------------------------------------------------------------
