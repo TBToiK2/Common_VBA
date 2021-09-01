@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
 '2021/09/02 02:56:50
 '----------------------------------------------------------------------------------------------------
-Public Function GetRangeToLastCol(ByVal ws As Worksheet, ByVal TargetRow As LongPtr, ByVal FirstCol As LongPtr) As Range
+Public Function GetRangeToLastCol(ByVal ws As Worksheet, ByVal TargetRow As LongPtr, Optional ByVal FirstCol As LongPtr = 1) As Range
 On Error GoTo Err
 
     With ws
