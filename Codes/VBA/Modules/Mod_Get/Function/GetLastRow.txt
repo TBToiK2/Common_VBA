@@ -1,14 +1,15 @@
 '----------------------------------------------------------------------------------------------------
-'2021/08/14 23:54:59
+'2021/09/19 03:27:41
 '----------------------------------------------------------------------------------------------------
 Public Function GetLastRow(ByVal ws As Worksheet, ByVal TargetCol As LongPtr) As LongPtr
 On Error GoTo Err
 
     With ws
+
         '使用範囲最終行 取得
         With .UsedRange
             Dim UsedLastRow As LongPtr
-            UsedLastRow = .Rows(1).Row - 1 + .Rows.Count
+            UsedLastRow = .Rows(1).Row + (.Rows.Count - 1)
         End With
 
         '使用範囲配列 取得
@@ -31,6 +32,7 @@ On Error GoTo Err
                 Exit Function
             End If
         Next LastRow
+
     End With
 
     Exit Function

@@ -1,14 +1,15 @@
 '----------------------------------------------------------------------------------------------------
-'2021/08/14 23:54:59
+'2021/09/19 03:27:44
 '----------------------------------------------------------------------------------------------------
 Public Function GetLastCol(ByVal ws As Worksheet, ByVal TargetRow As LongPtr) As LongPtr
 On Error GoTo Err
 
     With ws
+
         '使用範囲最終行 取得
         With .UsedRange
             Dim UsedLastCol As LongPtr
-            UsedLastCol = .Columns(1).Column - 1 + .Columns.Count
+            UsedLastCol = .Columns(1).Column + (.Columns.Count - 1)
         End With
 
         '使用範囲配列 取得
@@ -31,6 +32,7 @@ On Error GoTo Err
                 Exit Function
             End If
         Next LastCol
+
     End With
 
     Exit Function

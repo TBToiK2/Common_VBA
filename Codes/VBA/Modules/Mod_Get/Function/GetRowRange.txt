@@ -1,14 +1,23 @@
 '----------------------------------------------------------------------------------------------------
-'2021/09/02 02:56:46
+'2021/09/19 03:26:39
 '----------------------------------------------------------------------------------------------------
-Public Function GetRangeToLastRow(ByVal ws As Worksheet, ByVal TargetCol As LongPtr, Optional ByVal FirstRow As LongPtr = 1) As Range
+Public Function GetRowRange(ByVal ws As Worksheet, ByVal TargetCol As LongPtr, Optional ByVal FirstRow As LongPtr, Optional ByVal LastRow As LongPtr) As Range
 On Error GoTo Err
 
     With ws
+
+        '行数値 判定
+        If FirstRow <= 0 Then FirstRow = 1
+        If LastRow <= 0 Then
+            LastRow = 1
+            Set GetColRange = .Range(.Cells(FirstRow, TargetCol), .Cells(LastRow, TargetCol))
+            Exit Function
+        End If
+
         '使用範囲最終行 取得
         With .UsedRange
             Dim UsedLastRow As LongPtr
-            UsedLastRow = .Rows(1).Row - 1 + .Rows.Count
+            UsedLastRow = .Rows(1).Row + (.Rows.Count - 1)
         End With
 
         '使用範囲配列 取得
@@ -18,7 +27,7 @@ On Error GoTo Err
             If IsArray(.Value) Then
                 UsedRangeArr = .Value
             Else
-                Redim UsedRangeArr(1 To 1, 1 To 1)
+                ReDim UsedRangeArr(1 To 1, 1 To 1)
                 UsedRangeArr(1, 1) = .Value
             End If
         End With
@@ -27,10 +36,11 @@ On Error GoTo Err
         Dim LastRow As LongPtr
         For LastRow = UBound(UsedRangeArr, 1) To 1 Step -1
             If Not IsBlank(UsedRangeArr(CLng(LastRow), 1)) Then
-                Set GetRangeToLastRow = .Range(.Cells(FirstRow, TargetCol), .Cells(LastRow, TargetCol))
+                Set GetColRange = .Range(.Cells(FirstRow, TargetCol), .Cells(LastRow, TargetCol))
                 Exit Function
             End If
         Next LastRow
+
     End With
 
     Exit Function
