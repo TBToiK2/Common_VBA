@@ -1,28 +1,27 @@
 '----------------------------------------------------------------------------------------------------
-'2021/09/19 03:26:45
+'2021/09/19 06:13:37
 '----------------------------------------------------------------------------------------------------
-Public Function GetColRange(ByVal ws As Worksheet, ByVal TargetRow As LongPtr, Optional ByVal FirstCol As LongPtr, Optional ByVal LastCol As LongPtr) As Range
+Public Function GetColRange(ByVal ws As Worksheet, ByVal TargetCol As LongPtr, Optional ByVal FirstRow As LongPtr, Optional ByVal LastRow As LongPtr) As Range
 On Error GoTo Err
 
     With ws
 
-        '列数値 判定
-        If FirstCol <= 0 Then FirstCol = 1
-        If LastCol <= 0 Then
-            LastCol = 1
-            Set GetColRange = .Range(.Cells(TargetRow, FirstCol), .Cells(TargetRow, LastCol))
+        '行数値 判定
+        If FirstRow <= 0 Then FirstRow = 1
+        If LastRow > 0 Then
+            Set GetColRange = .Range(.Cells(FirstRow, TargetCol), .Cells(LastRow, TargetCol))
             Exit Function
         End If
 
         '使用範囲最終行 取得
         With .UsedRange
-            Dim UsedLastCol As LongPtr
-            UsedLastCol = .Columns(1).Column + (.Columns.Count - 1)
+            Dim UsedLastRow As LongPtr
+            UsedLastRow = .Rows(1).Row + (.Rows.Count - 1)
         End With
 
         '使用範囲配列 取得
         Dim UsedRangeArr() As Variant
-        With .Range(.Cells(TargetRow, 1), .Cells(TargetRow, UsedLastCol))
+        With .Range(.Cells(1, TargetCol), .Cells(UsedLastRow, TargetCol))
             '配列 判定
             If IsArray(.Value) Then
                 UsedRangeArr = .Value
@@ -33,13 +32,13 @@ On Error GoTo Err
         End With
 
         '最終行 取得
-        Dim LastCol As LongPtr
-        For LastCol = UBound(UsedRangeArr, 2) To 1 Step -1
-            If Not IsBlank(UsedRangeArr(1, CLng(LastCol))) Then
-                Set GetColRange = .Range(.Cells(TargetRow, FirstCol), .Cells(TargetRow, LastCol))
+        Dim LastRow As LongPtr
+        For LastRow = UBound(UsedRangeArr, 1) To 1 Step -1
+            If Not IsBlank(UsedRangeArr(CLng(LastRow), 1)) Then
+                Set GetColRange = .Range(.Cells(FirstRow, TargetCol), .Cells(LastRow, TargetCol))
                 Exit Function
             End If
-        Next LastCol
+        Next LastRow
 
     End With
 
