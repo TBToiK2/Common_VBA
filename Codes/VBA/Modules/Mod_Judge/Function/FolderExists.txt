@@ -10,7 +10,7 @@
 Public Function FolderExists(ByVal FolderSpec As String) As Boolean
 On Error GoTo Err
 
-    'フォルダの存在チェック
+    'フォルダ 存在確認
     Dim FSO As New FileSystemObject
     FolderExists = FSO.FolderExists(FolderSpec)
 

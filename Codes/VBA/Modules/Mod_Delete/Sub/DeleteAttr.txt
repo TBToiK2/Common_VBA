@@ -7,30 +7,38 @@
 'Name:Scripting
 'FullPath:C:\Windows\System32\scrrun.dll
 'Major.Minor:1.0
-Public Function HasAttr(ByVal Spec As String, ByVal Attr As FileAttribute) As Boolean
+Public Sub DeleteAttr(ByVal Spec As String, ByVal Attr As FileAttribute)
 On Error GoTo Err
 
     Dim FSO As New FileSystemObject
 
+    Dim AfterAttr As FileAttribute
+
     '属性 比較(ビット演算)
     If GetAttr(Spec) And vbDirectory = vbDirectory Then
 
+        Dim AttrFolder As Folder
+        Set AttrFolder = GetFolder(Spec)
         'フォルダ属性 比較(ビット演算)
-        HasAttr = FSO.GetFolder(Spec).Attributes And Attr = Attr
+        AfterAttr = AttrFolder.Attributes Xor Attr
+        AttrFolder.Attributes = AfterAttr
 
     Else
 
+        Dim AttrFile As File
+        Set AttrFile = GetFile(Spec)
         'ファイル属性 比較(ビット演算)
-        HasAttr = FSO.GetFile(Spec).Attributes And Attr = Attr
+        AfterAttr = GetFile(Spec).Attributes Xor Attr
+        AttrFile.Attributes = AfterAttr
 
     End If
 
-    Exit Function
+    Exit Sub
 
 'エラー処理
 Err:
 
     Call ShowErrMsg(Err.Description, Err.Number)
 
-End Function
+End Sub
 '----------------------------------------------------------------------------------------------------
