@@ -10,7 +10,7 @@
 Public Function FileExists(ByVal FileSpec As String) As Boolean
 On Error GoTo Err
 
-    'ファイルの存在確認
+    'ファイル 存在確認
     Dim FSO As New FileSystemObject
     FileExists = FSO.FileExists(FileSpec)
 
