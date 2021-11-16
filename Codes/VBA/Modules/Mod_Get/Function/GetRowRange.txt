@@ -32,13 +32,13 @@ On Error GoTo Err
         End With
 
         '最終列 取得
-        Dim LastCol As LongPtr
-        For LastCol = UBound(UsedRangeArr, 2) To 1 Step -1
-            If Not IsBlank(UsedRangeArr(1, CLng(LastCol))) Then
-                Set GetRowRange = .Range(.Cells(TargetRow, FirstCol), .Cells(TargetRow, LastCol))
+        Dim TargetLastCol As LongPtr
+        For TargetLastCol = UBound(UsedRangeArr, 2) To 1 Step -1
+            If Not IsBlank(UsedRangeArr(1, CLng(TargetLastCol))) Then
+                Set GetRowRange = .Range(.Cells(TargetRow, FirstCol), .Cells(TargetRow, TargetLastCol))
                 Exit Function
             End If
-        Next LastCol
+        Next TargetLastCol
 
     End With
 
