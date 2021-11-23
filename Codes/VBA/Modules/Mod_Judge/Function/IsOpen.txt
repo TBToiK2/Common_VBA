@@ -8,8 +8,8 @@ On Error Resume Next
     FileNumber = FreeFile
 
     '開閉確認
-    Open FileSpec For Append As #Clng(FileNumber)
-    Close #Clng(FileNumber)
+    Open FileSpec For Append As #CLng(FileNumber)
+    Close #CLng(FileNumber)
 
     IsOpen = Err.Number > 0
 
