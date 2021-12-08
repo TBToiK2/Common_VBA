@@ -1,44 +1,41 @@
 '----------------------------------------------------------------------------------------------------
-'2021/09/19 06:12:57
+'2021/12/08 14:54:37
 '----------------------------------------------------------------------------------------------------
-Public Function GetRowRange(ByVal ws As Worksheet, ByVal TargetRow As LongPtr, Optional ByVal FirstCol As LongPtr, Optional ByVal LastCol As LongPtr) As Range
+Public Function GetRowRange(ByVal ws As Worksheet, ByVal TargetRow As LongPtr, Optional ByVal FirstCol As LongPtr = 1, Optional ByVal LastCol As LongPtr) As Range
 On Error GoTo Err
+
+    If TargetRow < MIN_ROW Or TargetRow > MAX_ROW Then
+        ShowErrMsg("指定した行は存在しません。")
+        Exit Function
+    End If
+    If FirstCol < MIN_COL Or FirstCol > MAX_COL Then
+        ShowErrMsg("指定した列は存在しません。")
+        Exit Function
+    End If
+    If LastCol < 0 Or LastCol > MAX_COL Then
+        ShowErrMsg("指定した列は存在しません。")
+        Exit Function
+    End If
 
     With ws
 
-        '列数値 判定
-        If FirstCol <= 0 Then FirstCol = 1
+        '最終列数値 判定
         If LastCol > 0 Then
+
             Set GetRowRange = .Range(.Cells(TargetRow, FirstCol), .Cells(TargetRow, LastCol))
-            Exit Function
-        End If
 
-        '使用範囲最終列 取得
-        With .UsedRange
-            Dim UsedLastCol As LongPtr
-            UsedLastCol = .Columns(1).Column + (.Columns.Count - 1)
-        End With
+        Else
 
-        '使用範囲配列 取得
-        Dim UsedRangeArr() As Variant
-        With .Range(.Cells(TargetRow, 1), .Cells(TargetRow, UsedLastCol))
-            '配列 判定
-            If IsArray(.Value) Then
-                UsedRangeArr = .Value
-            Else
-                ReDim UsedRangeArr(1 To 1, 1 To 1)
-                UsedRangeArr(1, 1) = .Value
-            End If
-        End With
+            '最終列 取得
+            Dim TargetLastCol As LongPtr
+            TargetLastCol = GetLastCol(ws, TargetRow)
 
-        '最終列 取得
-        Dim TargetLastCol As LongPtr
-        For TargetLastCol = UBound(UsedRangeArr, 2) To 1 Step -1
-            If Not IsBlank(UsedRangeArr(1, CLng(TargetLastCol))) Then
+            '行範囲 取得
+            If FitstCol <= TargetLastCol Then
                 Set GetRowRange = .Range(.Cells(TargetRow, FirstCol), .Cells(TargetRow, TargetLastCol))
-                Exit Function
             End If
-        Next TargetLastCol
+
+        End If
 
     End With
 

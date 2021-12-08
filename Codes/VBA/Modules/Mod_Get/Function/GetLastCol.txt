@@ -1,15 +1,20 @@
 '----------------------------------------------------------------------------------------------------
-'2021/09/19 03:27:44
+'2021/12/08 14:54:37
 '----------------------------------------------------------------------------------------------------
 Public Function GetLastCol(ByVal ws As Worksheet, ByVal TargetRow As LongPtr) As LongPtr
 On Error GoTo Err
 
+    If TargetRow < MIN_ROW Or TargetRow > MAX_ROW Then
+        ShowErrMsg("指定した行は存在しません。")
+        Exit Function
+    End If
+
     With ws
 
-        '使用範囲最終行 取得
+        '使用範囲最終列 取得
         With .UsedRange
             Dim UsedLastCol As LongPtr
-            UsedLastCol = .Columns(1).Column + (.Columns.Count - 1)
+            UsedLastCol = .Columns(.Columns.Count).Column
         End With
 
         '使用範囲配列 取得
@@ -24,7 +29,7 @@ On Error GoTo Err
             End If
         End With
 
-        '最終行 取得
+        '最終列 取得
         Dim LastCol As LongPtr
         For LastCol = UBound(UsedRangeArr, 2) To 1 Step -1
             If Not IsBlank(UsedRangeArr(1, CLng(LastCol))) Then
