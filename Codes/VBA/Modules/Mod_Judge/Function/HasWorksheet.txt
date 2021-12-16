@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2021/08/22 23:44:14
+'2021/12/16 11:44:24
 '----------------------------------------------------------------------------------------------------
 Public Function HasWorksheet(ByVal wsName As String, Optional ByVal Parent As Sheets, Optional ByVal CodeNameFLG As Boolean ) As Boolean
 On Error GoTo Err
@@ -10,15 +10,20 @@ On Error GoTo Err
     'コードネーム 判定
     Dim sh As Object
     If CodeNameFLG Then
+
         '全シート 確認
         For Each sh In Parent
-            If TypeName(sh) = "Worksheet" And sh.CodeName = wsName Then
-                HasWorksheet = True
-                Exit Function
+            'Worksheet 判定
+            If sh.Type = xlWorksheet And TypeName(sh) = "Worksheet" Then
+                If sh.CodeName = wsName Then
+                    HasWorksheet = True
+                    Exit Function
+                End If
             End If
         Next sh
-        Exit Function
+
     Else
+
         '全シート 確認
         For Each sh In Parent
             If TypeName(sh) = "Worksheet" And sh.Name = wsName Then
@@ -26,8 +31,10 @@ On Error GoTo Err
                 Exit Function
             End If
         Next sh
-        Exit Function
+
     End If
+
+    Exit Function
 
 'エラー処理
 Err:
