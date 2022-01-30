@@ -1,15 +1,15 @@
 '----------------------------------------------------------------------------------------------------
-'2021/07/26 10:48:35
+'2022/01/30 06:17:54
 '----------------------------------------------------------------------------------------------------
-Public Sub BeforeProcess(ByRef Calculation As XlCalculation, Optional ByRef ExcelApp As Application)
+Public Sub BeforeProcess(ByRef calculation As XlCalculation, Optional ByRef excelApp As Application)
 
     '引数 既定値判定
-    If IsBlank(ExcelApp) Then Set ExcelApp = Application
+    If IsBlank(excelApp) Then Set excelApp = Application
 
     '各プロセス 停止
-    With ExcelApp
+    With excelApp
         If .Workbooks.Count > 0 Then
-            Calculation = .Calculation
+            calculation = .Calculation
             .Calculation = xlCalculationManual
         End If
         .ScreenUpdating = False

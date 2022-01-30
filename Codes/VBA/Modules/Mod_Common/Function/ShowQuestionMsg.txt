@@ -1,11 +1,14 @@
 '----------------------------------------------------------------------------------------------------
-'2021/07/26 10:48:35
+'2022/01/30 05:48:00
 '----------------------------------------------------------------------------------------------------
-Public Function ShowQuestionMsg(ByVal Prompt As String) As LongPtr
+Public Function ShowQuestionMsg(ByVal prompt As String, Optional ByVal title As String) As LongPtr
 On Error Resume Next
 
+    'タイトル 設定
+    If Not IsBlank(title) Then title = ":" & title
+
     'メッセージ 表示
-    ShowInfoMsg = MsgBox(Prompt, vbOKCancel + vbQuestion, "確認")
+    ShowInfoMsg = MsgBox(prompt, vbOKCancel + vbQuestion, "確認" & title)
 
 End Function
 '----------------------------------------------------------------------------------------------------

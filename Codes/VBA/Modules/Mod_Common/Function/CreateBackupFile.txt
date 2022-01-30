@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2021/07/26 10:48:35
+'2022/01/30 05:46:55
 '----------------------------------------------------------------------------------------------------
 '参照設定:Microsoft Scripting Runtime
 'ProgID:Scripting.FileSystemObject
@@ -7,19 +7,19 @@
 'Name:Scripting
 'FullPath:C:\Windows\System32\scrrun.dll
 'Major.Minor:1.0
-Public Function BackupFile(ByVal FileSpec As String) As Boolean
+Public Function CreateBackupFile(ByVal fileSpec As String) As Boolean
 On Error GoTo Err
 
     Dim FSO As New FileSystemObject
-    Dim BaseName As String, ExtensionName As String
+    Dim baseName As String, extensionName As String
 
     'ファイル名・拡張子 取得
-    BaseName = FSO.GetBaseName(FileSpec)
-    ExtensionName = FSO.GetExtensionName(FileSpec)
+    baseName = FSO.GetBaseName(fileSpec)
+    extensionName = FSO.GetExtensionName(fileSpec)
 
-    Call FileCopy(FileSpec, ThisWorkbook.Path & "\" & BaseName & "_" & CStr(Format(Now(), "yyyymmddhhmmss")) & "." & ExtensionName)
+    Call FileCopy(fileSpec, ThisWorkbook.Path & "\" & baseName & "_" & CStr(Format(Now(), "yyyymmddhhmmss")) & "." & extensionName)
 
-    BackupFile = True
+    CreateBackupFile = True
 
     Exit Function
 
