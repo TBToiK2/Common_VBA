@@ -1,16 +1,16 @@
 '----------------------------------------------------------------------------------------------------
-'2021/12/16 11:44:30
+'2022/01/31 11:58:01
 '----------------------------------------------------------------------------------------------------
-Public Function HasListObject(ByVal loName As String, Optional ByVal Parent As ListObjects) As Boolean
+Public Function HasListObject(ByVal loName As String, Optional ByVal parent As ListObjects) As Boolean
 On Error GoTo Err
 
     '引数 既定値判定
-    If IsBlank(Parent) Then
+    If IsBlank(parent) Then
         'ワークシート 判定
-        Dim ActSh As Object
-        Set ActSh = ThisWorkbook.ActiveSheet
-        If ActSh.Type = xlWorksheet And TypeName(ActSh) = "Worksheet" Then
-            Set Parent = ThisWorkbook.ActiveSheet.ListObjects
+        Dim actSh As Object
+        Set actSh = ThisWorkbook.ActiveSheet
+        If actSh.Type = xlWorksheet And TypeName(actSh) = "Worksheet" Then
+            Set parent = ThisWorkbook.ActiveSheet.ListObjects
         Else
             Exit Function
         End If
@@ -18,7 +18,7 @@ On Error GoTo Err
 
     '全リストオブジェクト 確認
     Dim lo As ListObject
-    For Each lo In Parent
+    For Each lo In parent
         If lo.Name = loName Then
             HasListObject = True
             Exit Function

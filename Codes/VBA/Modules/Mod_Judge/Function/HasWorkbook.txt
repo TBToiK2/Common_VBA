@@ -1,15 +1,15 @@
 '----------------------------------------------------------------------------------------------------
-'2021/7/28 02:08:47
+'2022/01/31 11:58:01
 '----------------------------------------------------------------------------------------------------
-Public Function HasWorkbook(ByVal wbName As String, Optional ByVal Parent As Workbooks) As Boolean
+Public Function HasWorkbook(ByVal wbName As String, Optional ByVal parent As Workbooks) As Boolean
 On Error GoTo Err
 
     '引数 既定値判定
-    If IsBlank(Parent) Then Set Parent = Workbooks
+    If IsBlank(parent) Then Set parent = Workbooks
 
     '全ワークブック 確認
     Dim wb As Workbook
-    For Each wb In Parent
+    For Each wb In parent
         If wb.Name = wbName Then
             HasWorkbook = True
             Exit Function

@@ -1,20 +1,20 @@
 '----------------------------------------------------------------------------------------------------
-'2021/08/22 23:44:14
+'2022/01/31 11:58:01
 '----------------------------------------------------------------------------------------------------
-Public Function HasList(ByVal ListName As String, Optional ByVal Parent As ListObjects) As Boolean
+Public Function HasList(ByVal listName As String, Optional ByVal parent As ListObjects) As Boolean
 On Error GoTo Err
 
     '引数 既定値判定
-    If IsBlank(Parent) Then Set Parent = ThisWorkbook.ActiveSheet.ListObjects
+    If IsBlank(parent) Then Set parent = ThisWorkbook.ActiveSheet.ListObjects
 
     '全リスト 確認
-    Dim List As ListObject
-    For Each List In Parent
-        If List.Name = ListName Then
+    Dim list As ListObject
+    For Each list In parent
+        If list.Name = listName Then
             HasList = True
             Exit Function
         End If
-    Next List
+    Next list
 
     Exit Function
 

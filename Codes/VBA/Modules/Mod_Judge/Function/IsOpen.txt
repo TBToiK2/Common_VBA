@@ -1,17 +1,26 @@
 '----------------------------------------------------------------------------------------------------
-'2021/7/26 01:28:58
+'2022/01/31 11:58:01
 '----------------------------------------------------------------------------------------------------
-Public Function IsOpen(ByVal FileSpec As String) As Boolean
+Public Function IsOpen(ByVal fileSpec As String) As LongPtr
 On Error Resume Next
 
-    Dim FileNumber As LongPtr
-    FileNumber = FreeFile
+    Dim fileNumber As Integer
+    fileNumber = FreeFile(0)
 
-    '開閉確認
-    Open FileSpec For Append As #CLng(FileNumber)
-    Close #CLng(FileNumber)
+    'ファイルナンバー1-255 使用時
+    If fileNumber = 0 Then fileNumber = FreeFile(1)
 
-    IsOpen = Err.Number > 0
+    'ファイルナンバー256-512 使用時
+    If fileNumber = 0 Then
+        IsOpen = 1
+    Else
+        '開閉確認
+        Open fileSpec For Append As #fileNumber
+        Close #fileNumber
+
+        IsOpen = Err.Number = 55
+
+    End If
 
 End Function
 '----------------------------------------------------------------------------------------------------

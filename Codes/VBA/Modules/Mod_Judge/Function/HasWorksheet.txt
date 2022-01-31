@@ -1,18 +1,18 @@
 '----------------------------------------------------------------------------------------------------
-'2021/12/16 11:44:24
+'2022/01/31 11:58:01
 '----------------------------------------------------------------------------------------------------
-Public Function HasWorksheet(ByVal wsName As String, Optional ByVal Parent As Sheets, Optional ByVal CodeNameFLG As Boolean ) As Boolean
+Public Function HasWorksheet(ByVal wsName As String, Optional ByVal parent As Sheets, Optional ByVal codeNameFLG As Boolean) As Boolean
 On Error GoTo Err
 
     '引数 既定値判定
-    If IsBlank(Parent) Then Set Parent = ThisWorkbook.Sheets
+    If IsBlank(parent) Then Set parent = ThisWorkbook.Sheets
 
     'コードネーム 判定
     Dim sh As Object
-    If CodeNameFLG Then
+    If codeNameFLG Then
 
         '全シート 確認
-        For Each sh In Parent
+        For Each sh In parent
             'Worksheet 判定
             If sh.Type = xlWorksheet And TypeName(sh) = "Worksheet" Then
                 If sh.CodeName = wsName Then
@@ -25,7 +25,7 @@ On Error GoTo Err
     Else
 
         '全シート 確認
-        For Each sh In Parent
+        For Each sh In parent
             If TypeName(sh) = "Worksheet" And sh.Name = wsName Then
                 HasWorksheet = True
                 Exit Function

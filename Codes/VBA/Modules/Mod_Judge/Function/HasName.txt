@@ -1,30 +1,30 @@
 '----------------------------------------------------------------------------------------------------
-'2021/7/26 01:28:58
+'2022/01/31 11:58:01
 '----------------------------------------------------------------------------------------------------
-Public Function HasName(ByVal NameName As String, Optional ByVal Parent As Names) As Boolean
+Public Function HasName(ByVal nameName As String, Optional ByVal parent As Names) As Boolean
 On Error GoTo Err
 
     '引数 既定値判定
-    If IsBlank(Parent) Then Set Parent = ThisWorkbook.Names
+    If IsBlank(parent) Then Set parent = ThisWorkbook.Names
 
-    Dim Name As Name
+    Dim name As Name
     'Worksheet 判定
-    If TypeName(Parent.Parent) = "Worksheet" Then
+    If TypeName(parent.Parent) = "Worksheet" Then
         '全名前 確認
-        For Each Name In Parent
-            If Name.Name = Parent.Parent.Name & "!" & NameName Then
+        For Each name In parent
+            If name.Name = parent.Parent.Name & "!" & nameName Then
                 HasName = True
                 Exit Function
             End If
-        Next Name
+        Next name
     Else
         '全名前 確認
-        For Each Name In Parent
-            If Name.Name = NameName Then
+        For Each name In parent
+            If name.Name = nameName Then
                 HasName = True
                 Exit Function
             End If
-        Next Name
+        Next name
     End If
 
     Exit Function
