@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2021/11/10 22:19:50
+'2022/02/01 12:47:13
 '----------------------------------------------------------------------------------------------------
 '参照設定:Microsoft Scripting Runtime
 'ProgID:Scripting.FileSystemObject
@@ -7,29 +7,29 @@
 'Name:Scripting
 'FullPath:C:\Windows\System32\scrrun.dll
 'Major.Minor:1.0
-Public Sub DeleteAttr(ByVal Spec As String, ByVal Attr As FileAttribute)
+Public Sub DeleteAttr(ByVal spec As String, ByVal attr As FileAttribute)
 On Error GoTo Err
 
     Dim FSO As New FileSystemObject
 
-    Dim AfterAttr As FileAttribute
+    Dim afterAttr As FileAttribute
 
     '属性 比較(ビット演算)
-    If GetAttr(Spec) And vbDirectory = vbDirectory Then
+    If (GetAttr(spec) And vbDirectory) = vbDirectory Then
 
-        Dim AttrFolder As Folder
-        Set AttrFolder = GetFolder(Spec)
+        Dim attrFolder As Folder
+        Set attrFolder = GetFolder(spec)
         'フォルダ属性 比較(ビット演算)
-        AfterAttr = AttrFolder.Attributes Xor Attr
-        AttrFolder.Attributes = AfterAttr
+        afterAttr = attrFolder.Attributes Xor attr
+        attrFolder.Attributes = afterAttr
 
     Else
 
-        Dim AttrFile As File
-        Set AttrFile = GetFile(Spec)
+        Dim attrFile As File
+        Set attrFile = GetFile(spec)
         'ファイル属性 比較(ビット演算)
-        AfterAttr = GetFile(Spec).Attributes Xor Attr
-        AttrFile.Attributes = AfterAttr
+        afterAttr = GetFile(spec).Attributes Xor attr
+        attrFile.Attributes = afterAttr
 
     End If
 
