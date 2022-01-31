@@ -1,10 +1,10 @@
 '----------------------------------------------------------------------------------------------------
-'2021/12/08 14:54:37
+'2022/02/01 12:21:07
 '----------------------------------------------------------------------------------------------------
-Public Function GetLastRow(ByVal ws As Worksheet, ByVal TargetCol As LongPtr) As LongPtr
+Public Function GetLastRow(ByVal ws As Worksheet, ByVal targetCol As LongPtr) As LongPtr
 On Error GoTo Err
 
-    If TargetCol < MIN_COL Or TargetCol > MAX_COL Then
+    If targetCol < MIN_COL Or targetCol > MAX_COL Then
         ShowErrMsg("指定した行は存在しません。")
         Exit Function
     End If
@@ -13,30 +13,30 @@ On Error GoTo Err
 
         '使用範囲最終行 取得
         With .UsedRange
-            Dim UsedLastRow As LongPtr
-            UsedLastRow = .Rows(.Rows.Count).Row
+            Dim usedLastRow As LongPtr
+            usedLastRow = .Rows(.Rows.Count).Row
         End With
 
         '使用範囲配列 取得
-        Dim UsedRangeArr() As Variant
-        With .Range(.Cells(1, TargetCol), .Cells(UsedLastRow, TargetCol))
+        Dim usedRangeArr() As Variant
+        With .Range(.Cells(1, targetCol), .Cells(usedLastRow, targetCol))
             '配列 判定
             If IsArray(.Value) Then
-                UsedRangeArr = .Value
+                usedRangeArr = .Value
             Else
-                Redim UsedRangeArr(1 To 1, 1 To 1)
-                UsedRangeArr(1, 1) = .Value
+                ReDim usedRangeArr(1 To 1, 1 To 1)
+                usedRangeArr(1, 1) = .Value
             End If
         End With
 
         '最終行 取得
-        Dim LastRow As LongPtr
-        For LastRow = UBound(UsedRangeArr, 1) To 1 Step -1
-            If Not IsBlank(UsedRangeArr(CLng(LastRow), 1)) Then
-                GetLastRow = LastRow
+        Dim lastRow As LongPtr
+        For lastRow = UBound(usedRangeArr, 1) To 1 Step -1
+            If Not IsBlank(usedRangeArr(CLng(lastRow), 1)) Then
+                GetlastRow = lastRow
                 Exit Function
             End If
-        Next LastRow
+        Next lastRow
 
     End With
 

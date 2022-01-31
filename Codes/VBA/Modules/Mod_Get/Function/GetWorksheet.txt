@@ -1,17 +1,17 @@
 '----------------------------------------------------------------------------------------------------
-'2021/08/22 23:44:14
+'2022/02/01 12:21:07
 '----------------------------------------------------------------------------------------------------
-Public Function GetWorksheet(ByVal wsName As String, Optional ByVal Parent As Sheets, Optional ByVal CodeNameFLG As Boolean ) As Worksheet
+Public Function GetWorksheet(ByVal wsName As String, Optional ByVal parent As Sheets, Optional ByVal codeNameFLG As Boolean ) As Worksheet
 On Error GoTo Err
 
     '引数 既定値判定
-    If IsBlank(Parent) Then Set Parent = ThisWorkbook.Sheets
+    If IsBlank(parent) Then Set parent = ThisWorkbook.Sheets
 
     'コードネーム 判定
     Dim sh As Object
-    If CodeNameFLG Then
+    If codeNameFLG Then
         '全シート 確認
-        For Each sh In Parent
+        For Each sh In parent
             If TypeName(sh) = "Worksheet" And sh.CodeName = wsName Then
                 Set GetWorksheet = sh
                 Exit Function
@@ -20,7 +20,7 @@ On Error GoTo Err
         Exit Function
     Else
         '全シート 確認
-        For Each sh In Parent
+        For Each sh In parent
             If TypeName(sh) = "Worksheet" And sh.Name = wsName Then
                 Set GetWorksheet = sh
                 Exit Function

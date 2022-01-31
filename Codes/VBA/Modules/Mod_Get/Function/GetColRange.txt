@@ -1,18 +1,18 @@
 '----------------------------------------------------------------------------------------------------
-'2021/12/08 14:54:37
+'2022/02/01 12:21:07
 '----------------------------------------------------------------------------------------------------
-Public Function GetColRange(ByVal ws As Worksheet, ByVal TargetCol As LongPtr, Optional ByVal FirstRow As LongPtr = 1, Optional ByVal LastRow As LongPtr) As Range
+Public Function GetColRange(ByVal ws As Worksheet, ByVal targetCol As LongPtr, Optional ByVal firstRow As LongPtr = 1, Optional ByVal lastRow As LongPtr) As Range
 On Error GoTo Err
 
-    If TargetCol < MIN_COL Or TargetCol > MAX_COL Then
+    If targetCol < MIN_COL Or targetCol > MAX_COL Then
         ShowErrMsg("指定した列は存在しません。")
         Exit Function
     End If
-    If FirstRow < MIN_Row Or FirstRow > MAX_ROW Then
+    If firstRow < MIN_ROW Or firstRow > MAX_ROW Then
         ShowErrMsg("指定した行は存在しません。")
         Exit Function
     End If
-    If LastRow < 0 Or LastRow > MAX_ROW Then
+    If lastRow < 0 Or lastRow > MAX_ROW Then
         ShowErrMsg("指定した行は存在しません。")
         Exit Function
     End If
@@ -20,19 +20,19 @@ On Error GoTo Err
     With ws
 
         '行数値 判定
-        If LastRow > 0 Then
+        If lastRow > 0 Then
 
-            Set GetColRange = .Range(.Cells(FirstRow, TargetCol), .Cells(LastRow, TargetCol))
+            Set GetColRange = .Range(.Cells(firstRow, targetCol), .Cells(lastRow, targetCol))
 
         Else
 
             '最終行 取得
-            Dim TargetLastRow As LongPtr
-            TargetLastRow = GetLastRow(ws, TargetCol)
+            Dim targetLastRow As LongPtr
+            targetLastRow = GetLastRow(ws, targetCol)
 
             '行範囲 取得
-            If FirstRow <= TargetLastRow Then
-                Set GetColRange = .Range(.Cells(FirstRow, TargetCol), .Cells(TargetLastRow, TargetCol))
+            If firstRow <= targetLastRow Then
+                Set GetColRange = .Range(.Cells(firstRow, targetCol), .Cells(targetLastRow, targetCol))
             End If
 
         End If

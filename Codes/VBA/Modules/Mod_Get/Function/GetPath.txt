@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2021/07/26 10:48:35
+'2022/02/01 12:21:07
 '----------------------------------------------------------------------------------------------------
 '参照設定:Microsoft Scripting Runtime
 'ProgID:Scripting.FileSystemObject
@@ -7,12 +7,12 @@
 'Name:Scripting
 'FullPath:C:\Windows\System32\scrrun.dll
 'Major.Minor:1.0
-Public Function GetPath(ByVal Spec As String) As String
+Public Function GetPath(ByVal spec As String) As String
 On Error GoTo Err
 
     'ファイル名 取得
     Dim FSO As New FileSystemObject
-    GetPath = FSO.GetParentFolderName(Spec)
+    GetPath = FSO.GetParentFolderName(spec)
 
     Exit Function
 

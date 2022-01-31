@@ -1,10 +1,10 @@
 '----------------------------------------------------------------------------------------------------
-'2021/12/08 14:54:37
+'2022/02/01 12:21:07
 '----------------------------------------------------------------------------------------------------
-Public Function GetLastCol(ByVal ws As Worksheet, ByVal TargetRow As LongPtr) As LongPtr
+Public Function GetLastCol(ByVal ws As Worksheet, ByVal targetRow As LongPtr) As LongPtr
 On Error GoTo Err
 
-    If TargetRow < MIN_ROW Or TargetRow > MAX_ROW Then
+    If targetRow < MIN_ROW Or targetRow > MAX_ROW Then
         ShowErrMsg("指定した行は存在しません。")
         Exit Function
     End If
@@ -13,30 +13,30 @@ On Error GoTo Err
 
         '使用範囲最終列 取得
         With .UsedRange
-            Dim UsedLastCol As LongPtr
-            UsedLastCol = .Columns(.Columns.Count).Column
+            Dim usedLastCol As LongPtr
+            usedLastCol = .Columns(.Columns.Count).Column
         End With
 
         '使用範囲配列 取得
-        Dim UsedRangeArr() As Variant
-        With .Range(.Cells(TargetRow, 1), .Cells(TargetRow, UsedLastCol))
+        Dim usedRangeArr() As Variant
+        With .Range(.Cells(targetRow, 1), .Cells(targetRow, usedLastCol))
             '配列 判定
             If IsArray(.Value) Then
-                UsedRangeArr = .Value
+                usedRangeArr = .Value
             Else
-                Redim UsedRangeArr(1 To 1, 1 To 1)
-                UsedRangeArr(1, 1) = .Value
+                ReDim usedRangeArr(1 To 1, 1 To 1)
+                usedRangeArr(1, 1) = .Value
             End If
         End With
 
         '最終列 取得
-        Dim LastCol As LongPtr
-        For LastCol = UBound(UsedRangeArr, 2) To 1 Step -1
-            If Not IsBlank(UsedRangeArr(1, CLng(LastCol))) Then
-                GetLastCol = LastCol
+        Dim lastCol As LongPtr
+        For lastCol = UBound(usedRangeArr, 2) To 1 Step -1
+            If Not IsBlank(usedRangeArr(1, CLng(lastCol))) Then
+                GetLastCol = lastCol
                 Exit Function
             End If
-        Next LastCol
+        Next lastCol
 
     End With
 
