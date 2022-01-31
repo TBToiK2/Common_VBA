@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2021/07/27 02:11:24
+'2022/02/01 12:34:06
 '----------------------------------------------------------------------------------------------------
 '参照設定:Microsoft Scripting Runtime
 'ProgID:Scripting.FileSystemObject
@@ -7,32 +7,32 @@
 'Name:Scripting
 'FullPath:C:\Windows\System32\scrrun.dll
 'Major.Minor:1.0
-Public Function BuildPath(ParamArray Path() As Variant) As String
+Public Function BuildPath(ParamArray path() As Variant) As String
 On Error GoTo Err
 
-    'パス 作成
     Dim FSO As New FileSystemObject
 
-    Dim MaxElement As LongPtr
-    MaxElement = UBound(Path, 1)
+    Dim maxElement As LongPtr
+    maxElement = UBound(path, 1)
 
     'パラメータ数 判定
-    Select Case MaxElement
-
+    Select Case maxElement
         Case 0
-            BuildPath = FSO.BuildPath(Path(0), vbNullString)
+            'パス 作成
+            BuildPath = FSO.BuildPath(path(0), vbNullString)
 
         Case Is > 0
-            BuildPath = FSO.BuildPath(Path(0), Path(1))
+            'パス 作成
+            BuildPath = FSO.BuildPath(path(0), path(1))
 
-            If MaxElement > 1 Then
-                Dim Element As LongPtr
-                For Element = 2 To MaxElement
-                    BuildPath = FSO.BuildPath(BuildPath, Path(CLng(Element)))
-                Next Element
+            If maxElement > 1 Then
+                Dim element As LongPtr
+                For element = 2 To maxElement
+                    BuildPath = FSO.BuildPath(BuildPath, path(CLng(element)))
+                Next element
             End If
 
-        End Select
+    End Select
 
     Exit Function
 

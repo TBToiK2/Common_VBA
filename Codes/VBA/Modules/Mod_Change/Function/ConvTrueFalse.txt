@@ -1,33 +1,33 @@
 '----------------------------------------------------------------------------------------------------
-'2021/08/11 12:49:57
+'2022/02/01 12:34:06
 '----------------------------------------------------------------------------------------------------
-Public Function ConvTrueFalse(ByVal TrueFalse As String, ByRef ConvertedTrueFalse As Boolean) As Boolean
+Public Function ConvTrueFalse(ByVal trueFalse As String, ByRef convertedTrueFalse As Boolean) As Boolean
 On Error GoTo Err
 
     '真偽判定用配列 作成
     '大文字での判定
-    Dim TrueArr As Variant, FalseArr As Variant
-    TrueArr = Array("True", "T", "Yes", "Y", "はい", "する")
-    FalseArr = Array("False", "F", "No", "N", "いいえ", "しない")
+    Dim trueArr As Variant, falseArr As Variant
+    trueArr = Array("True", "T", "Yes", "Y", "はい", "する")
+    falseArr = Array("False", "F", "No", "N", "いいえ", "しない")
 
     '真偽 判定
-    Dim T As Variant, F As Variant
+    Dim t As Variant, f As Variant
     'True 判定
-    For Each T In TrueArr
-        If UCase(TrueFalse) = UCase(T) Then
+    For Each t In trueArr
+        If UCase(trueFalse) = UCase(t) Then
             ConvTrueFalse = True
-            ConvertedTrueFalse = True
+            convertedTrueFalse = True
             Exit Function
         End If
-    Next T
+    Next t
     'False 判定
-    For Each F In FalseArr
-        If UCase(TrueFalse) = UCase(F) Then
+    For Each f In falseArr
+        If UCase(trueFalse) = UCase(f) Then
             ConvTrueFalse = True
-            ConvertedTrueFalse = False
+            convertedTrueFalse = False
             Exit Function
         End If
-    Next F
+    Next f
 
     Exit Function
 

@@ -1,11 +1,11 @@
 '----------------------------------------------------------------------------------------------------
-'2021/08/11 12:49:57
+'2022/02/01 12:34:06
 '----------------------------------------------------------------------------------------------------
-Public Function ConvAddrRef(ByVal ToReferenceStyle As XlReferenceStyle, ByRef A1 As String, ByRef R1C1 As LongPtr) As Boolean
+Public Function ConvAddrRef(ByVal toReferenceStyle As XlReferenceStyle, ByRef A1 As String, ByRef R1C1 As LongPtr) As Boolean
 On Error GoTo Err
 
-    If ToReferenceStyle = xlA1 Then
-        A1 = Split(Cells(1, R1C1).Address(ReferenceStyle:=ToReferenceStyle), "$")(1)
+    If toReferenceStyle = xlA1 Then
+        A1 = Split(Cells(1, R1C1).Address(ReferenceStyle:=toReferenceStyle), "$")(1)
     Else
         R1C1 = Range(A1 & "1").Column
     End If
@@ -18,7 +18,7 @@ On Error GoTo Err
 Err:
 
     'エラー判定
-    If ToReferenceStyle = xlA1 Then
+    If toReferenceStyle = xlA1 Then
         If R1C1 < 1 Or R1C1 > 16384 Then Call ShowErrMsg("入力値：" & R1C1 & vbCrLf & "入力値が有効列数の範囲外です。""1""以上""16384""以下で入力してください。")
     Else
         If IsAlphabet(A1) Then
