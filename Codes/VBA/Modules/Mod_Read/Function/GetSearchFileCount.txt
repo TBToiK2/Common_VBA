@@ -1,0 +1,60 @@
+'----------------------------------------------------------------------------------------------------
+'2022/02/02 03:25:21
+'----------------------------------------------------------------------------------------------------
+'参照設定:Microsoft Scripting Runtime
+'ProgID:Scripting.FileSystemObject
+'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
+'Name:Scripting
+'FullPath:C:\Windows\System32\scrrun.dll
+'Major.Minor:1.0
+Public Function GetSearchFileCount(ByVal folderSpec As String, ByVal searchFileName As String, Optional ByVal searchFileType As ReSearchType) As LongPtr
+On Error GoTo Err
+
+    Dim FSO As New FileSystemObject
+    With FSO
+
+        Dim targetFiles As Files
+        Set targetFiles = .GetFolder(folderSpec).Files
+
+        Dim searchFileBaseName As String, searchFileExtensionName As String
+        searchFileBaseName = .GetBaseName(searchFileName)
+        searchFileExtensionName = .GetExtensionName(searchFileName)
+
+        Dim targetFile As File
+        For Each targetFile In targetFiles
+
+            Dim fileName As String, baseName As String, extensionName As String
+            Dim fileCount As Long
+            Select Case searchFileType
+                'ファイル名
+                Case reSearchFileName
+                    fileName = targetFile.Name
+                    If searchFileName = fileName Then fileCount = fileCount + 1
+
+                'ベース名
+                Case reSearchBaseName
+                    baseName = .GetBaseName(targetFile.Name)
+                    If searchFileBaseName = baseName Then fileCount = fileCount + 1
+
+                '拡張子名
+                Case reSearchExtensionName
+                    extensionName = .GetExtensionName(targetFile.Name)
+                    If searchFileExtensionName = extensionName Then fileCount = fileCount + 1
+
+            End Select
+
+        Next targetFile
+
+    End With
+
+    GetSearchFileCount = fileCount
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number)
+
+End Function
+'----------------------------------------------------------------------------------------------------
