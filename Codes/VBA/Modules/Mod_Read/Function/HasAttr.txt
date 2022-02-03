@@ -11,19 +11,21 @@ Public Function HasAttr(ByVal spec As String, ByVal attr As FileAttribute) As Bo
 On Error GoTo Err
 
     Dim FSO As New FileSystemObject
+    With FSO
 
-    '属性 比較(ビット演算)
-    If GetAttr(spec) And vbDirectory = vbDirectory Then
+        '属性 比較(ビット演算)
+        If GetAttr(spec) And vbDirectory = vbDirectory Then
 
-        'フォルダ属性 比較(ビット演算)
-        HasAttr = (FSO.GetFolder(spec).Attributes And attr) = attr
+            'フォルダ属性 比較(ビット演算)
+            HasAttr = (.GetFolder(spec).Attributes And attr) = attr
 
-    Else
+        Else
+            'ファイル属性 比較(ビット演算)
+            HasAttr = (.GetFile(spec).Attributes And attr) = attr
 
-        'ファイル属性 比較(ビット演算)
-        HasAttr = (FSO.GetFile(spec).Attributes And attr) = attr
+        End If
 
-    End If
+    End With
 
     Exit Function
 

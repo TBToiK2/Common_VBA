@@ -4,18 +4,21 @@
 '参照設定:Microsoft Scripting Runtime
 'ProgID:Scripting.FileSystemObject
 'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
-'Name:Scripting
+'LibraryName:Scripting
 'FullPath:C:\Windows\System32\scrrun.dll
 'Major.Minor:1.0
 Public Function CreateBackupFile(ByVal fileSpec As String) As Boolean
 On Error GoTo Err
 
     Dim FSO As New FileSystemObject
-    Dim baseName As String, extensionName As String
+    With FSO
 
-    'ファイル名・拡張子 取得
-    baseName = FSO.GetBaseName(fileSpec)
-    extensionName = FSO.GetExtensionName(fileSpec)
+        'ファイル名・拡張子 取得
+        Dim baseName As String, extensionName As String
+        baseName = FSO.GetBaseName(fileSpec)
+        extensionName = FSO.GetExtensionName(fileSpec)
+
+    End With
 
     Call FileCopy(fileSpec, ThisWorkbook.Path & "\" & baseName & "_" & CStr(Format(Now(), "yyyymmddhhmmss")) & "." & extensionName)
 

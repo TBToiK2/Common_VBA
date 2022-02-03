@@ -20,6 +20,7 @@ On Error GoTo Err
         searchFileBaseName = .GetBaseName(searchFileName)
         searchFileExtensionName = .GetExtensionName(searchFileName)
 
+        '検索ファイル数 カウント
         Dim targetFile As File
         For Each targetFile In targetFiles
 

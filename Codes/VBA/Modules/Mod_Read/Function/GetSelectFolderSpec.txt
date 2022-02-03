@@ -1,14 +1,20 @@
 '----------------------------------------------------------------------------------------------------
-'2022/02/01 12:21:07
+'2022/02/03 01:53:33
 '----------------------------------------------------------------------------------------------------
-Public Function GetSelectFolderSpec() As String
+Public Function GetSelectFolderSpec(ByVal intialFileSpec As String, Optional ByVal title As String) As String
 On Error GoTo Err
+
+    'カレントディレクトリ 変更
+    Dim WSH As New WshShell
+    WSH.CurrentDirectory = intialFileSpec
+
+    If IsBlank(title) Then title = "フォルダ 選択"
 
     'ダイアログボックス 設定
     With Application.FileDialog(msoFileDialogFolderPicker)
         .AllowMultiSelect = False
-        .Title = "フォルダ 選択"
-        .InitialFileName = CurDir()
+        .Title = title
+        .InitialFileName = intialFileSpec
 
         'フォルダ選択状態 判定
         If .Show = -1 Then GetSelectFolderSpec = .SelectedItems(1)

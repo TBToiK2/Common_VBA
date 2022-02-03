@@ -11,28 +11,30 @@ Public Function BuildPath(ParamArray path() As Variant) As String
 On Error GoTo Err
 
     Dim FSO As New FileSystemObject
+    With FSO
 
-    Dim maxElement As LongPtr
-    maxElement = UBound(path, 1)
+        'パラメータ数 判定
+        Dim maxElement As LongPtr
+        maxElement = UBound(path, 1)
+        Select Case maxElement
+            Case Is < 0
+                'パス 作成
+                BuildPath = FSO.BuildPath(path(0), vbNullString)
 
-    'パラメータ数 判定
-    Select Case maxElement
-        Case 0
-            'パス 作成
-            BuildPath = FSO.BuildPath(path(0), vbNullString)
+            Case Else
+                'パス 作成
+                BuildPath = FSO.BuildPath(path(0), path(1))
 
-        Case Is > 0
-            'パス 作成
-            BuildPath = FSO.BuildPath(path(0), path(1))
+                If maxElement > 1 Then
+                    Dim element As LongPtr
+                    For element = 2 To maxElement
+                        BuildPath = FSO.BuildPath(BuildPath, path(CLng(element)))
+                    Next element
+                End If
 
-            If maxElement > 1 Then
-                Dim element As LongPtr
-                For element = 2 To maxElement
-                    BuildPath = FSO.BuildPath(BuildPath, path(CLng(element)))
-                Next element
-            End If
+        End Select
 
-    End Select
+    End With
 
     Exit Function
 

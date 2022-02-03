@@ -1,21 +1,33 @@
 '----------------------------------------------------------------------------------------------------
-'2022/02/01 12:21:07
+'2022/02/03 01:53:30
 '----------------------------------------------------------------------------------------------------
-Public Function GetSelectFileSpec() As String
+'参照設定:Windows Script Host Object Model
+'ProgID:WScript.Shell
+'CLSID:{72C24DD5-D70A-438B-8A42-98424B88AFB8}
+'LiblaryName:IWshRuntimeLibrary
+'FullPath:C:\Windows\System32\wshom.ocx
+'Major.Minor:1.0
+Public Function GetSelectFileSpec(ByVal intialFileSpec As String, Optional ByVal filterDescription As String, Optional ByVal filterExtentions As String, Optional ByVal title As String) As String
 On Error GoTo Err
+
+    'カレントディレクトリ 変更
+    Dim WSH As New WshShell
+    WSH.CurrentDirectory = intialFileSpec
+
+    If IsBlank(title) Then title = "ファイル 選択"
 
     'ダイアログボックス 設定
     With Application.FileDialog(msoFileDialogFilePicker)
-        .AllowMultiSelect = False
         With .Filters
-            .Clear
-            Call .Add("Excel ファイル", "*.xls*", 1)
+            Call .Clear
+            Call .Add(filterDescription, filterExtentions, 1)
         End With
         .FilterIndex = 1
-        .Title = "Excel ファイル 選択"
-        .InitialFileName = CurDir()
+        .AllowMultiSelect = False
+        .Title = title
+        .InitialFileName = intialFileSpec
 
-        'フォルダ選択状態 判定
+        'ファイル選択状態 判定
         If .Show = -1 Then GetSelectFileSpec = .SelectedItems(1)
     End With
 
