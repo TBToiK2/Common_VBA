@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/02/01 12:21:07
+'2022/02/04 01:04:41
 '----------------------------------------------------------------------------------------------------
 '参照設定:Microsoft Scripting Runtime
 'ProgID:Scripting.FileSystemObject
@@ -7,12 +7,26 @@
 'Name:Scripting
 'FullPath:C:\Windows\System32\scrrun.dll
 'Major.Minor:1.0
-Public Function GetFileName(ByVal fileSpec As String) As String
+Public Function GetFileName(ByVal fileSpec As String, Optional ByVal fileType As ReFileType) As String
 On Error GoTo Err
 
-    'ファイル名 取得
     Dim FSO As New FileSystemObject
-    GetFileName = FSO.GetFileName(fileSpec)
+    With FSO
+
+        'ファイル名 取得
+        Select Case searchFileType
+            Case reFileName
+            GetFileName = .GetFileName(fileSpec)
+
+            Case reBaseName
+            GetFileName = .GetBaseName(fileSpec)
+
+            Case reExtensionName
+            GetFileName = .GetExtensionName(fileSpec)
+
+        End Select
+
+    End With
 
     Exit Function
 

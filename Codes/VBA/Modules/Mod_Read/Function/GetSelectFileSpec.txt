@@ -6,7 +6,7 @@
 'CLSID:{72C24DD5-D70A-438B-8A42-98424B88AFB8}
 'LiblaryName:IWshRuntimeLibrary
 'FullPath:C:\Windows\System32\wshom.ocx
-'Major.Minor:1.0
+'Major.Minor:Indipendent
 Public Function GetSelectFileSpec(ByVal intialFileSpec As String, Optional ByVal filterDescription As String, Optional ByVal filterExtentions As String, Optional ByVal title As String) As String
 On Error GoTo Err
 
@@ -25,7 +25,7 @@ On Error GoTo Err
         .FilterIndex = 1
         .AllowMultiSelect = False
         .Title = title
-        .InitialFileName = intialFileSpec
+        .InitialFileName = vbNullString
 
         'ファイル選択状態 判定
         If .Show = -1 Then GetSelectFileSpec = .SelectedItems(1)

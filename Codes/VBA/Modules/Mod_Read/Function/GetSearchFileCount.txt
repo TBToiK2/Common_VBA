@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/02/02 03:25:21
+'2022/02/04 01:05:41
 '----------------------------------------------------------------------------------------------------
 '参照設定:Microsoft Scripting Runtime
 'ProgID:Scripting.FileSystemObject
@@ -7,7 +7,7 @@
 'Name:Scripting
 'FullPath:C:\Windows\System32\scrrun.dll
 'Major.Minor:1.0
-Public Function GetSearchFileCount(ByVal folderSpec As String, ByVal searchFileName As String, Optional ByVal searchFileType As ReSearchType) As LongPtr
+Public Function GetSearchFileCount(ByVal folderSpec As String, ByVal searchFileName As String, Optional ByVal fileType As ReFileType) As LongPtr
 On Error GoTo Err
 
     Dim FSO As New FileSystemObject
@@ -26,19 +26,19 @@ On Error GoTo Err
 
             Dim fileName As String, baseName As String, extensionName As String
             Dim fileCount As Long
-            Select Case searchFileType
+            Select Case fileType
                 'ファイル名
-                Case reSearchFileName
+                Case reFileName
                     fileName = targetFile.Name
                     If searchFileName = fileName Then fileCount = fileCount + 1
 
                 'ベース名
-                Case reSearchBaseName
+                Case reBaseName
                     baseName = .GetBaseName(targetFile.Name)
                     If searchFileBaseName = baseName Then fileCount = fileCount + 1
 
                 '拡張子名
-                Case reSearchExtensionName
+                Case reExtensionName
                     extensionName = .GetExtensionName(targetFile.Name)
                     If searchFileExtensionName = extensionName Then fileCount = fileCount + 1
 

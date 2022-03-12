@@ -15,8 +15,8 @@ On Error GoTo Err
 
         'ファイル名・拡張子 取得
         Dim baseName As String, extensionName As String
-        baseName = FSO.GetBaseName(fileSpec)
-        extensionName = FSO.GetExtensionName(fileSpec)
+        baseName = .GetBaseName(fileSpec)
+        extensionName = .GetExtensionName(fileSpec)
 
     End With
 

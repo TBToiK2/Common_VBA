@@ -1,6 +1,12 @@
 '----------------------------------------------------------------------------------------------------
 '2022/02/03 01:53:33
 '----------------------------------------------------------------------------------------------------
+'参照設定:Windows Script Host Object Model
+'ProgID:WScript.Shell
+'CLSID:{72C24DD5-D70A-438B-8A42-98424B88AFB8}
+'LiblaryName:IWshRuntimeLibrary
+'FullPath:C:\Windows\System32\wshom.ocx
+'Major.Minor:Indipendent
 Public Function GetSelectFolderSpec(ByVal intialFileSpec As String, Optional ByVal title As String) As String
 On Error GoTo Err
 
@@ -14,7 +20,7 @@ On Error GoTo Err
     With Application.FileDialog(msoFileDialogFolderPicker)
         .AllowMultiSelect = False
         .Title = title
-        .InitialFileName = intialFileSpec
+        .InitialFileName = vbNullString
 
         'フォルダ選択状態 判定
         If .Show = -1 Then GetSelectFolderSpec = .SelectedItems(1)
