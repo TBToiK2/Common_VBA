@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/02/04 01:05:41
+'2022/03/15 01:46:23
 '----------------------------------------------------------------------------------------------------
 '参照設定:Microsoft Scripting Runtime
 'ProgID:Scripting.FileSystemObject
@@ -7,7 +7,7 @@
 'Name:Scripting
 'FullPath:C:\Windows\System32\scrrun.dll
 'Major.Minor:1.0
-Public Function GetSearchFileCount(ByVal folderSpec As String, ByVal searchFileName As String, Optional ByVal fileType As ReFileType) As LongPtr
+Public Function GetSearchFileCount(ByVal folderSpec As String, ByVal searchFileName As String, Optional ByVal fileType As ReFileType) As Long
 On Error GoTo Err
 
     Dim FSO As New FileSystemObject

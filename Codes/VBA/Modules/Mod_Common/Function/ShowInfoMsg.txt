@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
 '2022/01/30 05:48:03
 '----------------------------------------------------------------------------------------------------
-Public Function ShowInfoMsg(ByVal prompt As String, Optional ByVal title As String) As LongPtr
+Public Function ShowInfoMsg(ByVal prompt As String, Optional ByVal title As String) As VbMsgBoxResult
 On Error Resume Next
 
     'タイトル 設定

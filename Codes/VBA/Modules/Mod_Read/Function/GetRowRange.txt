@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/02/01 12:21:07
+'2022/03/15 01:46:23
 '----------------------------------------------------------------------------------------------------
-Public Function GetRowRange(ByVal ws As Worksheet, ByVal targetRow As LongPtr, Optional ByVal firstCol As LongPtr = 1, Optional ByVal lastCol As LongPtr) As Range
+Public Function GetRowRange(ByVal ws As Worksheet, ByVal targetRow As Long, Optional ByVal firstCol As Long = 1, Optional ByVal lastCol As Long) As Range
 On Error GoTo Err
 
     If targetRow < MIN_ROW Or targetRow > MAX_ROW Then
@@ -27,7 +27,7 @@ On Error GoTo Err
         Else
 
             '最終列 取得
-            Dim targetLastCol As LongPtr
+            Dim targetLastCol As Long
             targetLastCol = GetLastCol(ws, targetRow)
 
             '行範囲 取得

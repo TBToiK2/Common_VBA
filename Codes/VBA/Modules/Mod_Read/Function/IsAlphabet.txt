@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2021/7/26 01:28:58
+'2022/03/15 02:00:33
 '----------------------------------------------------------------------------------------------------
 Public Function IsAlphabet(ByVal Expression As Variant) As Boolean
 On Error GoTo Err
@@ -8,7 +8,7 @@ On Error GoTo Err
     If IsBlank(Expression) Then Exit Function
 
     '全文字 確認
-    Dim LetterCount As LongPtr
+    Dim LetterCount As Long
     For LetterCount = 1 To Len(Expression)
         If Mid(Expression, LetterCount, 1) Like "[!A-zＡ-ｚ]" Then Exit Function
     Next LetterCount

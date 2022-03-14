@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
 '2022/02/01 12:34:06
 '----------------------------------------------------------------------------------------------------
-Public Function ConvAddrRef(ByVal toReferenceStyle As XlReferenceStyle, ByRef A1 As String, ByRef R1C1 As LongPtr) As Boolean
+Public Function ConvAddrRef(ByVal toReferenceStyle As XlReferenceStyle, ByRef A1 As String, ByRef R1C1 As Long) As Boolean
 On Error GoTo Err
 
     If toReferenceStyle = xlA1 Then

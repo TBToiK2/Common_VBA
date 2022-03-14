@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/02/01 12:21:07
+'2022/03/15 01:46:23
 '----------------------------------------------------------------------------------------------------
-Public Function GetLastRow(ByVal ws As Worksheet, ByVal targetCol As LongPtr) As LongPtr
+Public Function GetLastRow(ByVal ws As Worksheet, ByVal targetCol As Long) As Long
 On Error GoTo Err
 
     If targetCol < MIN_COL Or targetCol > MAX_COL Then
@@ -13,7 +13,7 @@ On Error GoTo Err
 
         '使用範囲最終行 取得
         With .UsedRange
-            Dim usedLastRow As LongPtr
+            Dim usedLastRow As Long
             usedLastRow = .Rows(.Rows.Count).Row
         End With
 
@@ -30,7 +30,7 @@ On Error GoTo Err
         End With
 
         '最終行 取得
-        Dim lastRow As LongPtr
+        Dim lastRow As Long
         For lastRow = UBound(usedRangeArr, 1) To 1 Step -1
             If Not IsBlank(usedRangeArr(CLng(lastRow), 1)) Then
                 GetlastRow = lastRow

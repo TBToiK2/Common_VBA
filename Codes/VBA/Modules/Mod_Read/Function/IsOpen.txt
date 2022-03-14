@@ -1,10 +1,10 @@
 '----------------------------------------------------------------------------------------------------
-'2022/01/31 11:58:01
+'2022/03/15 02:06:24
 '----------------------------------------------------------------------------------------------------
-Public Function IsOpen(ByVal fileSpec As String) As LongPtr
+Public Function IsOpen(ByVal fileSpec As String) As Long
 On Error Resume Next
 
-    Dim fileNumber As Integer
+    Dim fileNumber As Long
     fileNumber = FreeFile(0)
 
     'ファイルナンバー1-255 使用時

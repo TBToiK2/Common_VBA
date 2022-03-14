@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
 '2022/01/30 06:17:49
 '----------------------------------------------------------------------------------------------------
-Public Sub ShowErrMsg(ByVal errDescription As String, Optional ByVal errNumber As LongPtr, Optional ByVal title As String)
+Public Sub ShowErrMsg(ByVal errDescription As String, Optional ByVal errNumber As Long, Optional ByVal title As String)
 On Error Resume Next
 
     'メッセージプロンプト 設定

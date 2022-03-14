@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/02/01 12:21:07
+'2022/03/15 01:46:23
 '----------------------------------------------------------------------------------------------------
-Public Function GetColRange(ByVal ws As Worksheet, ByVal targetCol As LongPtr, Optional ByVal firstRow As LongPtr = 1, Optional ByVal lastRow As LongPtr) As Range
+Public Function GetColRange(ByVal ws As Worksheet, ByVal targetCol As Long, Optional ByVal firstRow As Long = 1, Optional ByVal lastRow As Long) As Range
 On Error GoTo Err
 
     If targetCol < MIN_COL Or targetCol > MAX_COL Then
@@ -27,7 +27,7 @@ On Error GoTo Err
         Else
 
             '最終行 取得
-            Dim targetLastRow As LongPtr
+            Dim targetLastRow As Long
             targetLastRow = GetLastRow(ws, targetCol)
 
             '行範囲 取得
