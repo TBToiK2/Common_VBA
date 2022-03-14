@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/02/01 12:34:06
+'2022/03/14 04:02:41
 '----------------------------------------------------------------------------------------------------
 '参照設定:Microsoft Scripting Runtime
 'ProgID:Scripting.FileSystemObject
@@ -8,40 +8,76 @@
 'FullPath:C:\Windows\System32\scrrun.dll
 'Major.Minor:1.0
 Public Function BuildPath(ParamArray path() As Variant) As String
-On Error GoTo Err
+On Error Resume Next
 
     Dim FSO As New FileSystemObject
     With FSO
 
-        'パラメータ数 判定
-        Dim maxElement As LongPtr
-        maxElement = UBound(path, 1)
-        Select Case maxElement
-            Case Is < 0
-                'パス 作成
-                BuildPath = FSO.BuildPath(path(0), vbNullString)
+        Dim maxElement As Long
+        Dim element As Long
+        Dim pathParam As String
+        '第一引数 配列判定
+        If IsArray(path(0)) Then
 
-            Case Else
-                'パス 作成
-                BuildPath = FSO.BuildPath(path(0), path(1))
+            Dim pathArr() As Variant
+            pathArr = path(0)
 
-                If maxElement > 1 Then
-                    Dim element As LongPtr
-                    For element = 2 To maxElement
-                        BuildPath = FSO.BuildPath(BuildPath, path(CLng(element)))
+            'パラメータ数 判定
+            maxElement = UBound(pathArr, 1)
+            Select Case maxElement
+                Case Is = -1
+                    Call ShowErrMsg("指定された配列に値が一つも存在しません。")
+
+                Case Is = 0
+                    pathParam = CStr(pathArr(0))
+                    'エラー 判定
+                    If Err.Number > 0 Then GoTo Err_Array
+                    'パス 作成
+                    BuildPath = .BuildPath(pathParam, vbNullString)
+
+                Case Else
+                    For element = 0 To maxElement
+                        pathParam = CStr(pathArr(element))
+                        'エラー 判定
+                        If Err.Number > 0 Then GoTo Err_Array
+                        'パス 作成
+                        BuildPath = .BuildPath(BuildPath, pathParam)
                     Next element
-                End If
 
-        End Select
+            End Select
+
+        Else
+
+            'パラメータ数 判定
+            maxElement = UBound(path, 1)
+            Select Case maxElement
+                Case Is = 0
+                    'パス 作成
+                    BuildPath = .BuildPath(path(0), vbNullString)
+
+                Case Else
+                    For element = 0 To maxElement
+                        pathParam = CStr(path(element))
+                        'エラー 判定
+                        If Err.Number > 0 Then GoTo Err_Array
+                        'パス 作成
+                        BuildPath = .BuildPath(BuildPath, pathParam)
+                    Next element
+
+            End Select
+
+        End If
 
     End With
 
     Exit Function
 
 'エラー処理
-Err:
+Err_Array:
 
-    Call ShowErrMsg(Err.Description, Err.Number)
+    Call ShowErrMsg("指定された配列内に文字列に変換できない要素が含まれています。")
+
+    BuildPath = vbNullString
 
 End Function
 '----------------------------------------------------------------------------------------------------
