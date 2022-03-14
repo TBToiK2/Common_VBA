@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/14 04:02:41
+'2022/03/15 02:24:33
 '----------------------------------------------------------------------------------------------------
 '参照設定:Microsoft Scripting Runtime
 'ProgID:Scripting.FileSystemObject
@@ -26,7 +26,7 @@ On Error Resume Next
             maxElement = UBound(pathArr, 1)
             Select Case maxElement
                 Case Is = -1
-                    Call ShowErrMsg("指定された配列に値が一つも存在しません。")
+                    Call ShowErrMsg("指定された配列に値が一つも存在しません。", title:="BuildPath")
 
                 Case Is = 0
                     pathParam = CStr(pathArr(0))
@@ -75,7 +75,7 @@ On Error Resume Next
 'エラー処理
 Err_Array:
 
-    Call ShowErrMsg("指定された配列内に文字列に変換できない要素が含まれています。")
+    Call ShowErrMsg("指定された配列内に文字列に変換できない要素が含まれています。", title:="BuildPath")
 
     BuildPath = vbNullString
 

@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/02/01 12:34:06
+'2022/03/15 03:28:53
 '----------------------------------------------------------------------------------------------------
 Public Function ConvTrueFalse(ByVal trueFalse As String, ByRef convertedTrueFalse As Boolean) As Boolean
 On Error GoTo Err
@@ -34,7 +34,7 @@ On Error GoTo Err
 'エラー処理
 Err:
 
-    Call ShowErrMsg(Err.Description, Err.Number)
+    Call ShowErrMsg(Err.Description, Err.Number, "ConvTrueFalse")
 
 End Function
 '----------------------------------------------------------------------------------------------------

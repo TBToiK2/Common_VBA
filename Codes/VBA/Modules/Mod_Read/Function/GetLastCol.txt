@@ -1,11 +1,11 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/15 01:46:23
+'2022/03/15 03:07:54
 '----------------------------------------------------------------------------------------------------
 Public Function GetLastCol(ByVal ws As Worksheet, ByVal targetRow As Long) As Long
 On Error GoTo Err
 
     If targetRow < MIN_ROW Or targetRow > MAX_ROW Then
-        ShowErrMsg("指定した行は存在しません。")
+        Call ShowErrMsg("指定した行は存在しません。", title:="GetLastCol")
         Exit Function
     End If
 
@@ -45,7 +45,7 @@ On Error GoTo Err
 'エラー処理
 Err:
 
-    Call ShowErrMsg(Err.Description, Err.Number)
+    Call ShowErrMsg(Err.Description, Err.Number, "GetLastCol")
 
 End Function
 '----------------------------------------------------------------------------------------------------

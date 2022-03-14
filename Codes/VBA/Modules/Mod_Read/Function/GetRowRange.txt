@@ -1,19 +1,19 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/15 01:46:23
+'2022/03/15 03:05:49
 '----------------------------------------------------------------------------------------------------
 Public Function GetRowRange(ByVal ws As Worksheet, ByVal targetRow As Long, Optional ByVal firstCol As Long = 1, Optional ByVal lastCol As Long) As Range
 On Error GoTo Err
 
     If targetRow < MIN_ROW Or targetRow > MAX_ROW Then
-        ShowErrMsg("指定した行は存在しません。")
+        Call ShowErrMsg("指定した行は存在しません。", title:="GetRowRange")
         Exit Function
     End If
     If firstCol < MIN_COL Or firstCol > MAX_COL Then
-        ShowErrMsg("指定した列は存在しません。")
+        Call ShowErrMsg("指定した列は存在しません。", title:="GetRowRange")
         Exit Function
     End If
     If lastCol < 0 Or lastCol > MAX_COL Then
-        ShowErrMsg("指定した列は存在しません。")
+        Call ShowErrMsg("指定した列は存在しません。", title:="GetRowRange")
         Exit Function
     End If
 
@@ -44,7 +44,7 @@ On Error GoTo Err
 'エラー処理
 Err:
 
-    Call ShowErrMsg(Err.Description, Err.Number)
+    Call ShowErrMsg(Err.Description, Err.Number, "GetRowRange")
 
 End Function
 '----------------------------------------------------------------------------------------------------

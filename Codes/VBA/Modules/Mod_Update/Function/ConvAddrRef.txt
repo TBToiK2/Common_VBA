@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/02/01 12:34:06
+'2022/03/15 03:28:53
 '----------------------------------------------------------------------------------------------------
 Public Function ConvAddrRef(ByVal toReferenceStyle As XlReferenceStyle, ByRef A1 As String, ByRef R1C1 As Long) As Boolean
 On Error GoTo Err
@@ -19,12 +19,12 @@ Err:
 
     'エラー判定
     If toReferenceStyle = xlA1 Then
-        If R1C1 < 1 Or R1C1 > 16384 Then Call ShowErrMsg("入力値：" & R1C1 & vbCrLf & "入力値が有効列数の範囲外です。""1""以上""16384""以下で入力してください。")
+        If R1C1 < 1 Or R1C1 > 16384 Then Call ShowErrMsg("入力値：" & R1C1 & vbCrLf & "入力値が有効列数の範囲外です。""1""以上""16384""以下で入力してください。", title:="ConvAddrRef")
     Else
         If IsAlphabet(A1) Then
-            Call ShowErrMsg("入力値：" & A1 & vbCrLf & "入力値が最大列数を超えています。""XFD""未満で入力してください。")
+            Call ShowErrMsg("入力値：" & A1 & vbCrLf & "入力値が最大列数を超えています。""XFD""未満で入力してください。", title:="ConvAddrRef")
         Else
-            Call ShowErrMsg("入力値：" & A1 & vbCrLf & "入力値が正しくありません。アルファベットで入力してください。")
+            Call ShowErrMsg("入力値：" & A1 & vbCrLf & "入力値が正しくありません。アルファベットで入力してください。", title:="ConvAddrRef")
         End If
     End If
 

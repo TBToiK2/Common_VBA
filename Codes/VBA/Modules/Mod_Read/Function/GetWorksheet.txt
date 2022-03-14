@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/02/01 12:21:07
+'2022/03/15 03:11:48
 '----------------------------------------------------------------------------------------------------
 Public Function GetWorksheet(ByVal wsName As String, Optional ByVal parent As Sheets, Optional ByVal codeNameFLG As Boolean ) As Worksheet
 On Error GoTo Err
@@ -32,7 +32,7 @@ On Error GoTo Err
 'エラー処理
 Err:
 
-    Call ShowErrMsg(Err.Description, Err.Number)
+    Call ShowErrMsg(Err.Description, Err.Number, "GetWorksheet")
 
 End Function
 '----------------------------------------------------------------------------------------------------

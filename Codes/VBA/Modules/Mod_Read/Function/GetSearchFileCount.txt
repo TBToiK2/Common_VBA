@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/15 01:46:23
+'2022/03/15 03:07:54
 '----------------------------------------------------------------------------------------------------
 '参照設定:Microsoft Scripting Runtime
 'ProgID:Scripting.FileSystemObject
@@ -55,7 +55,7 @@ On Error GoTo Err
 'エラー処理
 Err:
 
-    Call ShowErrMsg(Err.Description, Err.Number)
+    Call ShowErrMsg(Err.Description, Err.Number, "GetSearchFileCount")
 
 End Function
 '----------------------------------------------------------------------------------------------------

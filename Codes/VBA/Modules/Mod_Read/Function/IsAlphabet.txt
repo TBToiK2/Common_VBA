@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/15 02:00:33
+'2022/03/15 03:11:48
 '----------------------------------------------------------------------------------------------------
 Public Function IsAlphabet(ByVal Expression As Variant) As Boolean
 On Error GoTo Err
@@ -20,7 +20,7 @@ On Error GoTo Err
 'エラー処理
 Err:
 
-    Call ShowErrMsg(Err.Description, Err.Number)
+    Call ShowErrMsg(Err.Description, Err.Number, "IsAlphabet")
 
 End Function
 '----------------------------------------------------------------------------------------------------
