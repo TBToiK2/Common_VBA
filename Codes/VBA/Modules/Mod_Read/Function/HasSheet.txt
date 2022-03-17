@@ -1,45 +1,55 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/15 03:11:48
+'2022/03/17 03:55:36
 '----------------------------------------------------------------------------------------------------
-Public Function HasWorksheet(ByVal wsName As String, Optional ByVal parent As Sheets, Optional ByVal codeNameFLG As Boolean) As Boolean
+Public Function HasSheet(ByVal shName As String, Optional ByVal parentWb As Workbook, Optional ByVal codeNameFLG As Boolean, Optional ByVal shType As XlSheetType) As Boolean
 On Error GoTo Err
 
     '引数 既定値判定
-    If IsBlank(parent) Then Set parent = ThisWorkbook.Sheets
+    If IsBlank(parentWb) Then Set parentWb = ThisWorkbook
 
-    'コードネーム 判定
+    Dim parent As Sheets
     Dim sh As Object
-    If codeNameFLG Then
-
-        '全シート 確認
-        For Each sh In parent
-            'Worksheet 判定
-            If sh.Type = xlWorksheet And TypeName(sh) = "Worksheet" Then
-                If sh.CodeName = wsName Then
-                    HasWorksheet = True
+    Dim targetName As String
+    'シートタイプ 判定
+    Select Case shType
+        Case xlChart, xlWorksheet
+            Set parent = IIf(shType = xlChart, parentWb.Charts, parentWb.Worksheets)
+            '全シート 確認
+            For Each sh In parent
+                targetName = IIf(codeNameFLG, sh.CodeName, sh.Name)
+                If targetName = shName Then
+                    HasSheet = True
                     Exit Function
                 End If
-            End If
-        Next sh
+            Next sh
 
-    Else
+        Case xlDialogSheet, xlExcel4IntlMacroSheet, xlExcel4MacroSheet
+            Set parent = IIf(shType = xlDialogSheet, parentWb.DialogSheets, IIf(shType = xlExcel4IntlMacroSheet, parentWb.Excel4IntlMacroSheets, parentWb.Excel4MacroSheets))
+            '全シート 確認
+            For Each sh In parent
+                If sh.Name = shName Then
+                    HasSheet = True
+                    Exit Function
+                End If
+            Next sh
 
-        '全シート 確認
-        For Each sh In parent
-            If TypeName(sh) = "Worksheet" And sh.Name = wsName Then
-                HasWorksheet = True
-                Exit Function
-            End If
-        Next sh
+        Case Else
+            '全シート 確認
+            For Each sh In parentWb.Sheets
+                If sh.Name = shName Then
+                    HasSheet = True
+                    Exit Function
+                End If
+            Next sh
 
-    End If
+    End Select
 
     Exit Function
 
 'エラー処理
 Err:
 
-    Call ShowErrMsg(Err.Description, Err.Number, "HasWorksheet")
+    Call ShowErrMsg(Err.Description, Err.Number, "HasSheet")
 
 End Function
 '----------------------------------------------------------------------------------------------------

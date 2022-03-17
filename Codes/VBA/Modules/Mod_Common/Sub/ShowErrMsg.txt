@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/01/30 06:17:49
+'2022/03/17 09:59:52
 '----------------------------------------------------------------------------------------------------
 Public Sub ShowErrMsg(ByVal errDescription As String, Optional ByVal errNumber As Long, Optional ByVal title As String)
 On Error Resume Next
@@ -10,7 +10,7 @@ On Error Resume Next
     If errNumber <> 0 Then Prompt = "エラー番号:[" & errNumber & "]" & vbCrLf & prompt
 
     'タイトル 設定
-    If Not IsBlank(title) Then title = ":" & title
+    If title <> "" Then title = ":" & title
 
     'メッセージ 表示
     Call MsgBox(prompt, vbOKOnly + vbCritical, "エラー" & title)
