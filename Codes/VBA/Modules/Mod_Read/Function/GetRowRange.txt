@@ -1,19 +1,19 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/15 03:05:49
+'2022/03/18 23:26:15
 '----------------------------------------------------------------------------------------------------
 Public Function GetRowRange(ByVal ws As Worksheet, ByVal targetRow As Long, Optional ByVal firstCol As Long = 1, Optional ByVal lastCol As Long) As Range
 On Error GoTo Err
 
     If targetRow < MIN_ROW Or targetRow > MAX_ROW Then
-        Call ShowErrMsg("指定した行は存在しません。", title:="GetRowRange")
+        Call ShowErrMsg("指定された値が有効行数の範囲外です。" & MIN_ROW & "以上" & MAX_ROW & "以下で入力してください。", title:="GetRowRange")
         Exit Function
     End If
     If firstCol < MIN_COL Or firstCol > MAX_COL Then
-        Call ShowErrMsg("指定した列は存在しません。", title:="GetRowRange")
+        Call ShowErrMsg("指定された値が有効列数の範囲外です。" & MIN_COL & "以上" & MAX_COL & "以下で入力してください。", title:="GetRowRange")
         Exit Function
     End If
     If lastCol < 0 Or lastCol > MAX_COL Then
-        Call ShowErrMsg("指定した列は存在しません。", title:="GetRowRange")
+        Call ShowErrMsg("指定された値が有効列数の範囲外です。" & MIN_COL & "以上" & MAX_COL & "以下で入力してください。", title:="GetRowRange")
         Exit Function
     End If
 

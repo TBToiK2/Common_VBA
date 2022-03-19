@@ -1,11 +1,11 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/15 03:07:54
+'2022/03/18 23:26:15
 '----------------------------------------------------------------------------------------------------
 Public Function GetLastCol(ByVal ws As Worksheet, ByVal targetRow As Long) As Long
 On Error GoTo Err
 
     If targetRow < MIN_ROW Or targetRow > MAX_ROW Then
-        Call ShowErrMsg("指定した行は存在しません。", title:="GetLastCol")
+        Call ShowErrMsg("指定された値が有効行数の範囲外です。" & MIN_ROW & "以上" & MAX_ROW & "以下で入力してください。", title:="GetLastCol")
         Exit Function
     End If
 
@@ -32,7 +32,7 @@ On Error GoTo Err
         '最終列 取得
         Dim lastCol As Long
         For lastCol = UBound(usedRangeArr, 2) To 1 Step -1
-            If Not IsBlank(usedRangeArr(1, CLng(lastCol))) Then
+            If Not IsBlank(usedRangeArr(1, lastCol)) Then
                 GetLastCol = lastCol
                 Exit Function
             End If
