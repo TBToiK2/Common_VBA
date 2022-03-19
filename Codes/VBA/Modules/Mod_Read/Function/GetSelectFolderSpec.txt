@@ -1,25 +1,31 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/15 03:11:48
+'2022/03/20 00:26:51
 '----------------------------------------------------------------------------------------------------
 '参照設定:Windows Script Host Object Model
 'ProgID:WScript.Shell
 'CLSID:{72C24DD5-D70A-438B-8A42-98424B88AFB8}
-'LiblaryName:IWshRuntimeLibrary
+'LibraryName:IWshRuntimeLibrary
 'FullPath:C:\Windows\System32\wshom.ocx
 'Major.Minor:Indipendent
-Public Function GetSelectFolderSpec(ByVal intialFileSpec As String, Optional ByVal title As String) As String
+Public Function GetSelectFolderSpec(ByVal folderPath As String, Optional ByVal dialogTitle As String) As String
 On Error GoTo Err
+
+    'フォルダパス 存在確認
+    If Not FolderExists(folderPath) Then
+        Call ShowErrMsg("指定されたフォルダパスが存在しません。", title:="GetSelectFolderSpec")
+        Exit Function
+    End If
 
     'カレントディレクトリ 変更
     Dim WSH As New WshShell
-    WSH.CurrentDirectory = intialFileSpec
+    WSH.CurrentDirectory = folderPath
 
-    If IsBlank(title) Then title = "フォルダ 選択"
+    If IsBlank(dialogTitle) Then dialogTitle = "フォルダ 選択"
 
     'ダイアログボックス 設定
     With Application.FileDialog(msoFileDialogFolderPicker)
         .AllowMultiSelect = False
-        .Title = title
+        .Title = dialogTitle
         .InitialFileName = vbNullString
 
         'フォルダ選択状態 判定

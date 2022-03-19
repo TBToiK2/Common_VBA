@@ -4,7 +4,7 @@
 '参照設定:Microsoft Scripting Runtime
 'ProgID:Scripting.FileSystemObject
 'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
-'LiblaryName:Scripting
+'LibraryName:Scripting
 'FullPath:C:\Windows\System32\scrrun.dll
 'Major.Minor:1.0
 Public Function BuildPath(ParamArray path() As Variant) As String
