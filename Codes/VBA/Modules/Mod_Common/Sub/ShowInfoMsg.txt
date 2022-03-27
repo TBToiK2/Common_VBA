@@ -1,14 +1,14 @@
 '----------------------------------------------------------------------------------------------------
-'2022/01/30 05:48:03
+'2022/03/28 01:11:31
 '----------------------------------------------------------------------------------------------------
-Public Function ShowInfoMsg(ByVal prompt As String, Optional ByVal title As String) As VbMsgBoxResult
+Public Sub ShowInfoMsg(ByVal prompt As String, Optional ByVal title As String)
 On Error Resume Next
 
     'タイトル 設定
     If Not IsBlank(title) Then title = ":" & title
 
     'メッセージ 表示
-    ShowInfoMsg = MsgBox(prompt, vbOKOnly + vbInformation, "情報" & title)
+    Call MsgBox(prompt, vbOKOnly + vbInformation, "情報" & title)
 
-End Function
+End Sub
 '----------------------------------------------------------------------------------------------------
