@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
 '2022/03/24 00:21:53
 '----------------------------------------------------------------------------------------------------
-Public Function HasName(ByVal nameName As String, Optional ByVal parent As Names) As Boolean
+Public Function GetName(ByVal nameName As String, Optional ByVal parent As Names) As Name
 On Error GoTo Err
 
     '引数 既定値判定
@@ -13,7 +13,7 @@ On Error GoTo Err
         '全名前 確認
         For Each defineName In parent
             If defineName.Name = parent.Parent.Name & "!" & nameName Then
-                HasName = True
+                Set GetName = defineName
                 Exit Function
             End If
         Next defineName
@@ -21,7 +21,7 @@ On Error GoTo Err
         '全名前 確認
         For Each defineName In parent
             If defineName.Name = nameName Then
-                HasName = True
+                Set GetName = defineName
                 Exit Function
             End If
         Next defineName
@@ -32,7 +32,7 @@ On Error GoTo Err
 'エラー処理
 Err:
 
-    Call ShowErrMsg(Err.Description, Err.Number, "HasName")
+    Call ShowErrMsg(Err.Description, Err.Number, "GetName")
 
 End Function
 '----------------------------------------------------------------------------------------------------

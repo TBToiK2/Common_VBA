@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/17 03:55:36
+'2022/03/26 22:37:42
 '----------------------------------------------------------------------------------------------------
-Public Function GetSheet(ByVal shName As String, Optional ByVal parentWb As Workbook, Optional ByVal codeNameFLG As Boolean, Optional ByVal shType As XlSheetType) As Object
+Public Function GetSheet(ByVal shName As String, Optional ByVal parentWb As Workbook, Optional ByVal shType As XlSheetType, Optional ByVal codeNameFLG As Boolean) As Object
 On Error GoTo Err
 
     '引数 既定値判定

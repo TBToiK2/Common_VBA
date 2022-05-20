@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/20 00:06:50
+'2022/03/26 22:15:17
 '----------------------------------------------------------------------------------------------------
 '参照設定:Microsoft VBScript Regular Explession 5.5
 'ProgID:VBScript.RegExp
@@ -10,8 +10,8 @@
 Public Function IsNumber(ByVal Expression As Variant) As Boolean
 On Error GoTo Err
 
-    '空判定
-    If IsBlank(Expression) Then Exit Function
+    '空, 文字列判定
+    If IsBlank(Expression) Or Not IsString(Expression) Then Exit Function
 
     '正規表現 判定
     Dim Reg As New RegExp
@@ -19,7 +19,7 @@ On Error GoTo Err
         .Global = False
         .IgnoreCase = False
         .MultiLine = False
-        .Pattern = "^(?:(?!-0$)|-?\d+)(?:\.\d*?[1-9])?$"
+        .Pattern = "^-?\d*\.?\d*$"
         IsNumber = .Test(Expression)
     End With
 

@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/20 21:28:50
+'2022/04/05 12:21:07
 '----------------------------------------------------------------------------------------------------
-Public Function HasListObject(ByVal loName As String, Optional ByVal parent As ListObjects) As Boolean
+Public Function GetListObject(ByVal loName As String, Optional ByVal parent As ListObjects) As ListObject
 On Error GoTo Err
 
     '引数 既定値判定
@@ -24,7 +24,7 @@ On Error GoTo Err
     Dim lo As ListObject
     For Each lo In parent
         If lo.Name = loName Then
-            HasListObject = True
+            Set GetListObject = lo
             Exit Function
         End If
     Next lo
@@ -34,7 +34,7 @@ On Error GoTo Err
 'エラー処理
 Err:
 
-    Call ShowErrMsg(Err.Description, Err.Number, "HasListObject")
+    Call ShowErrMsg(Err.Description, Err.Number, "GetListObject")
 
 End Function
 '----------------------------------------------------------------------------------------------------

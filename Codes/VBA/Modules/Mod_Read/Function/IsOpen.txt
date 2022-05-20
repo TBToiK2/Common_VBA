@@ -1,25 +1,24 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/15 03:11:48
+'2022/05/20 14:29:36
 '----------------------------------------------------------------------------------------------------
 Public Function IsOpen(ByVal fileSpec As String) As Long
 On Error Resume Next
 
     Dim fileNumber As Long
+    'ファイルナンバー1-255
     fileNumber = FreeFile(0)
-
-    'ファイルナンバー1-255 使用時
+    'ファイルナンバー256-512
     If fileNumber = 0 Then fileNumber = FreeFile(1)
 
-    'ファイルナンバー256-512 使用時
-    If fileNumber = 0 Then
-        IsOpen = 1
-    Else
+    '未使用ファイルナンバー 存在時
+    If fileNumber <> 0 Then
         '開閉確認
         Open fileSpec For Append As #fileNumber
         Close #fileNumber
 
         IsOpen = Err.Number = 55
-
+    Else
+        IsOpen = 1
     End If
 
 End Function

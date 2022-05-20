@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/15 03:10:36
+'2022/03/26 22:01:21
 '----------------------------------------------------------------------------------------------------
 '参照設定:Microsoft Scripting Runtime
 'ProgID:Scripting.FileSystemObject
@@ -10,17 +10,29 @@
 Public Function CreateBackupFile(ByVal fileSpec As String) As Boolean
 On Error GoTo Err
 
+    'ファイル存在 確認
+    If Not FileExists(fileSpec) Then
+        Call ShowErrMsg("指定されたディレクトリは存在しません。", title:="CreateBackupFile")
+        Exit Function
+    End If
+
+    'ファイル属性 判定
+    If FolderExists(fileSpec) Then
+        Call ShowErrMsg("指定されたディレクトリはファイルではありません。", title:="CreateBackupFile")
+        Exit Function
+    End If
+
     Dim FSO As New FileSystemObject
     With FSO
 
-        'ファイル名・拡張子 取得
+        'ファイル名, 拡張子 取得
         Dim baseName As String, extensionName As String
         baseName = .GetBaseName(fileSpec)
         extensionName = .GetExtensionName(fileSpec)
 
     End With
 
-    Call FileCopy(fileSpec, ThisWorkbook.Path & "\" & baseName & "_" & CStr(Format(Now(), "yyyymmddhhmmss")) & "." & extensionName)
+    Call FileCopy(fileSpec, ThisWorkbook.Path & "\" & baseName & "_" & Format(Now, "yyyymmddhhmmss") & "." & extensionName)
 
     CreateBackupFile = True
 

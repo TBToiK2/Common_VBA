@@ -1,16 +1,24 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/18 23:26:15
+'2022/03/21 01:04:47
 '----------------------------------------------------------------------------------------------------
-Public Function ConvAddrRef(ByVal toReferenceStyle As XlReferenceStyle, ByRef A1 As String, ByRef R1C1 As Long) As Boolean
+Public Function ConvAddrRef(ByVal expression As Variant, ByVal toReferenceStyle As XlReferenceStyle) As Variant
 On Error GoTo Err
 
+    '参照形式 判定
     If toReferenceStyle = xlA1 Then
-        A1 = Split(Cells(1, R1C1).Address(ReferenceStyle:=toReferenceStyle), "$")(1)
+        If IsNumber(expression) Then
+            expression = CLng(expression)
+            ConvAddrRef = Split(Cells(1, expression).Address(ReferenceStyle:=toReferenceStyle), "$")(1)
+        Else
+            Call ShowErrMsg("数値ではない値が指定されています。", title:="ConvAddrRef")
+        End If
     Else
-        R1C1 = Range(A1 & "1").Column
+        If IsAlphabet(expression) Then
+            ConvAddrRef = Range(expression & "1").Column
+        Else
+            Call ShowErrMsg("アルファベットではない値が指定されています。", title:="ConvAddrRef")
+        End If
     End If
-
-    ConvAddrRef = True
 
     Exit Function
 
@@ -19,13 +27,9 @@ Err:
 
     'エラー判定
     If toReferenceStyle = xlA1 Then
-        If R1C1 < 1 Or R1C1 > 16384 Then Call ShowErrMsg("指定された値が有効列数の範囲外です。" & MIN_COL & "以上" & MAX_COL & "以下で入力してください。", title:="ConvAddrRef")
+        If expression < MIN_COL Or expression > MAX_COL Then Call ShowErrMsg("指定された値が有効列数の範囲外です。" & MIN_COL & "以上" & MAX_COL & "以下で入力してください。", title:="ConvAddrRef")
     Else
-        If IsAlphabet(A1) Then
-            Call ShowErrMsg("指定された値が有効列数の範囲外です。XFD未満で入力してください。", title:="ConvAddrRef")
-        Else
-            Call ShowErrMsg("指定された値が正しくありません。アルファベットで入力してください。", title:="ConvAddrRef")
-        End If
+        Call ShowErrMsg("指定された値が有効列数の範囲外です。XFD未満で入力してください。", title:="ConvAddrRef")
     End If
 
 End Function

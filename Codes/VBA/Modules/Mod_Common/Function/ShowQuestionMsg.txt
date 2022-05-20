@@ -8,7 +8,7 @@ On Error Resume Next
     If Not IsBlank(title) Then title = ":" & title
 
     'メッセージ 表示
-    ShowInfoMsg = MsgBox(prompt, vbOKCancel + vbQuestion, "確認" & title)
+    ShowQuestionMsg = MsgBox(prompt, vbOKCancel + vbQuestion, "確認" & title)
 
 End Function
 '----------------------------------------------------------------------------------------------------
