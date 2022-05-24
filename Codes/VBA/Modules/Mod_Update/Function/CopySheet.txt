@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/26 14:24:15
+'2022/05/25 00:24:11
 '----------------------------------------------------------------------------------------------------
-Public Function GetCopySheet(ByVal copySh As Object, Optional ByVal before As Variant, Optional ByVal after As Variant) As Object
+Public Function CopySheet(ByVal copySh As Object, Optional ByVal before As Variant, Optional ByVal after As Variant) As Object
 On Error GoTo Err
 
     Dim sheetsFLG As Boolean
@@ -13,10 +13,10 @@ On Error GoTo Err
         Case "Sheets"
             sheetsFLG = True
         Case "Nothing"
-            Call ShowErrMsg("copyShオブジェクトが空です。", title:="GetCopySheet")
+            Call ShowErrMsg("copyShオブジェクトが空です。", title:="CopySheet")
             Exit Function
         Case Else
-            Call ShowErrMsg("copyShにはシートオブジェクトを指定してください。", title:="GetCopySheet")
+            Call ShowErrMsg("copyShにはシートオブジェクトを指定してください。", title:="CopySheet")
             Exit Function
     End Select
 
@@ -27,9 +27,9 @@ On Error GoTo Err
         Call copySh.Copy
         'SheetsFLG 判定
         If sheetsFLG Then
-            Set GetCopySheet = ActiveWorkbook.Sheets
+            Set CopySheet = ActiveWorkbook.Sheets
         Else
-            Set GetCopySheet = ActiveWorkbook.ActiveSheet
+            Set CopySheet = ActiveWorkbook.ActiveSheet
         End If
 
         Exit Function
@@ -41,10 +41,10 @@ On Error GoTo Err
             Case "Worksheet", "Chart", "DialogSheet"
                 Set wb = before.Parent
             Case "Nothing"
-                Call ShowErrMsg("beforeオブジェクトが空です。", title:="GetCopySheet")
+                Call ShowErrMsg("beforeオブジェクトが空です。", title:="CopySheet")
                 Exit Function
             Case Else
-                Call ShowErrMsg("beforeにはシートオブジェクトを指定してください。", title:="GetCopySheet")
+                Call ShowErrMsg("beforeにはシートオブジェクトを指定してください。", title:="CopySheet")
                 Exit Function
         End Select
 
@@ -55,16 +55,16 @@ On Error GoTo Err
             Case "Worksheet", "Chart", "DialogSheet"
                 Set wb = after.Parent
             Case "Nothing"
-                Call ShowErrMsg("afterオブジェクトが空です。", title:="GetCopySheet")
+                Call ShowErrMsg("afterオブジェクトが空です。", title:="CopySheet")
                 Exit Function
             Case Else
-                Call ShowErrMsg("afterにはシートオブジェクトを指定してください。", title:="GetCopySheet")
+                Call ShowErrMsg("afterにはシートオブジェクトを指定してください。", title:="CopySheet")
                 Exit Function
         End Select
 
     'before, after指定
     Else
-        Call ShowErrMsg("beforeとafterは同時に指定できません。", title:="GetCopySheet")
+        Call ShowErrMsg("beforeとafterは同時に指定できません。", title:="CopySheet")
         Exit Function
     End If
 
@@ -105,9 +105,9 @@ On Error GoTo Err
     If UBound(shIndxArr) > -1 Then
         'SheetsFLG 判定
         If sheetsFLG Then
-            Set GetCopySheet = wb.Sheets(shIndxArr)
+            Set CopySheet = wb.Sheets(shIndxArr)
         Else
-            Set GetCopySheet = wb.Sheets(shIndxArr)(1)
+            Set CopySheet = wb.Sheets(shIndxArr)(1)
         End If
     End If
 
@@ -116,7 +116,7 @@ On Error GoTo Err
 'エラー処理
 Err:
 
-    Call ShowErrMsg(Err.Description, Err.Number, "GetCopySheet")
+    Call ShowErrMsg(Err.Description, Err.Number, "CopySheet")
 
 End Function
 '----------------------------------------------------------------------------------------------------

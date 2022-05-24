@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/26 14:24:15
+'2022/05/25 00:24:04
 '----------------------------------------------------------------------------------------------------
-Public Function GetMoveSheet(ByVal moveSh As Object, Optional ByVal before As Variant, Optional ByVal after As Variant) As Object
+Public Function MoveSheet(ByVal moveSh As Object, Optional ByVal before As Variant, Optional ByVal after As Variant) As Object
 On Error GoTo Err
 
     Dim sheetsFLG As Boolean
@@ -13,10 +13,10 @@ On Error GoTo Err
         Case "Sheets"
             sheetsFLG = True
         Case "Nothing"
-            Call ShowErrMsg("moveShオブジェクトが空です。", title:="GetCopySheet")
+            Call ShowErrMsg("moveShオブジェクトが空です。", title:="MoveSheet")
             Exit Function
         Case Else
-            Call ShowErrMsg("moveShにはシートオブジェクトを指定してください。", title:="GetMoveSheet")
+            Call ShowErrMsg("moveShにはシートオブジェクトを指定してください。", title:="MoveSheet")
             Exit Function
     End Select
 
@@ -27,9 +27,9 @@ On Error GoTo Err
         Call moveSh.Move
         'SheetsFLG 判定
         If sheetsFLG Then
-            Set GetMoveSheet = ActiveWorkbook.Sheets
+            Set MoveSheet = ActiveWorkbook.Sheets
         Else
-            Set GetMoveSheet = ActiveWorkbook.ActiveSheet
+            Set MoveSheet = ActiveWorkbook.ActiveSheet
         End If
 
         Exit Function
@@ -41,10 +41,10 @@ On Error GoTo Err
             Case "Worksheet", "Chart", "DialogSheet"
                 Set wb = before.Parent
             Case "Nothing"
-                Call ShowErrMsg("beforeオブジェクトが空です。", title:="GetCopySheet")
+                Call ShowErrMsg("beforeオブジェクトが空です。", title:="MoveSheet")
                 Exit Function
             Case Else
-                Call ShowErrMsg("beforeにはシートオブジェクトを指定してください。", title:="GetMoveSheet")
+                Call ShowErrMsg("beforeにはシートオブジェクトを指定してください。", title:="MoveSheet")
                 Exit Function
         End Select
 
@@ -55,16 +55,16 @@ On Error GoTo Err
             Case "Worksheet", "Chart", "DialogSheet"
                 Set wb = after.Parent
             Case "Nothing"
-                Call ShowErrMsg("afterオブジェクトが空です。", title:="GetCopySheet")
+                Call ShowErrMsg("afterオブジェクトが空です。", title:="MoveSheet")
                 Exit Function
             Case Else
-                Call ShowErrMsg("afterにはシートオブジェクトを指定してください。", title:="GetMoveSheet")
+                Call ShowErrMsg("afterにはシートオブジェクトを指定してください。", title:="MoveSheet")
                 Exit Function
         End Select
 
     'before, after指定
     Else
-        Call ShowErrMsg("beforeとafterは同時に指定できません。", title:="GetMoveSheet")
+        Call ShowErrMsg("beforeとafterは同時に指定できません。", title:="MoveSheet")
         Exit Function
     End If
 
@@ -92,7 +92,7 @@ On Error GoTo Err
 
     '移動先ワークブック 判定
     If wb.Name = ThisWorkbook.Name Then
-        Set GetMoveSheet = moveSh
+        Set MoveSheet = moveSh
         Exit Function
     End If
 
@@ -111,9 +111,9 @@ On Error GoTo Err
     If UBound(shIndxArr) > -1 Then
         'SheetsFLG 判定
         If sheetsFLG Then
-            Set GetMoveSheet = wb.Sheets(shIndxArr)
+            Set MoveSheet = wb.Sheets(shIndxArr)
         Else
-            Set GetMoveSheet = wb.Sheets(shIndxArr)(1)
+            Set MoveSheet = wb.Sheets(shIndxArr)(1)
         End If
     End If
 
@@ -122,7 +122,7 @@ On Error GoTo Err
 'エラー処理
 Err:
 
-    Call ShowErrMsg(Err.Description, Err.Number, "GetMoveSheet")
+    Call ShowErrMsg(Err.Description, Err.Number, "MoveSheet")
 
 End Function
 '----------------------------------------------------------------------------------------------------
