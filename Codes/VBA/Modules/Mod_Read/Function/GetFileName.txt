@@ -7,21 +7,21 @@
 'LibraryName:Scripting
 'FullPath:C:\Windows\System32\scrrun.dll
 'Major.Minor:1.0
-Public Function GetFileName(ByVal fileSpec As String, Optional ByVal fileType As ReFileType) As String
+Public Function GetFileName(ByVal fileSpec As String, Optional ByVal enFileNameType As EnumFileNameType) As String
 On Error GoTo Err
 
     Dim FSO As New FileSystemObject
     With FSO
 
         'ファイル名 取得
-        Select Case fileType
-            Case reFileName
+        Select Case enFileNameType
+            Case enFileName
             GetFileName = .GetFileName(fileSpec)
 
-            Case reBaseName
+            Case enBaseName
             GetFileName = .GetBaseName(fileSpec)
 
-            Case reExtensionName
+            Case enExtensionName
             GetFileName = .GetExtensionName(fileSpec)
 
         End Select

@@ -7,7 +7,7 @@
 'LibraryName:Scripting
 'FullPath:C:\Windows\System32\scrrun.dll
 'Major.Minor:1.0
-Public Function GetSearchFileCount(ByVal folderSpec As String, ByVal searchFileName As String, Optional ByVal fileType As ReFileType) As Long
+Public Function GetSearchFileCount(ByVal folderSpec As String, ByVal searchFileName As String, Optional ByVal enFileNameType As EnumFileNameType) As Long
 On Error GoTo Err
 
     Dim FSO As New FileSystemObject
@@ -26,19 +26,19 @@ On Error GoTo Err
 
             Dim fileName As String, baseName As String, extensionName As String
             Dim fileCount As Long
-            Select Case fileType
+            Select Case enFileNameType
                 'ファイル名
-                Case reFileName
+                Case enFileName
                     fileName = targetFile.Name
                     If searchFileName = fileName Then fileCount = fileCount + 1
 
                 'ベース名
-                Case reBaseName
+                Case enBaseName
                     baseName = .GetBaseName(targetFile.Name)
                     If searchFileBaseName = baseName Then fileCount = fileCount + 1
 
                 '拡張子名
-                Case reExtensionName
+                Case enExtensionName
                     extensionName = .GetExtensionName(targetFile.Name)
                     If searchFileExtensionName = extensionName Then fileCount = fileCount + 1
 
