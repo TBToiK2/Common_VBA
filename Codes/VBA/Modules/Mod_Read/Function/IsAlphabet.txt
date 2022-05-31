@@ -1,12 +1,15 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/21 00:36:35
+'2022/06/01 00:29:22
 '----------------------------------------------------------------------------------------------------
-'参照設定:Microsoft VBScript Regular Explession 5.5
-'ProgID:VBScript.RegExp
-'CLSID:{3F4DACA4-160D-11D2-A8E9-00104B365C9F}
+'参照設定
 'LibraryName:VBScript_RegExp_55
-'FullPath:C:\Windows\System32\vbscript.dll\3
-'Major.Minor:5.5
+'LIBID:{3F4DACA7-160D-11D2-A8E9-00104B365C9F}
+    'ReferenceName:Microsoft VBScript Regular Expressions 5.5
+    'FullPath(win32):C:\Windows\SysWOW64\vbscript.dll\3
+    'FullPath(win64):C:\Windows\System32\vbscript.dll\3
+    'Major.Minor:5.5
+        'CLSID:{3F4DACA4-160D-11D2-A8E9-00104B365C9F}
+        'ProgID:VBScript.RegExp
 Public Function IsAlphabet(ByVal Expression As Variant) As Boolean
 On Error GoTo Err
 

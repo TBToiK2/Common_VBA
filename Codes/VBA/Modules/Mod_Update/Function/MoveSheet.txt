@@ -1,6 +1,15 @@
 '----------------------------------------------------------------------------------------------------
-'2022/05/25 00:24:04
+'2022/06/01 00:29:22
 '----------------------------------------------------------------------------------------------------
+'参照設定
+'LibraryName:Scripting
+'LIBID:{420B2830-E718-11CF-893D-00A0C9054228}
+    'ReferenceName:Microsoft Scripting Runtime
+    'FullPath(win32):C:\Windows\SysWOW64\scrrun.dll
+    'FullPath(win64):C:\Windows\System32\scrrun.dll
+    'Major.Minor:1.0
+        'CLSID:{EE09B103-97E0-11CF-978F-00A02463E06F}
+        'ProgID:Scripting.Dictionary
 Public Function MoveSheet(ByVal moveSh As Object, Optional ByVal before As Variant, Optional ByVal after As Variant) As Object
 On Error GoTo Err
 

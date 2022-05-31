@@ -1,12 +1,15 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/20 00:26:51
+'2022/06/01 00:29:22
 '----------------------------------------------------------------------------------------------------
-'参照設定:Windows Script Host Object Model
-'ProgID:WScript.Shell
-'CLSID:{72C24DD5-D70A-438B-8A42-98424B88AFB8}
+'参照設定
 'LibraryName:IWshRuntimeLibrary
-'FullPath:C:\Windows\System32\wshom.ocx
-'Major.Minor:Indipendent
+'LIBID:{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}
+    'ReferenceName:Windows Script Host Object Model
+    'FullPath(win32):C:\Windows\SysWOW64\wshom.ocx
+    'FullPath(win64):C:\Windows\System32\wshom.ocx
+    'Major.Minor:1.0
+        'CLSID:{F935DC22-1CF0-11D0-ADB9-00C04FD58A0B}
+        'ProgID:WScript.Shell
 Public Function GetSelectFolderSpec(ByVal folderPath As String, Optional ByVal dialogTitle As String) As String
 On Error GoTo Err
 
