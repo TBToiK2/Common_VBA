@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/28 00:22:43
+'2022/06/07 15:06:48
 '----------------------------------------------------------------------------------------------------
 Public Function ArrayByType(ByVal arrType As VbVarType, ParamArray arr() As Variant) As Variant
 On Error Resume Next
@@ -12,13 +12,25 @@ On Error Resume Next
 
     Dim cnt As Long, element As Variant
     Select Case arrType
+        '0
+        Case vbEmpty
+            Dim emptyArr() As Variant
+            ReDim emptyArr(arrLB To arrUB)
+            ArrayByType = emptyArr
+        '1
+        Case vbNull
+            Dim nullArr() As Variant
+            ReDim nullArr(arrLB To arrUB)
+            For cnt = arrLB To arrUB
+                nullArr(cnt) = Null
+            Next cnt
+            ArrayByType = nullArr
         '2
         Case vbInteger
             Dim intArr() As Integer
             ReDim intArr(arrLB To arrUB)
             For cnt = arrLB To arrUB
-                element = CInt(arr(cnt))
-                intArr(cnt) = element
+                intArr(cnt) = CInt(arr(cnt))
             Next cnt
             If Err.Number = 13 Then GoTo Err_Convert
             ArrayByType = intArr
@@ -27,8 +39,7 @@ On Error Resume Next
             Dim lngArr() As Long
             ReDim lngArr(arrLB To arrUB)
             For cnt = arrLB To arrUB
-                element = CLng(arr(cnt))
-                lngArr(cnt) = element
+                lngArr(cnt) = CLng(arr(cnt))
             Next cnt
             If Err.Number = 13 Then GoTo Err_Convert
             ArrayByType = lngArr
@@ -37,8 +48,7 @@ On Error Resume Next
             Dim sngArr() As Single
             ReDim sngArr(arrLB To arrUB)
             For cnt = arrLB To arrUB
-                element = CSng(arr(cnt))
-                sngArr(cnt) = element
+                sngArr(cnt) = CSng(arr(cnt))
             Next cnt
             If Err.Number = 13 Then GoTo Err_Convert
             ArrayByType = sngArr
@@ -47,8 +57,7 @@ On Error Resume Next
             Dim dblArr() As Double
             ReDim dblArr(arrLB To arrUB)
             For cnt = arrLB To arrUB
-                element = CDbl(arr(cnt))
-                dblArr(cnt) = element
+                dblArr(cnt) = CDbl(arr(cnt))
             Next cnt
             If Err.Number = 13 Then GoTo Err_Convert
             ArrayByType = dblArr
@@ -57,8 +66,7 @@ On Error Resume Next
             Dim curArr() As Currency
             ReDim curArr(arrLB To arrUB)
             For cnt = arrLB To arrUB
-                element = CCur(arr(cnt))
-                curArr(cnt) = element
+                curArr(cnt) = CCur(arr(cnt))
             Next cnt
             If Err.Number = 13 Then GoTo Err_Convert
             ArrayByType = curArr
@@ -67,8 +75,7 @@ On Error Resume Next
             Dim dateArr() As Date
             ReDim dateArr(arrLB To arrUB)
             For cnt = arrLB To arrUB
-                element = CDate(arr(cnt))
-                dateArr(cnt) = element
+                dateArr(cnt) = CDate(arr(cnt))
             Next cnt
             If Err.Number = 13 Then GoTo Err_Convert
             ArrayByType = dateArr
@@ -77,8 +84,7 @@ On Error Resume Next
             Dim strArr() As String
             ReDim strArr(arrLB To arrUB)
             For cnt = arrLB To arrUB
-                element = CStr(arr(cnt))
-                strArr(cnt) = element
+                strArr(cnt) = CStr(arr(cnt))
             Next cnt
             If Err.Number = 13 Then GoTo Err_Convert
             ArrayByType = strArr
@@ -96,8 +102,7 @@ On Error Resume Next
             Dim boolArr() As Boolean
             ReDim boolArr(arrLB To arrUB)
             For cnt = arrLB To arrUB
-                element = CBool(arr(cnt))
-                boolArr(cnt) = element
+                boolArr(cnt) = CBool(arr(cnt))
             Next cnt
             If Err.Number = 13 Then GoTo Err_Convert
             ArrayByType = boolArr
@@ -109,8 +114,7 @@ On Error Resume Next
             Dim decArr() As Variant
             ReDim decArr(arrLB To arrUB)
             For cnt = arrLB To arrUB
-                element = CDec(arr(cnt))
-                decArr(cnt) = element
+                decArr(cnt) = CDec(arr(cnt))
             Next cnt
             If Err.Number = 13 Then GoTo Err_Convert
             ArrayByType = decArr
@@ -119,21 +123,25 @@ On Error Resume Next
             Dim byteArr() As Byte
             ReDim byteArr(arrLB To arrUB)
             For cnt = arrLB To arrUB
-                element = CByte(arr(cnt))
-                byteArr(cnt) = element
+                byteArr(cnt) = CByte(arr(cnt))
             Next cnt
             If Err.Number = 13 Then GoTo Err_Convert
             ArrayByType = byteArr
+
+        #If Win64 Then
+
         '20
         Case vbLongLong
-            Dim lnglngArr() As LongPtr
+            Dim lnglngArr() As LongLong
             ReDim lnglngArr(arrLB To arrUB)
             For cnt = arrLB To arrUB
-                element = CLngPtr(arr(cnt))
-                lnglngArr(cnt) = element
+                lnglngArr(cnt) = CLngLng(arr(cnt))
             Next cnt
             If Err.Number = 13 Then GoTo Err_Convert
             ArrayByType = lnglngArr
+
+        #End If
+
         Case Else
             Call ShowErrMsg("指定されたデータ型は無効です。", title:="ConvTrueFalse")
             Exit Function

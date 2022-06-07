@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/01/30 06:17:54
+'2022/06/07 17:26:31
 '----------------------------------------------------------------------------------------------------
 Public Sub BeforeProcess(ByRef calculation As XlCalculation, Optional ByRef excelApp As Application)
 
@@ -15,8 +15,8 @@ Public Sub BeforeProcess(ByRef calculation As XlCalculation, Optional ByRef exce
         .ScreenUpdating = False
         .DisplayAlerts = False
         .EnableEvents = False
+        .StatusBar = False
     End With
-    DoEvents
 
 End Sub
 '----------------------------------------------------------------------------------------------------
