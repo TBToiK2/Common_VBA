@@ -1,0 +1,33 @@
+'----------------------------------------------------------------------------------------------------
+'2022/06/01 01:26:19
+'----------------------------------------------------------------------------------------------------
+'参照設定
+'LibraryName:VBIDE
+'LIBID:{0002E157-0000-0000-C000-000000000046}
+    'ReferenceName:Microsoft Visual Basic for Applications Extensibility 5.3
+    'FullPath(win32):C:\Program Files\Microsoft Office\Root\VFS\ProgramFilesCommonX86\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB
+    'Major.Minor:1.0
+Public Function HasVBComponent(ByVal VBCName As String, ByVal VBCType As vbext_ComponentType, Optional ByVal parent As VBComponents) As Boolean
+On Error GoTo Err
+
+    '引数 既定値判定
+    If IsBlank(parent) Then Set parent = ThisWorkbook.VBProject.VBComponents
+
+    '全VBComponent 確認
+    Dim VBC As VBComponent
+    For Each VBC In parent
+        If VBC.Name = VBCName And VBC.Type = VBCType Then
+            HasVBComponent = True
+            Exit Function
+        End If
+    Next VBC
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "HasVBComponent")
+
+End Function
+'----------------------------------------------------------------------------------------------------

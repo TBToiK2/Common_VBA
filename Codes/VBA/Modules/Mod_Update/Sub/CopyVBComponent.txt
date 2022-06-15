@@ -1,0 +1,56 @@
+'----------------------------------------------------------------------------------------------------
+'2022/06/07 11:35:08
+'----------------------------------------------------------------------------------------------------
+'参照設定
+'LibraryName:VBIDE
+'LIBID:{0002E157-0000-0000-C000-000000000046}
+    'ReferenceName:Microsoft Visual Basic for Applications Extensibility 5.3
+    'FullPath(win32):C:\Program Files\Microsoft Office\Root\VFS\ProgramFilesCommonX86\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB
+    'Major.Minor:1.0
+Public Sub CopyVBComponent(ByVal source As VBProject, ByVal destination As VBProject, ByVal VBCName As String, ByVal VBCType As vbext_ComponentType, Optional ByVal overwrite As Boolean)
+On Error GoTo Err
+
+    If source Is destination Then
+        Call ShowErrMsg("コピー元とコピー先のVBProjectオブジェクトが同じです。", title:="CopyVBComponent")
+        Exit Sub
+    End If
+
+    'コピー元VBComponents 存在確認
+    If Not HasVBComponent(VBCName, VBCType, source.VBComponents) Then
+        Call ShowErrMsg("コピー元に指定したVBComponent名が存在しません。", title:="CopyVBComponent")
+        Exit Sub
+    End If
+
+    'コピー先VBComponents 存在確認
+    Dim VBC As VBComponent
+    If HasVBComponent(VBCName, VBCType, destination.VBComponents) Then
+        If Not overwrite Then
+            Call ShowErrMsg("指定したVBComponent名は既にコピー先に存在しています。", title:="CopyVBComponent")
+            Exit Sub
+        End If
+
+        Set VBC = destination.VBComponents(VBCName)
+    Else
+        Set VBC = destination.VBComponents.Add(VBCType)
+        VBC.Name = VBCName
+    End If
+
+    'VBComponent CodeModuleコピー
+    Dim moduleCode As String
+    With source.VBComponents(VBCName).CodeModule
+        moduleCode = .Lines(1, .CountOfLines)
+    End With
+    With VBC.CodeModule
+        Call .DeleteLines(1, .CountOfLines)
+        Call .AddFromString(moduleCode)
+    End With
+
+    Exit Sub
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "CopyVBComponent")
+
+End Sub
+'----------------------------------------------------------------------------------------------------
