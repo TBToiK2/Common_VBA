@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/01 00:29:22
+'2022/06/16 02:48:55
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -10,7 +10,7 @@
     'Major.Minor:1.0
         'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
         'ProgID:Scripting.FileSystemObject
-Public Function GetSearchFileCount(ByVal folderSpec As String, ByVal searchFileName As String, Optional ByVal enFileNameType As EnumFileNameType) As Long
+Public Function GetSearchFileCount(ByVal folderSpec As String, ByVal searchFile As String, Optional ByVal enFileNameType As EnumFileNameType) As Long
 On Error GoTo Err
 
     Dim FSO As New FileSystemObject
@@ -19,9 +19,10 @@ On Error GoTo Err
         Dim targetFiles As Files
         Set targetFiles = .GetFolder(folderSpec).Files
 
-        Dim searchFileBaseName As String, searchFileExtensionName As String
-        searchFileBaseName = .GetBaseName(searchFileName)
-        searchFileExtensionName = .GetExtensionName(searchFileName)
+        Dim searchFileName As String, searchFileBaseName As String, searchFileExtensionName As String
+        searchFileName = .GetFileName(searchFile)
+        searchFileBaseName = .GetBaseName(searchFile)
+        searchFileExtensionName = .GetExtensionName(searchFile)
 
         '検索ファイル数 カウント
         Dim targetFile As File

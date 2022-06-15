@@ -19,13 +19,13 @@ On Error GoTo Err
         'ファイル名 取得
         Select Case enFileNameType
             Case enFileName
-            GetFileName = .GetFileName(fileSpec)
+                GetFileName = .GetFileName(fileSpec)
 
             Case enBaseName
-            GetFileName = .GetBaseName(fileSpec)
+                GetFileName = .GetBaseName(fileSpec)
 
             Case enExtensionName
-            GetFileName = .GetExtensionName(fileSpec)
+                GetFileName = .GetExtensionName(fileSpec)
 
         End Select
 
