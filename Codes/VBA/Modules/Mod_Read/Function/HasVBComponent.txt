@@ -1,12 +1,12 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/01 01:26:19
+'2022/06/17 00:02:30
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:VBIDE
 'LIBID:{0002E157-0000-0000-C000-000000000046}
     'ReferenceName:Microsoft Visual Basic for Applications Extensibility 5.3
-    'FullPath(win32):C:\Program Files\Microsoft Office\Root\VFS\ProgramFilesCommonX86\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB
-    'Major.Minor:1.0
+    'FullPath(win32):C:\Program Files (x86)\Common Files\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB
+    'Major.Minor:5.3
 Public Function HasVBComponent(ByVal VBCName As String, ByVal VBCType As vbext_ComponentType, Optional ByVal parent As VBComponents) As Boolean
 On Error GoTo Err
 
