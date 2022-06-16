@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/01 00:29:22
+'2022/06/17 01:37:16
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:IWshRuntimeLibrary
@@ -10,7 +10,8 @@
     'Major.Minor:1.0
         'CLSID:{F935DC22-1CF0-11D0-ADB9-00C04FD58A0B}
         'ProgID:WScript.Shell
-Public Function GetSelectFileSpec(ByVal filePath As String, Optional ByVal filterDescription As String, Optional ByVal filterExtentions As String, Optional ByVal dialogTitle As String) As String
+Public Function GetSelectFileSpec(ByVal filePath As String, Optional ByVal filterDescription As String, Optional ByVal filterExtentions As String, _
+                                  Optional ByVal multiSelect As Boolean, Optional ByVal dialogTitle As String) As Variant
 On Error GoTo Err
 
     'ファイルパス 存在確認
@@ -34,12 +35,28 @@ On Error GoTo Err
             Call .Add(filterDescription, filterExtentions, 1)
         End With
         .FilterIndex = 1
-        .AllowMultiSelect = False
+        .AllowMultiSelect = multiSelect
         .Title = dialogTitle
         .InitialFileName = vbNullString
 
         'ファイル選択状態 判定
-        If .Show = -1 Then GetSelectFileSpec = .SelectedItems(1)
+        If .Show = -1 Then
+            If multiSelect Then
+
+                Dim selectedArr() As String
+                ReDim selectedArr(.SelectedItems.Count - 1)
+
+                Dim indx As Long
+                For indx = 1 To .SelectedItems.Count
+                    selectedArr(indx - 1) = .SelectedItems(indx)
+                Next indx
+
+                GetSelectFileSpec = selectedArr
+            Else
+                GetSelectFileSpec = .SelectedItems(1)
+            End If
+        End If
+
     End With
 
     Exit Function

@@ -10,7 +10,7 @@
     'Major.Minor:1.0
         'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
         'ProgID:Scripting.FileSystemObject
-Public Function GetSearchFileCount(ByVal folderSpec As String, ByVal searchFile As String, Optional ByVal enFileNameType As EnumFileNameType) As Long
+Public Function GetSearchFileCount(ByVal folderSpec As String, ByVal searchName As String, Optional ByVal enFileNameType As EnumFileNameType) As Long
 On Error GoTo Err
 
     Dim FSO As New FileSystemObject
@@ -18,11 +18,6 @@ On Error GoTo Err
 
         Dim targetFiles As Files
         Set targetFiles = .GetFolder(folderSpec).Files
-
-        Dim searchFileName As String, searchFileBaseName As String, searchFileExtensionName As String
-        searchFileName = .GetFileName(searchFile)
-        searchFileBaseName = .GetBaseName(searchFile)
-        searchFileExtensionName = .GetExtensionName(searchFile)
 
         '検索ファイル数 カウント
         Dim targetFile As File
@@ -34,17 +29,17 @@ On Error GoTo Err
                 'ファイル名
                 Case enFileName
                     fileName = targetFile.Name
-                    If searchFileName = fileName Then fileCount = fileCount + 1
+                    If searchName = fileName Then fileCount = fileCount + 1
 
                 'ベース名
                 Case enBaseName
                     baseName = .GetBaseName(targetFile.Name)
-                    If searchFileBaseName = baseName Then fileCount = fileCount + 1
+                    If searchName = baseName Then fileCount = fileCount + 1
 
                 '拡張子名
                 Case enExtensionName
                     extensionName = .GetExtensionName(targetFile.Name)
-                    If searchFileExtensionName = extensionName Then fileCount = fileCount + 1
+                    If searchName = extensionName Then fileCount = fileCount + 1
 
             End Select
 
