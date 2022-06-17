@@ -1,15 +1,6 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/17 01:37:16
+'2022/06/18 01:31:43
 '----------------------------------------------------------------------------------------------------
-'参照設定
-'LibraryName:IWshRuntimeLibrary
-'LIBID:{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}
-    'ReferenceName:Windows Script Host Object Model
-    'FullPath(win32):C:\Windows\SysWOW64\wshom.ocx
-    'FullPath(win64):C:\Windows\System32\wshom.ocx
-    'Major.Minor:1.0
-        'CLSID:{F935DC22-1CF0-11D0-ADB9-00C04FD58A0B}
-        'ProgID:WScript.Shell
 Public Function GetSelectFileSpec(ByVal filePath As String, Optional ByVal filterDescription As String, Optional ByVal filterExtentions As String, _
                                   Optional ByVal multiSelect As Boolean, Optional ByVal dialogTitle As String) As Variant
 On Error GoTo Err
@@ -19,10 +10,6 @@ On Error GoTo Err
         Call ShowErrMsg("指定されたファイルパスが存在しません。", title:="GetSelectFileSpec")
         Exit Function
     End If
-
-    'カレントディレクトリ 変更
-    Dim WSH As New WshShell
-    WSH.CurrentDirectory = filePath
 
     If IsBlank(filterDescription) Then filterDescription = "すべてのファイル"
     If IsBlank(filterExtentions) Then filterExtentions = "*.*"
@@ -37,7 +24,7 @@ On Error GoTo Err
         .FilterIndex = 1
         .AllowMultiSelect = multiSelect
         .Title = dialogTitle
-        .InitialFileName = vbNullString
+        .InitialFileName = BuildPath(filePath, Application.PathSeparator)
 
         'ファイル選択状態 判定
         If .Show = -1 Then
