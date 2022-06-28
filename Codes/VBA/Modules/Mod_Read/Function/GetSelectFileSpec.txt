@@ -1,19 +1,30 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/18 01:31:43
+'2022/06/27 09:43:50
 '----------------------------------------------------------------------------------------------------
+'参照設定
+'LibraryName:Scripting
+'LIBID:{420B2830-E718-11CF-893D-00A0C9054228}
+    'ReferenceName:Microsoft Scripting Runtime
+    'FullPath(win32):C:\Windows\SysWOW64\scrrun.dll
+    'FullPath(win64):C:\Windows\System32\scrrun.dll
+    'Major.Minor:1.0
+        'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
+        'ProgID:Scripting.FileSystemObject
 Public Function GetSelectFileSpec(ByVal filePath As String, Optional ByVal filterDescription As String, Optional ByVal filterExtentions As String, _
-                                  Optional ByVal multiSelect As Boolean, Optional ByVal dialogTitle As String) As Variant
+                                  Optional ByVal multiSelect As Boolean, Optional ByVal dialogTitle As String) As String()
 On Error GoTo Err
 
+    Dim FSO As New FileSystemObject
+
     'ファイルパス 存在確認
-    If Not FolderExists(filePath) Then
+    If Not FSO.FolderExists(filePath) Then
         Call ShowErrMsg("指定されたファイルパスが存在しません。", title:="GetSelectFileSpec")
         Exit Function
     End If
 
-    If IsBlank(filterDescription) Then filterDescription = "すべてのファイル"
-    If IsBlank(filterExtentions) Then filterExtentions = "*.*"
-    If IsBlank(dialogTitle) Then dialogTitle = "ファイル 選択"
+    If filterDescription = "" Then filterDescription = "すべてのファイル"
+    If filterExtentions = "" Then filterExtentions = "*.*"
+    If dialogTitle = "" Then dialogTitle = "ファイル 選択"
 
     'ダイアログボックス 設定
     With Application.FileDialog(msoFileDialogFilePicker)
@@ -24,13 +35,12 @@ On Error GoTo Err
         .FilterIndex = 1
         .AllowMultiSelect = multiSelect
         .Title = dialogTitle
-        .InitialFileName = BuildPath(filePath, Application.PathSeparator)
+        .InitialFileName = FSO.BuildPath(filePath, Application.PathSeparator)
 
         'ファイル選択状態 判定
         If .Show = -1 Then
+            Dim selectedArr() As String
             If multiSelect Then
-
-                Dim selectedArr() As String
                 ReDim selectedArr(.SelectedItems.Count - 1)
 
                 Dim indx As Long
@@ -40,7 +50,11 @@ On Error GoTo Err
 
                 GetSelectFileSpec = selectedArr
             Else
-                GetSelectFileSpec = .SelectedItems(1)
+                ReDim selectedArr(0)
+
+                selectedArr(0) = .SelectedItems(1)
+
+                GetSelectFileSpec = selectedArr
             End If
         End If
 

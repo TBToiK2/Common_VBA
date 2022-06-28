@@ -1,22 +1,33 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/18 01:31:43
+'2022/06/27 09:43:50
 '----------------------------------------------------------------------------------------------------
+'参照設定
+'LibraryName:Scripting
+'LIBID:{420B2830-E718-11CF-893D-00A0C9054228}
+    'ReferenceName:Microsoft Scripting Runtime
+    'FullPath(win32):C:\Windows\SysWOW64\scrrun.dll
+    'FullPath(win64):C:\Windows\System32\scrrun.dll
+    'Major.Minor:1.0
+        'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
+        'ProgID:Scripting.FileSystemObject
 Public Function GetSelectFolderSpec(ByVal folderPath As String, Optional ByVal dialogTitle As String) As String
 On Error GoTo Err
 
+    Dim FSO As New FileSystemObject
+
     'フォルダパス 存在確認
-    If Not FolderExists(folderPath) Then
+    If Not FSO.FolderExists(folderPath) Then
         Call ShowErrMsg("指定されたフォルダパスが存在しません。", title:="GetSelectFolderSpec")
         Exit Function
     End If
 
-    If IsBlank(dialogTitle) Then dialogTitle = "フォルダ 選択"
+    If dialogTitle = "" Then dialogTitle = "フォルダ 選択"
 
     'ダイアログボックス 設定
     With Application.FileDialog(msoFileDialogFolderPicker)
         .AllowMultiSelect = False
         .Title = dialogTitle
-        .InitialFileName = BuildPath(folderPath, Application.PathSeparator)
+        .InitialFileName = FSO.BuildPath(folderPath, Application.PathSeparator)
 
         'フォルダ選択状態 判定
         If .Show = -1 Then GetSelectFolderSpec = .SelectedItems(1)

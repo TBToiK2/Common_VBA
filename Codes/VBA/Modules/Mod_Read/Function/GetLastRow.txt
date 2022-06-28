@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/18 23:26:15
+'2022/06/28 01:24:56
 '----------------------------------------------------------------------------------------------------
 Public Function GetLastRow(ByVal ws As Worksheet, ByVal targetCol As Long) As Long
 On Error GoTo Err
@@ -32,7 +32,7 @@ On Error GoTo Err
         '最終行 取得
         Dim lastRow As Long
         For lastRow = UBound(usedRangeArr, 1) To 1 Step -1
-            If Not IsBlank(usedRangeArr(lastRow, 1)) Then
+            If CStr(usedRangeArr(lastRow, 1)) <> "" Then
                 GetLastRow = lastRow
                 Exit Function
             End If
