@@ -1,10 +1,10 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/07 17:26:31
+'2022/06/29 04:11:11
 '----------------------------------------------------------------------------------------------------
-Public Sub BeforeProcess(ByRef calculation As XlCalculation, Optional ByRef excelApp As Application)
+Public Sub BeforeProcess(ByRef calculation As XlCalculation, Optional ByRef excelApp As Excel.Application)
 
     '引数 既定値判定
-    If IsBlank(excelApp) Then Set excelApp = Application
+    If excelApp Is Nothing Then Set excelApp = Excel.Application
 
     '各プロセス 停止
     With excelApp

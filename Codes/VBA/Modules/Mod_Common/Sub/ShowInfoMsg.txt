@@ -1,11 +1,11 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/28 01:11:31
+'2022/06/29 04:11:11
 '----------------------------------------------------------------------------------------------------
 Public Sub ShowInfoMsg(ByVal prompt As String, Optional ByVal title As String)
 On Error Resume Next
 
     'タイトル 設定
-    If Not IsBlank(title) Then title = ":" & title
+    If title <> "" Then title = ":" & title
 
     'メッセージ 表示
     Call MsgBox(prompt, vbOKOnly + vbInformation, "情報" & title)
