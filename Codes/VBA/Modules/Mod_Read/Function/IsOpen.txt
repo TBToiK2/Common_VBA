@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/18 03:33:39
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
 Public Function IsOpen(ByVal fileSpec As String) As Long
 On Error Resume Next
@@ -7,7 +7,7 @@ On Error Resume Next
     IsOpen = 1
 
     'ファイル存在確認
-    If Not FileExists(fileSpec) Then Exit Function
+    If Not FSO.FileExists(fileSpec) Then Exit Function
 
     Dim fileNumber As Long
     'ファイルナンバー1-255

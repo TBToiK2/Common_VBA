@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/28 13:15:31
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:VBIDE
@@ -7,7 +7,7 @@
     'ReferenceName:Microsoft Visual Basic for Applications Extensibility 5.3
     'FullPath(win32):C:\Program Files (x86)\Common Files\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB
     'Major.Minor:5.3
-Public Function HasVBComponent(ByVal VBCName As String, ByVal VBCType As vbext_ComponentType, Optional ByVal parent As VBComponents) As Boolean
+Public Function HasVBComponent(ByVal VBCName As String, ByVal VBCType As vbext_ComponentType, Optional ByRef parent As VBComponents) As Boolean
 On Error GoTo Err
 
     '引数 既定値判定

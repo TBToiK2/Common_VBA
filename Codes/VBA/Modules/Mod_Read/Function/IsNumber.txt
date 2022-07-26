@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/01 00:29:22
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:VBScript_RegExp_55
@@ -10,15 +10,15 @@
     'Major.Minor:5.5
         'CLSID:{3F4DACA4-160D-11D2-A8E9-00104B365C9F}
         'ProgID:VBScript.RegExp
-Public Function IsNumber(ByVal Expression As Variant) As Boolean
+Public Function IsNumber(ByVal Expression As String) As Boolean
 On Error GoTo Err
 
     '空, 文字列判定
-    If IsBlank(Expression) Or Not IsString(Expression) Then Exit Function
+    If Expression = "" Then Exit Function
 
     '正規表現 判定
-    Dim Reg As New RegExp
-    With Reg
+    Dim REG As New RegExp
+    With REG
         .Global = False
         .IgnoreCase = False
         .MultiLine = False

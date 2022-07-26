@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/28 13:15:31
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
-Public Function GetListObject(ByVal loName As String, Optional ByVal parent As ListObjects) As ListObject
+Public Function GetListObject(ByVal loName As String, Optional ByRef parent As ListObjects) As ListObject
 On Error GoTo Err
 
     '引数 既定値判定

@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
 '2022/06/28 01:24:56
 '----------------------------------------------------------------------------------------------------
-Public Function GetLastCol(ByVal ws As Worksheet, ByVal targetRow As Long) As Long
+Public Function GetLastCol(ByRef ws As Worksheet, ByVal targetRow As Long) As Long
 On Error GoTo Err
 
     If targetRow < MIN_ROW Or targetRow > MAX_ROW Then

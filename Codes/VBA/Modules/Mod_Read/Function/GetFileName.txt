@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/01 00:29:22
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -13,7 +13,6 @@
 Public Function GetFileName(ByVal fileSpec As String, Optional ByVal enFileNameType As EnumFileNameType) As String
 On Error GoTo Err
 
-    Dim FSO As New FileSystemObject
     With FSO
 
         'ファイル名 取得
