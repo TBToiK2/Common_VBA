@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/01 00:29:22
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -13,20 +13,13 @@
 Public Function CreateBackupFile(ByVal fileSpec As String) As Boolean
 On Error GoTo Err
 
-    'ファイル存在 確認
-    If Not FileExists(fileSpec) Then
-        Call ShowErrMsg("指定されたディレクトリは存在しません。", title:="CreateBackupFile")
-        Exit Function
-    End If
-
-    'ファイル属性 判定
-    If FolderExists(fileSpec) Then
-        Call ShowErrMsg("指定されたディレクトリはファイルではありません。", title:="CreateBackupFile")
-        Exit Function
-    End If
-
-    Dim FSO As New FileSystemObject
     With FSO
+
+        'ファイル存在 確認
+        If Not .FileExists(fileSpec) Then
+            Call ShowErrMsg("指定されたファイルディレクトリは存在しません。", title:="CreateBackupFile")
+            Exit Function
+        End If
 
         'ファイル名, 拡張子 取得
         Dim baseName As String, extensionName As String
