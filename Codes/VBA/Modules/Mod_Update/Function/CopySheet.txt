@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/01 00:29:22
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -10,7 +10,7 @@
     'Major.Minor:1.0
         'CLSID:{EE09B103-97E0-11CF-978F-00A02463E06F}
         'ProgID:Scripting.Dictionary
-Public Function CopySheet(ByVal copySh As Object, Optional ByVal before As Variant, Optional ByVal after As Variant) As Object
+Public Function CopySheet(ByRef copySh As Object, Optional ByRef before As Variant, Optional ByRef after As Variant) As Object
 On Error GoTo Err
 
     Dim sheetsFLG As Boolean

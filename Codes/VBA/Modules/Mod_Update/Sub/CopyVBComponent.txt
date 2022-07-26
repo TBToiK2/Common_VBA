@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/17 00:02:30
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:VBIDE
@@ -7,7 +7,7 @@
     'ReferenceName:Microsoft Visual Basic for Applications Extensibility 5.3
     'FullPath(win32):C:\Program Files (x86)\Common Files\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB
     'Major.Minor:5.3
-Public Sub CopyVBComponent(ByVal source As VBProject, ByVal destination As VBProject, ByVal VBCName As String, ByVal VBCType As vbext_ComponentType, Optional ByVal overwrite As Boolean)
+Public Sub CopyVBComponent(ByRef source As VBProject, ByRef destination As VBProject, ByVal VBCName As String, ByVal VBCType As vbext_ComponentType, Optional ByVal overwrite As Boolean)
 On Error GoTo Err
 
     If source Is destination Then
@@ -31,6 +31,11 @@ On Error GoTo Err
 
         Set VBC = destination.VBComponents(VBCName)
     Else
+        If VBCType = vbext_ct_ActiveXDesigner Or VBCType = vbext_ct_Document Then
+            Call ShowErrMsg("指定した型のVBComponentオブジェクトは上書きでのみコピー可能です。", title:="CopyVBComponent")
+            Exit Sub
+        End If
+
         Set VBC = destination.VBComponents.Add(VBCType)
         VBC.Name = VBCName
     End If

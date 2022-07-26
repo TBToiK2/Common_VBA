@@ -1,0 +1,22 @@
+'----------------------------------------------------------------------------------------------------
+'2022/07/27 00:58:07
+'----------------------------------------------------------------------------------------------------
+Public Function ConvColAddrRef(ByVal colAddr As String, ByVal toReferenceStyle As XlReferenceStyle) As String
+On Error Resume Next
+
+    '参照形式 判定
+    Dim colAddrRef As String
+    If toReferenceStyle = xlA1 Then
+        colAddrRef = Split(Cells(1, CLng(colAddr)).Address(ReferenceStyle:=toReferenceStyle), "$")(1)
+    Else
+        colAddrRef = Range(colAddr & "1").Column
+    End If
+
+    If colAddrRef <> "" Then
+        ConvColAddrRef = colAddrRef
+    Else
+        Call ShowErrMsg("指定された値が正しくありません。", title:="ConvColAddrRef")
+    End If
+
+End Function
+'----------------------------------------------------------------------------------------------------
