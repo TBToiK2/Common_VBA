@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/18 23:26:15
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
-Public Function GetRowRange(ByVal ws As Worksheet, ByVal targetRow As Long, Optional ByVal firstCol As Long = 1, Optional ByVal lastCol As Long) As Range
+Public Function GetRowRange(ByRef ws As Worksheet, ByVal targetRow As Long, Optional ByVal firstCol As Long = 1, Optional ByVal lastCol As Long) As Range
 On Error GoTo Err
 
     If targetRow < MIN_ROW Or targetRow > MAX_ROW Then

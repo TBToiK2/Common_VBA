@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/01 00:29:22
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -14,7 +14,6 @@ Public Function FileExists(ByVal fileSpec As String) As Boolean
 On Error GoTo Err
 
     'ファイル 存在確認
-    Dim FSO As New FileSystemObject
     FileExists = FSO.FileExists(fileSpec)
 
     Exit Function

@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/18 23:26:15
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
-Public Function GetColRange(ByVal ws As Worksheet, ByVal targetCol As Long, Optional ByVal firstRow As Long = 1, Optional ByVal lastRow As Long) As Range
+Public Function GetColRange(ByRef ws As Worksheet, ByVal targetCol As Long, Optional ByVal firstRow As Long = 1, Optional ByVal lastRow As Long) As Range
 On Error GoTo Err
 
     If targetCol < MIN_COL Or targetCol > MAX_COL Then

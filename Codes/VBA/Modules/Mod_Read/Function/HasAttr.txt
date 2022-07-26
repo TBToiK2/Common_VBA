@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/01 00:29:22
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -13,7 +13,6 @@
 Public Function HasAttr(ByVal spec As String, ByVal attr As FileAttribute) As Boolean
 On Error GoTo Err
 
-    Dim FSO As New FileSystemObject
     With FSO
 
         '属性 比較(ビット演算)

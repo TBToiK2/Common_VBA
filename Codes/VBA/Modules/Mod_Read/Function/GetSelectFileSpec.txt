@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/27 09:43:50
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -13,8 +13,6 @@
 Public Function GetSelectFileSpec(ByVal filePath As String, Optional ByVal filterDescription As String, Optional ByVal filterExtentions As String, _
                                   Optional ByVal multiSelect As Boolean, Optional ByVal dialogTitle As String) As String()
 On Error GoTo Err
-
-    Dim FSO As New FileSystemObject
 
     'ファイルパス 存在確認
     If Not FSO.FolderExists(filePath) Then
