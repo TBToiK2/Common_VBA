@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/28 13:15:31
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:VBScript_RegExp_55
@@ -10,20 +10,20 @@
     'Major.Minor:5.5
         'CLSID:{3F4DACA4-160D-11D2-A8E9-00104B365C9F}
         'ProgID:VBScript.RegExp
-Public Function IsAlphabet(ByVal Expression As String) As Boolean
+Public Function IsAlphabet(ByVal expression As String) As Boolean
 On Error GoTo Err
 
     '空白 判定
-    If Expression = "" Then Exit Function
+    If expression = "" Then Exit Function
 
     '正規表現 判定
-    Dim Reg As New RegExp
-    With Reg
+    Dim REG As New RegExp
+    With REG
         .Global = False
         .IgnoreCase = False
         .MultiLine = False
         .Pattern = "^[A-Za-zＡ-Ｚａ-ｚ]+$"
-        IsAlphabet = .Test(Expression)
+        IsAlphabet = .Test(expression)
     End With
 
     Exit Function

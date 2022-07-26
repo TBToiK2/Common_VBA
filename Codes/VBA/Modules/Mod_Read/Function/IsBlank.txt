@@ -1,27 +1,27 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/15 03:11:48
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
-Public Function IsBlank(ByVal Expression As Variant) As Boolean
+Public Function IsBlank(ByVal expression As Variant) As Boolean
 On Error GoTo Err
 
     'オブジェクト判定
-    If IsObject(Expression) Then
+    If IsObject(expression) Then
         '空判定
-        If Not Expression Is Nothing Then Exit Function
+        If Not expression Is Nothing Then Exit Function
     '配列判定
-    ElseIf IsArray(Expression) Then
+    ElseIf IsArray(expression) Then
 
 On Error GoTo Err_Array
 
         '空判定
-        If UBound(Expression) > -1 Then Exit Function
+        If UBound(expression) > -1 Then Exit Function
 
 Err_Resume_Array:
 On Error GoTo Err
 
     Else
         '空判定
-        If CStr(Expression) <> "" Then Exit Function
+        If CStr(expression) <> "" Then Exit Function
     End If
 
     IsBlank = True

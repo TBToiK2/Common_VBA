@@ -1,11 +1,11 @@
 '----------------------------------------------------------------------------------------------------
-'2022/03/20 23:22:56
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
-Public Function IsString(ByVal Expression As Variant) As Boolean
+Public Function IsString(ByVal expression As Variant) As Boolean
 On Error Resume Next
 
     Dim str As String
-    str = CStr(Expression)
+    str = CStr(expression)
 
     IsString = Not Err.Number > 0
 
