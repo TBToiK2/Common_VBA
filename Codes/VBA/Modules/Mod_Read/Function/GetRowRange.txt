@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/07/27 00:58:07
+'2022/07/28 15:47:52
 '----------------------------------------------------------------------------------------------------
 Public Function GetRowRange(ByRef ws As Worksheet, ByVal targetRow As Long, Optional ByVal firstCol As Long = 1, Optional ByVal lastCol As Variant, _
                             Optional ByVal relativeFLG As Boolean) As Range
@@ -23,20 +23,21 @@ On Error GoTo Err
 
     Else
 
-        '最終列 取得
-        targetLastCol = firstCol + lastCol
-
         If Not IsNumber(lastCol) Then
             Call ShowErrMsg("lastColに指定された値は数値ではありません。" & "1以上" & MAX_COL & "以下で入力してください。", title:="GetRowRange")
             Exit Function
         Else
             If relativeFLG Then
+                '最終列 取得
+                targetLastCol = firstCol + lastCol
                 If targetLastCol < 1 Or targetLastCol > MAX_COL Then
                     Call ShowErrMsg("指定された値が有効行数の範囲外です。" & "firstCol + lastColが" & "1以上" & MAX_COL & "以下となるよう入力してください。", title:="GetRowRange")
                     Exit Function
                 End If
             Else
-                If lastCol < 1 Or lastCol > MAX_COL Then
+                '最終列 取得
+                targetLastCol = lastCol
+                If targetLastCol < 1 Or targetLastCol > MAX_COL Then
                     Call ShowErrMsg("lastColに指定された値が有効行数の範囲外です。" & "1以上" & MAX_COL & "以下で入力してください。", title:="GetRowRange")
                     Exit Function
                 End If
