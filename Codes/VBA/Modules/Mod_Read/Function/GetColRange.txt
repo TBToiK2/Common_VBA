@@ -1,42 +1,52 @@
 '----------------------------------------------------------------------------------------------------
 '2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
-Public Function GetColRange(ByRef ws As Worksheet, ByVal targetCol As Long, Optional ByVal firstRow As Long = 1, Optional ByVal lastRow As Long) As Range
+Public Function GetColRange(ByRef ws As Worksheet, ByVal targetCol As Long, Optional ByVal firstRow As Long = 1, Optional ByVal lastRow As Variant, _
+                            Optional ByVal relativeFLG As Boolean) As Range
 On Error GoTo Err
 
-    If targetCol < MIN_COL Or targetCol > MAX_COL Then
-        Call ShowErrMsg("指定された値が有効列数の範囲外です。" & MIN_COL & "以上" & MAX_COL & "以下で入力してください。", title:="GetColRange")
+    If targetCol < 1 Or targetCol > MAX_COL Then
+        Call ShowErrMsg("targetColに指定された値が有効列数の範囲外です。" & "1以上" & MAX_COL & "以下で入力してください。", title:="GetColRange")
         Exit Function
     End If
-    If firstRow < MIN_ROW Or firstRow > MAX_ROW Then
-        Call ShowErrMsg("指定された値が有効行数の範囲外です。" & MIN_ROW & "以上" & MAX_ROW & "以下で入力してください。", title:="GetColRange")
+    If firstRow < 1 Or firstRow > MAX_ROW Then
+        Call ShowErrMsg("firstRowに指定された値が有効行数の範囲外です。" & "1以上" & MAX_ROW & "以下で入力してください。", title:="GetColRange")
         Exit Function
     End If
-    If lastRow < 0 Or lastRow > MAX_ROW Then
-        Call ShowErrMsg("指定された値が有効行数の範囲外です。" & MIN_ROW & "以上" & MAX_ROW & "以下で入力してください。", title:="GetColRange")
-        Exit Function
+
+    Dim targetLastRow As Long
+    If IsMissing(lastRow) Then
+
+        '最終行 取得
+        targetLastRow = GetLastRow(ws, targetCol)
+        If firstRow > targetLastRow Then Exit Function
+
+    Else
+
+        '最終行 取得
+        targetLastRow = firstRow + lastRow
+
+        If Not IsNumber(lastRow) Then
+            Call ShowErrMsg("lastRowに指定された値は数値ではありません。" & "1以上" & MAX_ROW & "以下で入力してください。", title:="GetColRange")
+            Exit Function
+        Else
+            If relativeFLG Then
+                If targetLastRow < 1 Or targetLastRow > MAX_ROW Then
+                    Call ShowErrMsg("指定された値が有効行数の範囲外です。" & "firstRow + lastRowが" & "1以上" & MAX_ROW & "以下となるよう入力してください。", title:="GetColRange")
+                    Exit Function
+                End If
+            Else
+                If lastRow < 1 Or lastRow > MAX_ROW Then
+                    Call ShowErrMsg("lastRowに指定された値が有効行数の範囲外です。" & "1以上" & MAX_ROW & "以下で入力してください。", title:="GetColRange")
+                    Exit Function
+                End If
+            End If
+        End If
+
     End If
 
     With ws
-
-        '最終行数値 判定
-        If lastRow > 0 Then
-
-            Set GetColRange = .Range(.Cells(firstRow, targetCol), .Cells(lastRow, targetCol))
-
-        Else
-
-            '最終行 取得
-            Dim targetLastRow As Long
-            targetLastRow = GetLastRow(ws, targetCol)
-
-            '行範囲 取得
-            If firstRow <= targetLastRow Then
-                Set GetColRange = .Range(.Cells(firstRow, targetCol), .Cells(targetLastRow, targetCol))
-            End If
-
-        End If
-
+        Set GetColRange = .Range(.Cells(firstRow, targetCol), .Cells(targetLastRow, targetCol))
     End With
 
     Exit Function

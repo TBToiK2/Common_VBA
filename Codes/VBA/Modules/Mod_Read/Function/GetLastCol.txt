@@ -4,8 +4,8 @@
 Public Function GetLastCol(ByRef ws As Worksheet, ByVal targetRow As Long) As Long
 On Error GoTo Err
 
-    If targetRow < MIN_ROW Or targetRow > MAX_ROW Then
-        Call ShowErrMsg("指定された値が有効行数の範囲外です。" & MIN_ROW & "以上" & MAX_ROW & "以下で入力してください。", title:="GetLastCol")
+    If targetRow < 1 Or targetRow > MAX_ROW Then
+        Call ShowErrMsg("指定された値が有効行数の範囲外です。" & "1以上" & MAX_ROW & "以下で入力してください。", title:="GetLastCol")
         Exit Function
     End If
 
