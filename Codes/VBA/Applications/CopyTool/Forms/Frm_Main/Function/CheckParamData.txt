@@ -1,0 +1,163 @@
+'----------------------------------------------------------------------------------------------------
+Public Function CheckParamData() As Boolean
+On Error GoTo Err
+
+
+Dim t As Double
+t = Timer
+
+
+    'パラメータアドレス 設定
+    Dim LogAddress As String, FormatAddress As String, BlankAddress As String, AutoSaveAddress As String, BackupAddress As String
+    Dim ChangeMarkAddress As String, FontAddress As String, InteriorAddress As String
+    Dim FFileSpecAddress As String, TFileSpecAddress As String, FShNameAddress As String, TShNameAddress As String
+    Dim FItemIDAddress As String, TItemIDAddress As String, FStartColAddress As String, TStartColAddress As String
+    Dim FDataIDAddress As String, TDataIDAddress As String, FStartRowAddress As String, TStartRowAddress As String
+    Dim FPassAddress As String, TPassAddress As String
+    LogAddress = "$C$3":        FormatAddress = "$C$4":     BlankAddress = "$C$5":      AutoSaveAddress = "$C$6": BackupAddress = "$C$7"
+    ChangeMarkAddress = "$C$8": FontAddress = "$C$9":       InteriorAddress = "$C$10"
+    FFileSpecAddress = "$C$13": TFileSpecAddress = "$D$13": FShNameAddress = "$C$14":   TShNameAddress = "$D$14"
+    FItemIDAddress = "$C$15":   TItemIDAddress = "$D$15":   FStartColAddress = "$C$16": TStartColAddress = "$D$16"
+    FDataIDAddress = "$C$17":   TDataIDAddress = "$D$17":   FStartRowAddress = "$C$18": TStartRowAddress = "$D$18"
+    FPassAddress = "$C$19":     TPassAddress = "$D$19"
+
+    Set g_ParamSh = ThisWorkbook.Sheets(g_ParamShName)
+
+    'パラメータ 確認
+    With g_ParamSh
+
+        Dim ErrParam As String
+        '更新ログ作成
+        If Not ConvertTrueFalse(.Range(LogAddress).Value, g_LogFLG) Then ErrParam = ErrParam & vbCrLf & "更新ログ作成"
+        '書式コピー
+        If Not ConvertTrueFalse(.Range(FormatAddress).Value, g_FormatFLG) Then ErrParam = ErrParam & vbCrLf & "書式コピー"
+        '空白コピー
+        If Not ConvertTrueFalse(.Range(BlankAddress).Value, g_BlankFLG) Then ErrParam = ErrParam & vbCrLf & "空白コピー"
+        'コピー先オートセーブ
+        If Not ConvertTrueFalse(.Range(AutoSaveAddress).Value, g_AutoSaveFLG) Then ErrParam = ErrParam & vbCrLf & "コピー先オートセーブ"
+        'コピー先バックアップ
+        If Not ConvertTrueFalse(.Range(BackupAddress).Value, g_BackupFLG) Then ErrParam = ErrParam & vbCrLf & "コピー先バックアップ"
+
+        'コピー先変更行マーク
+        If Not IsBlank(.Range(ChangeMarkAddress).Value) Then
+            If Not ConvertColumnReference(xlR1C1, .Range(ChangeMarkAddress).Value, g_ChangeMarkCol) Then
+                ErrParam = ErrParam & vbCrLf & "コピー先変更マーク行"
+            End If
+        End If
+
+        'コピーセル文字色
+        g_FontColor = .Range(FontAddress).Font.Color
+        'コピーセル背景色
+        g_InteriorColor = .Range(InteriorAddress).Interior.Color
+
+        'ファイルパス
+        g_FFileSpec = .Range(FFileSpecAddress).Value
+        g_TFileSpec = .Range(TFileSpecAddress).Value
+        If IsBlank(g_FFileSpec) Then ErrParam = ErrParam & vbCrLf & "コピー元 ファイルパス"
+        If IsBlank(g_TFileSpec) Then ErrParam = ErrParam & vbCrLf & "コピー先 ファイルパス"
+
+        'ファイル名
+        g_FFileName = GetFileName(g_FFileSpec)
+        g_TFileName = GetFileName(g_TFileSpec)
+        If IsBlank(g_FFileName) Then ErrParam = ErrParam & vbCrLf & "コピー元 ファイル名"
+        If IsBlank(g_TFileName) Then ErrParam = ErrParam & vbCrLf & "コピー先 ファイル名"
+
+        'シート名
+        g_FShName = .Range(FShNameAddress).Value
+        g_TShName = .Range(TShNameAddress).Value
+        If IsBlank(g_FShName) Then ErrParam = ErrParam & vbCrLf & "コピー元 シート名"
+        If IsBlank(g_TShName) Then ErrParam = ErrParam & vbCrLf & "コピー先 シート名"
+
+        '項目ID行
+        g_FItemIDRow = Int(Val(.Range(FItemIDAddress).Value))
+        g_TItemIDRow = Int(Val(.Range(TItemIDAddress).Value))
+        If g_FItemIDRow < MIN_ROW Or g_FItemIDRow > MAX_ROW Then ErrParam = ErrParam & vbCrLf & "コピー元 項目ID行"
+        If g_TItemIDRow < MIN_ROW Or g_TItemIDRow > MAX_ROW Then ErrParam = ErrParam & vbCrLf & "コピー先 項目ID行"
+
+        '項目開始列
+        If Not ConvertColumnReference(ByVal xlR1C1, .Range(FStartColAddress).Value, g_FStartCol) Then
+            ErrParam = ErrParam & vbCrLf & "コピー元 項目開始列"
+        End If
+        If Not ConvertColumnReference(ByVal xlR1C1, .Range(TStartColAddress).Value, g_TStartCol) Then
+            ErrParam = ErrParam & vbCrLf & "コピー先 項目開始列"
+        End If
+
+        'データID列
+        If Not ConvertColumnReference(ByVal xlR1C1, .Range(FDataIDAddress).Value, g_FDataIDCol) Then
+            ErrParam = ErrParam & vbCrLf & "コピー元 データID列"
+        End If
+        If Not ConvertColumnReference(ByVal xlR1C1, .Range(TDataIDAddress).Value, g_TDataIDCol) Then
+            ErrParam = ErrParam & vbCrLf & "コピー先 データID列"
+        End If
+
+        'データ開始行
+        g_FStartRow = Int(Val(.Range(FStartRowAddress).Value))
+        g_TStartRow = Int(Val(.Range(TStartRowAddress).Value))
+        If g_FStartRow < MIN_ROW Or g_FStartRow > MAX_ROW Then ErrParam = ErrParam & vbCrLf & "コピー元 データ開始行"
+        If g_TStartRow < MIN_ROW Or g_TStartRow > MAX_ROW Then ErrParam = ErrParam & vbCrLf & "コピー先 データ開始行"
+
+        'パスワード
+        g_FPswd = .Range("C19").Value
+        g_TPswd = .Range("C19").Value
+
+        If Not IsBlank(ErrParam) Then
+            Call ShowErrMsg("以下のパラメータが不正です。設定しなおしてください。" & ErrParam)
+            GoTo Err_Config
+        End If
+
+        'コピー対象項目ID 空白確認
+        If .Cells(Rows.Count, 2).End(xlUp).Row < COPYCOL_START_ROW Then
+            Call ShowErrMsg("項目IDが1つも設定されていません。設定してください。")
+            GoTo Err_Config
+        End If
+
+        'コピー対象項目配列 取得
+        '1列目：項目名
+        '2列目：項目ID
+        '3列目：別項目ID
+        g_CopyItemArr = .Range(.Cells(COPYCOL_START_ROW, 1), .Cells(.Cells(Rows.Count, 2).End(xlUp).Row, 3)).Value
+
+    End With
+
+    Dim CopyColIndex As Long
+    For CopyColIndex = 1 To UBound(g_CopyItemArr, 1)
+
+        Dim FCopyCol As Long
+        If IsBlank(g_CopyItemArr(CopyColIndex, 2)) Then
+            Call ShowErrMsg("以下の項目名の項目IDが設定されていません。設定してください。" & vbCrLf & g_CopyItemArr(CopyColIndex, 1))
+            GoTo Err_Config
+        End If
+
+    Next CopyColIndex
+
+    'ファイル 存在確認
+    If Not FileExists(g_FFileSpec) Then
+        Call ShowErrMsg("コピー元 ファイルが存在しません｡")
+        Exit Function
+    End If
+    If Not FileExists(g_TFileSpec) Then
+        Call ShowErrMsg("コピー先 ファイルが存在しません｡")
+        Exit Function
+    End If
+
+
+Debug.Print "CheckParamData:" & (Timer - t) & "秒"
+
+
+    CheckParamData = True
+
+    Exit Function
+
+'エラー処理
+Err_Config:
+
+    g_ParamSh.Activate
+
+    Exit Function
+
+Err:
+
+    Call ShowErrMsg(Err.Number, Err.Description)
+
+End Function
+'----------------------------------------------------------------------------------------------------

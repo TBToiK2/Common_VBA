@@ -1,0 +1,180 @@
+'----------------------------------------------------------------------------------------------------
+Private Sub Btn_OK_Click()
+On Error GoTo Err
+
+    'シート 選択判定
+    If IsBlank(g_ParamShName) Then
+        Call ShowErrMsg("対象シートが選択されていません。" & vbCrLf & "シートを選択してください。")
+        Exit Sub
+    End If
+
+    'バックグラウンド処理 確認
+    g_BackgroundFLG = Ckb_Background.Value
+    If g_BackgroundFLG Then
+        If ShowInfoMsg(INF_BACK_ON) = vbCancel Then Exit Sub
+    Else
+        If ShowInfoMsg(INF_BACK_OFF) = vbCancel Then Exit Sub
+    End If
+
+
+Dim t As Double
+t = Timer
+
+
+    'パラメータ 確認
+    If Not CheckParamData() Then Exit Sub
+
+    '使用ファイルが読み取り専用で開いている場合は、一旦クローズ
+    '他プロセスで以降の処理を実行した際、ファイルが重複する為
+    Dim wb As Workbook
+    For Each wb In Workbooks
+        With wb
+            If .ReadOnly And (.FullName = g_FFileSpec Or .FullName = g_TFileSpec) Then
+                Call .Close(SaveChanges:=False)
+            End If
+        End With
+    Next
+
+    'ファイル 開閉確認
+    'コピー元
+    If IsOpen(g_FFileSpec) Then
+        ShowErrMsg ("コピー元 ファイルが使用中です。終了してください。")
+        Exit Sub
+    End If
+    'コピー先
+    If IsOpen(g_TFileSpec) Then
+        ShowErrMsg ("コピー先 ファイルが使用中です。終了してください。")
+        Exit Sub
+    End If
+
+    'コピー先ファイル 属性比較
+    If CompareAttr(g_TFileSpec, vbReadOnly) Then
+        ShowErrMsg ("コピー先 ファイルの属性が読み取り専用です。終了してください。")
+        Exit Sub
+    End If
+
+    'コピー先ファイル バックアップ
+    If g_BackupFLG Then
+        If Not BackupFile(g_TFileSpec) Then Exit Sub
+    End If
+
+    'バックグラウンド処理 判定
+    If g_BackgroundFLG Then
+
+        'Excelオブジェクト 取得
+        Set g_ExcelApp = New Excel.Application
+
+        With g_ExcelApp
+            .DisplayAlerts = False
+
+            'マクロ警告ダイアログ 値保存
+            Dim AutoSecurity As MsoAutomationSecurity
+            AutoSecurity = .AutomationSecurity
+            'マクロ警告ダイアログ 値変更
+            .AutomationSecurity = msoAutomationSecurityForceDisable
+
+            'ファイル オープン
+            'コピー元
+            Call .Workbooks.Open(g_FFileSpec, ReadOnly:=True, Notify:=False, Password:=g_FPswd)
+            Set g_FWb = .ActiveWorkbook
+            'コピー先
+            Call .Workbooks.Open(g_TFileSpec, ReadOnly:=False, IgnoreReadOnlyRecommended:=True, Notify:=False, Password:=g_TPswd)
+            Set g_TWb = .ActiveWorkbook
+
+            'マクロ警告ダイアログ 値復元
+            .AutomationSecurity = AutoSecurity
+
+            .DisplayAlerts = True
+        End With
+
+    Else
+
+        'Excelオブジェクト 取得
+        Set g_ExcelApp = Excel.Application
+
+        '同一ファイル名 存在確認
+        'コピー元
+        If HasWorkbook(g_ExcelApp.Workbooks, g_FFileName) Then
+            Call ShowErrMsg("コピー元と同名のファイルが開かれています。終了して下さい。")
+            Exit Sub
+        End If
+        'コピー先
+        If HasWorkbook(g_ExcelApp.Workbooks, g_TFileName) Then
+            Call ShowErrMsg("コピー先と同名のファイルが開かれています。終了して下さい。")
+            Exit Sub
+        End If
+
+        With g_ExcelApp
+            .DisplayAlerts = False
+
+            'ファイル オープン
+            'コピー元
+            Call .Workbooks.Open(g_FFileSpec, ReadOnly:=True, Notify:=False, Password:=g_FPswd)
+            Set g_FWb = .ActiveWorkbook
+            'コピー先
+            Call .Workbooks.Open(g_TFileSpec, ReadOnly:=False, IgnoreReadOnlyRecommended:=True, Notify:=False, Password:=g_TPswd)
+            Set g_TWb = .ActiveWorkbook
+
+            .DisplayAlerts = True
+        End With
+    End If
+
+    Dim BeforeCalc As Long
+    '各プロセス 停止
+    Call BeforeProcess(BeforeCalc, g_ExcelApp)
+
+    'シート 存在確認
+    'コピー元
+    If Not HasWorksheet(g_FWb.Sheets, g_FShName) Then
+        Call ShowErrMsg("コピー元 ファイル内に指定されたシートが存在しません｡" & vbCrLf & "シート名: " & g_FShName)
+        Exit Sub
+    End If
+    'コピー先
+    If Not HasWorksheet(g_TWb.Sheets, g_TShName) Then
+        Call ShowErrMsg("コピー先 ファイル内に指定されたシートが存在しません｡" & vbCrLf & "シート名: " & g_TShName)
+        Exit Sub
+    End If
+
+    'データ コピー
+    Dim CopiedCount As Long
+    If Not DataCopy(CopiedCount) Then
+        Call ShowErrMsg("データのコピーに失敗しました。")
+        GoTo ErrAfter
+    End If
+
+    '自動保存 判定
+    If g_AutoSaveFLG Then Call g_TWb.Save
+
+
+Debug.Print "Btn_OK_Click:" & (Timer - t) & "秒"
+
+
+    'メッセージ 表示
+    Call MsgBox("データのコピーが終了しました｡" & vbCrLf & "処理件数: " & CopiedCount & "件です。", vbOKOnly)
+
+    'コピー先ファイル 表示
+    g_ExcelApp.Visible = True
+
+    '各プロセス 再開
+    Call AfterProcess(BeforeCalc, g_ExcelApp)
+
+    Call CloseWorkbook
+    Call Unload(Me)
+
+    Exit Sub
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number)
+
+ErrAfter:
+
+    '各プロセス 再開
+    Call AfterProcess(BeforeCalc, g_ExcelApp)
+
+    Call CloseWorkbook(True)
+    Call Unload(Me)
+
+End Sub
+'----------------------------------------------------------------------------------------------------

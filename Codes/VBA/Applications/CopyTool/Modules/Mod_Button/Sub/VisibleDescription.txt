@@ -1,0 +1,45 @@
+'----------------------------------------------------------------------------------------------------
+Public Sub VisibleDescription(ByVal ShapeName As String)
+
+    Application.ScreenUpdating = False
+
+    With Main
+
+        'シート プロテクト解除
+        Call .Unprotect(PASS)
+
+        '非表示範囲 判定, 取得
+        Dim DescriptionRange As Range
+        Select Case ShapeName
+        Case "Tri_Visible_Summary"
+            Set DescriptionRange = .Range(.Rows(5), .Rows(6))
+        Case "Tri_Visible_Param"
+            Set DescriptionRange = .Range(.Rows(8), .Rows(31))
+        Case "Tri_Visible_Copy"
+            Set DescriptionRange = .Range(.Rows(33), .Rows(39))
+        Case "Tri_Visible_Use"
+            Set DescriptionRange = .Range(.Rows(41), .Rows(87))
+        Case Else
+            GoTo Skip
+        End Select
+
+        '対象範囲 表示設定
+        DescriptionRange.Hidden = Not (DescriptionRange.Hidden)
+
+        '表示アイコン 角度設定
+        Dim ShapeRotation As Long
+        If DescriptionRange.Hidden Then ShapeRotation = 180
+        .Shapes(ShapeName).Rotation = ShapeRotation
+
+Skip:
+        'シート プロテクト
+        .Cells(1, 19).Activate
+        .EnableSelection = xlUnlockedCells
+        Call .Protect(PASS, UserInterfaceOnly:=True, AllowFormattingCells:=True)'セル色設定ボタン完成時にAllowFormattingCellsを削除
+
+    End With
+
+    Application.ScreenUpdating = True
+
+End Sub
+'----------------------------------------------------------------------------------------------------

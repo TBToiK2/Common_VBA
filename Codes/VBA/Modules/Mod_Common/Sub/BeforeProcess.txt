@@ -1,0 +1,22 @@
+'----------------------------------------------------------------------------------------------------
+'2022/06/29 04:11:11
+'----------------------------------------------------------------------------------------------------
+Public Sub BeforeProcess(ByRef calculation As XlCalculation, Optional ByRef excelApp As Excel.Application)
+
+    '引数 既定値判定
+    If excelApp Is Nothing Then Set excelApp = Excel.Application
+
+    '各プロセス 停止
+    With excelApp
+        If .Workbooks.Count > 0 Then
+            calculation = .Calculation
+            .Calculation = xlCalculationManual
+        End If
+        .ScreenUpdating = False
+        .DisplayAlerts = False
+        .EnableEvents = False
+        .StatusBar = False
+    End With
+
+End Sub
+'----------------------------------------------------------------------------------------------------

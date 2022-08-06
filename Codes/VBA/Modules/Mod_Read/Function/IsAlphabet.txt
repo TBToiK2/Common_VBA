@@ -1,0 +1,37 @@
+'----------------------------------------------------------------------------------------------------
+'2022/07/27 00:58:07
+'----------------------------------------------------------------------------------------------------
+'参照設定
+'LibraryName:VBScript_RegExp_55
+'LIBID:{3F4DACA7-160D-11D2-A8E9-00104B365C9F}
+    'ReferenceName:Microsoft VBScript Regular Expressions 5.5
+    'FullPath(win32):C:\Windows\SysWOW64\vbscript.dll\3
+    'FullPath(win64):C:\Windows\System32\vbscript.dll\3
+    'Major.Minor:5.5
+        'CLSID:{3F4DACA4-160D-11D2-A8E9-00104B365C9F}
+        'ProgID:VBScript.RegExp
+Public Function IsAlphabet(ByVal expression As String) As Boolean
+On Error GoTo Err
+
+    '空白 判定
+    If expression = "" Then Exit Function
+
+    '正規表現 判定
+    Dim REG As New RegExp
+    With REG
+        .Global = False
+        .IgnoreCase = False
+        .MultiLine = False
+        .Pattern = "^[A-Za-zＡ-Ｚａ-ｚ]+$"
+        IsAlphabet = .Test(expression)
+    End With
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "IsAlphabet")
+
+End Function
+'----------------------------------------------------------------------------------------------------

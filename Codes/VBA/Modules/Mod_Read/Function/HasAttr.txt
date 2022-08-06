@@ -1,0 +1,40 @@
+'----------------------------------------------------------------------------------------------------
+'2022/07/27 00:58:07
+'----------------------------------------------------------------------------------------------------
+'参照設定
+'LibraryName:Scripting
+'LIBID:{420B2830-E718-11CF-893D-00A0C9054228}
+    'ReferenceName:Microsoft Scripting Runtime
+    'FullPath(win32):C:\Windows\SysWOW64\scrrun.dll
+    'FullPath(win64):C:\Windows\System32\scrrun.dll
+    'Major.Minor:1.0
+        'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
+        'ProgID:Scripting.FileSystemObject
+Public Function HasAttr(ByVal spec As String, ByVal attr As FileAttribute) As Boolean
+On Error GoTo Err
+
+    With FSO
+
+        '属性 比較(ビット演算)
+        If (GetAttr(spec) And vbDirectory) = vbDirectory Then
+
+            'フォルダ属性 比較(ビット演算)
+            HasAttr = (.GetFolder(spec).Attributes And attr) = attr
+
+        Else
+            'ファイル属性 比較(ビット演算)
+            HasAttr = (.GetFile(spec).Attributes And attr) = attr
+
+        End If
+
+    End With
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "HasAttr")
+
+End Function
+'----------------------------------------------------------------------------------------------------

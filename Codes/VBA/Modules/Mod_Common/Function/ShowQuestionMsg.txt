@@ -1,0 +1,14 @@
+'----------------------------------------------------------------------------------------------------
+'2022/06/29 04:11:11
+'----------------------------------------------------------------------------------------------------
+Public Function ShowQuestionMsg(ByVal prompt As String, Optional ByVal title As String) As VbMsgBoxResult
+On Error Resume Next
+
+    'タイトル 設定
+    If title <> "" Then title = ":" & title
+
+    'メッセージ 表示
+    ShowQuestionMsg = MsgBox(prompt, vbOKCancel + vbQuestion, "確認" & title)
+
+End Function
+'----------------------------------------------------------------------------------------------------

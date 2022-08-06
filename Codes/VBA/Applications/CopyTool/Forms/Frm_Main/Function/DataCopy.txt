@@ -1,0 +1,406 @@
+'----------------------------------------------------------------------------------------------------
+Private Function DataCopy(ByRef CopiedCount As Long) As Boolean
+On Error GoTo Err
+
+
+Dim t As Double
+t = Timer
+
+
+    '「処理中」フォーム 表示
+    Dim BarMaxWidth As Single
+    With Frm_Progress
+        Call .Show(vbModeless)
+        BarMaxWidth = .Fra_Progress.Width
+        .Lbl_Description.Caption = "コピー中……"
+    End With
+
+    'シート 取得
+    Dim FSheet As Worksheet, TSheet As Worksheet
+    Set FSheet = g_FWb.Sheets(g_FShName)
+    Set TSheet = g_TWb.Sheets(g_TShName)
+
+    'コピーシート 全表示
+    Call ShowAllData(FSheet)
+    Call ShowAllData(TSheet)
+
+    '項目ID最大列数, データID最大行数, 項目ID範囲, データID範囲 取得
+    Dim FEndCol As Long, TEndCol As Long
+    Dim FEndRow As Long, TEndRow As Long
+    Dim FItemIDArr() As Variant, TItemIDArr() As Variant
+    Dim FDataIDArr() As Variant, TDataIDArr() As Variant
+    'コピー元
+    With FSheet
+        FEndCol = .Cells(g_FItemIDRow, .Columns.Count).End(xlToLeft).Column
+        FEndRow = .Cells(.Rows.Count, g_FDataIDCol).End(xlUp).Row
+        '配列 判定
+        With .Range(.Cells(g_FItemIDRow, g_FStartCol), .Cells(g_FItemIDRow, FEndCol))
+            If IsArray(.Value) Then
+                FItemIDArr = .Value
+            Else
+                Redim FItemIDArr(1 To 1, 1 To 1)
+                FItemIDArr(1, 1) = .Value
+            End If
+        End With
+        '配列 判定
+        With .Range(.Cells(g_FStartRow, g_FDataIDCol), .Cells(FEndRow, g_FDataIDCol))
+            If IsArray(.Value) Then
+                FDataIDArr = .Value
+            Else
+                Redim FDataIDArr(1 To 1, 1 To 1)
+                FDataIDArr(1, 1) = .Value
+            End If
+        End With
+    End With
+    'コピー先
+    With TSheet
+        TEndCol = .UsedRange(.UsedRange.Count).Column
+        TEndRow = .UsedRange(.UsedRange.Count).Row
+        '配列 判定
+        With .Range(.Cells(g_TItemIDRow, g_TStartCol), .Cells(g_TItemIDRow, TEndCol))
+            If IsArray(.Value) Then
+                TItemIDArr = .Value
+            Else
+                Redim TItemIDArr(1 To 1, 1 To 1)
+                TItemIDArr(1, 1) = .Value
+            End If
+        End With
+        '配列 判定
+        With .Range(.Cells(g_TStartRow, g_TDataIDCol), .Cells(TEndRow, g_TDataIDCol))
+            If IsArray(.Value) Then
+                TDataIDArr = .Value
+            Else
+                Redim TDataIDArr(1 To 1, 1 To 1)
+                TDataIDArr(1, 1) = .Value
+            End If
+        End With
+    End With
+
+    '配列2次元要素数 追加
+    '4列目：コピー元項目ID各要素番号
+    '5列目：コピー先項目ID各要素番号
+    ReDim Preserve g_CopyItemArr(1 To UBound(g_CopyItemArr, 1), 1 To UBound(g_CopyItemArr, 2) + 2)
+
+    'コピー対象項目配列 ループ
+    Dim CopyItemIDCount As Long
+    For CopyItemIDCount = 1 To UBound(g_CopyItemArr, 1)
+
+        'コピー対象項目要素 取得
+        Dim CopyItemID As Variant, AnotherCopyItemID As Variant
+        CopyItemID = g_CopyItemArr(CopyItemIDCount, 2)
+        AnotherCopyItemID = g_CopyItemArr(CopyItemIDCount, 3)
+
+        Dim FItemIDCol As Variant, TItemIDCol As Variant
+        Dim FItemIDCount As Long, TItemIDCount As Long
+        'コピー元
+        FItemIDCol = Application.Match(CopyItemID, FItemIDArr, 0)
+        If Not IsError(FItemIDCol) Then
+            g_CopyItemArr(CopyItemIDCount, 4) = FItemIDCol
+            FItemIDCount = FItemIDCount + 1
+        End If
+        'コピー先
+        If IsBlank(AnotherCopyItemID) Then
+            TItemIDCol = Application.Match(CopyItemID, TItemIDArr, 0)
+        Else
+            TItemIDCol = Application.Match(AnotherCopyItemID, TItemIDArr, 0)
+        End If
+        If Not IsError(TItemIDCol) Then
+            g_CopyItemArr(CopyItemIDCount, 5) = TItemIDCol
+            TItemIDCount = TItemIDCount + 1
+        End If
+
+    Next
+
+    If FItemIDCount * TItemIDCount = 0 Then
+        If FItemIDCount = 0 Then Call ShowErrMsg("コピー元ファイルにコピー対象項目が存在しません。")
+        If TItemIDCount = 0 Then Call ShowErrMsg("コピー先ファイルにコピー対象項目が存在しません。")
+        Exit Function
+    End If
+
+    'コピーデータ保持用配列
+    Dim CopyData() As String, CopyAllData() As Variant
+
+    ReDim CopyAllData(0)
+
+    'コピー元対象行 ループ
+    Dim FDataRow As Long
+    For FDataRow = g_FStartRow To FEndRow
+
+        ReDim CopyData(0)
+
+        '対象項目ID 取得
+        Dim DataID As Variant
+        DataID = FDataIDArr(FDataRow - (g_FStartRow - 1), 1)
+
+        'コピー先対象行 取得(相対)
+        Dim RelDataRow As Variant
+        RelDataRow = Application.Match(DataID, TDataIDArr, 0)
+
+        'コピー先対象行 有無判定
+        If Not IsError(RelDataRow) Then
+
+            'コピー先対象行 取得(絶対)
+            Dim TDataRow As Long
+            TDataRow = CLng(RelDataRow) + (g_TStartRow - 1)
+
+            'コピー対象行配列 取得
+            'コピー元
+            Dim FDataRowArr() As Variant, TDataRowArr() As Variant, TDataRowFormulaArr() As Variant
+            With FSheet
+                With .Range(.Cells(FDataRow, g_FStartCol), .Cells(FDataRow, FEndCol))
+                    '配列 判定
+                    If IsArray(.Value) Then
+                        FDataRowArr = .Value
+                    Else
+                        ReDim FDataRowArr(1 To 1, 1 To 1)
+                        FDataRowArr(1, 1) = .Value
+                    End If
+                End With
+            End With
+            'コピー先
+            With TSheet
+                With .Range(.Cells(TDataRow, g_TStartCol), .Cells(TDataRow, TEndCol))
+                    '配列 判定
+                    If IsArray(.Value) Then
+                        TDataRowArr = .Value
+
+                        On Error GoTo Err_Formula
+
+                        TDataRowFormulaArr = .Formula
+
+                    Else
+                        ReDim TDataRowArr(1 To 1, 1 To 1)
+                        ReDim TDataRowFormulaArr(1 To 1, 1 To 1)
+                        TDataRowArr(1, 1) = .Value
+
+                        On Error GoTo Err_Formula
+
+                        TDataRowFormulaArr(1, 1) = .Formula
+
+                    End If
+                End With
+
+                GoTo Skip
+
+Err_Formula:
+
+                'Formula文字数制限(8221文字)該当セル 処理
+                ReDim TDataRowFormulaArr(1 To 1, 1 To TEndCol - g_TStartCol + 1)
+                Dim Cell As Range
+                For Each Cell In .Range(.Cells(TDataRow, g_TStartCol), .Cells(TDataRow, TEndCol))
+                    With Cell
+                        If .HasFormula Then
+                            TDataRowFormulaArr(1, .Column - g_TStartCol + 1) = .Formula
+                        Else
+                            TDataRowFormulaArr(1, .Column - g_TStartCol + 1) = .Value
+                        End If
+                    End With
+                Next Cell
+
+            End With
+
+Skip:
+
+            On Error GoTo Err
+
+            'コピー対象項目配列 ループ
+            Dim CopyItemCount As Long
+            For CopyItemCount = 1 To UBound(g_CopyItemArr, 1)
+
+                'コピー対象項目要素 取得
+                Dim CopyItemFNo As Long, CopyItemTNo As Long
+                CopyItemFNo = g_CopyItemArr(CopyItemCount, 4)
+                CopyItemTNo = g_CopyItemArr(CopyItemCount, 5)
+
+                'コピー対象項目 有無判定
+                If CopyItemFNo * CopyItemTNo = 0 Then GoTo Continue
+
+                'コピー対象セル値 取得
+                Dim FValue As Variant, TValue As Variant
+                FValue = FDataRowArr(1, CopyItemFNo)
+                TValue = TDataRowArr(1, CopyItemTNo)
+
+                'セル値 エラー判定
+                'コピー元
+                If IsError(FValue) Then GoTo Continue
+                'コピー先
+                If IsError(TValue) Then GoTo Continue
+
+                'コピー元空白時処理 判定
+                If Not (Not g_BlankFLG And IsBlank(Trim(FValue))) Then
+
+                    'セル値 比較
+                    If CStr(FValue) <> CStr(TValue) Then
+
+                        '項目ID 配列追加
+                        If IsBlank(CopyData(0)) Then CopyData(0) = DataID
+
+                        'コピー対象セル列記号 取得
+                        Dim FDataCol As String, TDataCol As String
+                        If Not ConvertColumnReference(xlA1, FDataCol, CopyItemFNo + (g_FStartCol - 1)) Then
+                            Exit Function
+                        End If
+                        If Not ConvertColumnReference(xlA1, TDataCol, CopyItemTNo + (g_TStartCol - 1)) Then
+                            Exit Function
+                        End If
+
+                        If g_LogFLG Then
+                            'コピーデータ 配列格納
+                            '項目名[アドレス], コピー元セル値, コピー先セル値 配列追加
+                            Dim AddCopyDataCount As Long
+                            AddCopyDataCount = UBound(CopyData, 1) + 3
+                            ReDim Preserve CopyData(AddCopyDataCount)
+                            CopyData(AddCopyDataCount - 2) = g_CopyItemArr(CopyItemCount, 1) & "[" & FDataCol & FDataRow & ", " & TDataCol & TDataRow & "]"
+                            CopyData(AddCopyDataCount - 1) = FValue
+                            CopyData(AddCopyDataCount) = TValue
+                        End If
+
+                        '変更値 配列反映
+                        TDataRowFormulaArr(1, CopyItemTNo) = FValue
+
+                        'コピーセル 取得
+                        Dim FCell As Range, TCell As Range
+                        'コピー元
+                        Set FCell = FSheet.Range(FDataCol & FDataRow)
+                        'コピー先
+                        Set TCell = TSheet.Range(TDataCol & TDataRow)
+
+                        '書式コピーフラグ 判定
+                        If g_FormatFLG Then
+                            Call FCell.Copy(Destination:=TCell)
+                        Else
+                            '文字色 変更
+                            TCell.Font.Color = g_FontColor
+                            '背景色 変更
+                            TCell.Interior.Color = g_InteriorColor
+                        End If
+                    End If
+                End If
+
+Continue:
+            Next CopyItemCount
+
+            If Not IsBlank(CopyData(0)) Then
+
+                With TSheet
+                    'コピー先対象行 反映
+                    .Range(.Cells(TDataRow, g_TStartCol), .Cells(TDataRow, TEndCol)).Value = TDataRowFormulaArr
+                    '処理日付 反映
+                    If g_ChangeMarkCol > 0 Then .Cells(TDataRow, g_ChangeMarkCol) = Date
+                End With
+
+                'ログ用変更データ 配列格納
+                If g_LogFLG And UBound(CopyData, 1) > 0 Then
+                    CopyAllData(UBound(CopyAllData, 1)) = CopyData
+                    ReDim Preserve CopyAllData(UBound(CopyAllData, 1) + 1)
+                End If
+
+                '処理件数 カウント
+                CopiedCount = CopiedCount + 1
+            End If
+        End If
+
+        'フォーム 更新
+        Dim FCopyRatio As Long, TCopyRatio As Long
+        TCopyRatio = (FDataRow - (g_FStartRow - 1)) * 100 \ (FEndRow - (g_FStartRow - 1))
+        If TCopyRatio <> FCopyRatio Then
+            Frm_Progress.Lbl_ProgressBar.Width = BarMaxWidth * TCopyRatio / 100
+            Call Frm_Progress.Repaint
+            FCopyRatio = TCopyRatio
+        End If
+
+        DoEvents
+
+    Next FDataRow
+
+    'コピー先シート アクティベート
+    TSheet.Activate
+
+    'ログ出力 判定
+    If g_LogFLG And CopiedCount > 0 Then
+    
+        '「ログ出力中」フォーム 表示
+        Frm_Progress.Lbl_Description.Caption = "ログ出力中……"
+
+        'ログ用シート 作成
+        Dim LogSh As Worksheet
+        Set LogSh = ThisWorkbook.Sheets.Add
+
+        'ログ 出力
+        Dim CopyMaxCount
+        Dim LogCount As Long
+        For LogCount = 0 To UBound(CopyAllData, 1) - 1
+
+            'ログ出力最大値 取得
+            Dim MaxCopyData As Long
+            MaxCopyData = UBound(CopyAllData(LogCount), 1)
+            CopyMaxCount = WorksheetFunction.Max(CopyMaxCount, MaxCopyData)
+
+            '2行目以降 ログ出力
+            With LogSh
+                .Range(.Cells(2 + LogCount, 1), .Cells(2 + LogCount, MaxCopyData)).Value = CopyAllData(LogCount)
+            End With
+
+            'フォーム 更新
+            Dim FLogRatio As Long, TLogRatio As Long
+            TLogRatio = LogCount * 100 \ UBound(CopyAllData, 1)
+            If TLogRatio <> FLogRatio Then
+                Frm_Progress.Lbl_ProgressBar.Width = BarMaxWidth * TLogRatio / 100
+                Call Frm_Progress.Repaint
+                FLogRatio = TLogRatio
+            End If
+
+        Next LogCount
+
+        'ログ見出し 出力
+        Dim LogTitle() As String
+        ReDim Preserve LogTitle(CopyMaxCount) As String
+        LogTitle(0) = "データID"
+        Dim LogTitleCount
+        For LogTitleCount = 1 To UBound(LogTitle, 1) Step 3
+            LogTitle(LogTitleCount) = "項目名, アドレス[元, 先]"
+            LogTitle(LogTitleCount + 1) = "コピー元セル値"
+            LogTitle(LogTitleCount + 2) = "コピー先セル値"
+        Next LogTitleCount
+        With LogSh
+            .Range(.Cells(1, 1), .Cells(1, 1 + UBound(LogTitle, 1))).Value = LogTitle
+        End With
+
+        'セル幅, 罫線 設定
+        With LogSh.UsedRange
+            Call .Columns.AutoFit
+            .Borders.LineStyle = True
+        End With
+
+        'ログとして新規ブックへ
+        Call LogSh.Copy
+        '元シート削除
+        Application.DisplayAlerts = False
+        On Error Resume Next
+        Call LogSh.Delete
+        On Error GoTo 0
+        Application.DisplayAlerts = False
+
+    End If
+
+
+Debug.Print "DataCopy:" & (Timer - t) & "秒"
+
+
+    'フォーム 終了
+    Call Unload(Frm_Progress)
+
+    DataCopy = True
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    'フォーム 終了
+    Call Unload(Frm_Progress)
+
+    Call ShowErrMsg(Err.Description, Err.Number)
+
+End Function
+'----------------------------------------------------------------------------------------------------

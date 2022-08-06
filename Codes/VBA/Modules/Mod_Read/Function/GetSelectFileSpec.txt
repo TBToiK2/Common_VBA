@@ -1,0 +1,69 @@
+'----------------------------------------------------------------------------------------------------
+'2022/07/27 00:58:07
+'----------------------------------------------------------------------------------------------------
+'参照設定
+'LibraryName:Scripting
+'LIBID:{420B2830-E718-11CF-893D-00A0C9054228}
+    'ReferenceName:Microsoft Scripting Runtime
+    'FullPath(win32):C:\Windows\SysWOW64\scrrun.dll
+    'FullPath(win64):C:\Windows\System32\scrrun.dll
+    'Major.Minor:1.0
+        'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
+        'ProgID:Scripting.FileSystemObject
+Public Function GetSelectFileSpec(ByVal filePath As String, Optional ByVal filterDescription As String, Optional ByVal filterExtentions As String, _
+                                  Optional ByVal multiSelect As Boolean, Optional ByVal dialogTitle As String) As String()
+On Error GoTo Err
+
+    'ファイルパス 存在確認
+    If Not FSO.FolderExists(filePath) Then
+        Call ShowErrMsg("指定されたファイルパスが存在しません。", title:="GetSelectFileSpec")
+        Exit Function
+    End If
+
+    If filterDescription = "" Then filterDescription = "すべてのファイル"
+    If filterExtentions = "" Then filterExtentions = "*.*"
+    If dialogTitle = "" Then dialogTitle = "ファイル 選択"
+
+    'ダイアログボックス 設定
+    With Application.FileDialog(msoFileDialogFilePicker)
+        With .Filters
+            Call .Clear
+            Call .Add(filterDescription, filterExtentions, 1)
+        End With
+        .FilterIndex = 1
+        .AllowMultiSelect = multiSelect
+        .Title = dialogTitle
+        .InitialFileName = FSO.BuildPath(filePath, Application.PathSeparator)
+
+        'ファイル選択状態 判定
+        If .Show = -1 Then
+            Dim selectedArr() As String
+            If multiSelect Then
+                ReDim selectedArr(.SelectedItems.Count - 1)
+
+                Dim indx As Long
+                For indx = 1 To .SelectedItems.Count
+                    selectedArr(indx - 1) = .SelectedItems(indx)
+                Next indx
+
+                GetSelectFileSpec = selectedArr
+            Else
+                ReDim selectedArr(0)
+
+                selectedArr(0) = .SelectedItems(1)
+
+                GetSelectFileSpec = selectedArr
+            End If
+        End If
+
+    End With
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "GetSelectFileSpec")
+
+End Function
+'----------------------------------------------------------------------------------------------------

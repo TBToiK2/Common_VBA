@@ -1,0 +1,21 @@
+'----------------------------------------------------------------------------------------------------
+'2022/03/17 09:59:52
+'----------------------------------------------------------------------------------------------------
+Public Sub ShowErrMsg(ByVal errDescription As String, Optional ByVal errNumber As Long, Optional ByVal title As String)
+On Error Resume Next
+
+    'メッセージプロンプト 設定
+    Dim prompt As String
+    prompt = "エラー内容:[" & vbCrLf & errDescription & vbCrLf & "]"
+    If errNumber <> 0 Then Prompt = "エラー番号:[" & errNumber & "]" & vbCrLf & prompt
+
+    'タイトル 設定
+    If title <> "" Then title = ":" & title
+
+    'メッセージ 表示
+    Call MsgBox(prompt, vbOKOnly + vbCritical, "エラー" & title)
+
+    Err.Clear
+
+End Sub
+'----------------------------------------------------------------------------------------------------

@@ -1,0 +1,18 @@
+'----------------------------------------------------------------------------------------------------
+Private Sub Cmb_ShName_Change()
+On Error Resume Next
+
+    With ThisWorkbook.Sheets(Cmb_ShName.Value)
+        'ファイルパス 表示
+        Lbl_FPath.Caption = .Range("C13").Value
+        Lbl_TPath.Caption = .Range("D13").Value
+    End With
+
+    '選択項目 保存
+    g_ParamShName = Cmb_ShName.Value
+
+    'OKボタン フォーカス
+    Btn_OK.SetFocus
+
+End Sub
+'----------------------------------------------------------------------------------------------------

@@ -1,0 +1,38 @@
+'----------------------------------------------------------------------------------------------------
+'2022/03/21 02:08:32
+'----------------------------------------------------------------------------------------------------
+Public Function ConvTrueFalse(ByVal expression As String) As Long
+On Error GoTo Err
+
+    '真偽判定用配列 作成
+    Dim trueArr() As Variant, falseArr() As Variant
+    trueArr = Array("True", "T", "Yes", "Y", "はい", "する")
+    falseArr = Array("False", "F", "No", "N", "いいえ", "しない")
+
+    Dim t As Variant, f As Variant
+    'True 判定
+    For Each t In trueArr
+        If StrComp(expression, t, vbTextCompare) = 0 Then
+            ConvTrueFalse = True
+            Exit Function
+        End If
+    Next t
+    'False 判定
+    For Each f In falseArr
+        If StrComp(expression, f, vbTextCompare) = 0 Then
+            ConvTrueFalse = False
+            Exit Function
+        End If
+    Next f
+
+    ConvTrueFalse = 1
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "ConvTrueFalse")
+
+End Function
+'----------------------------------------------------------------------------------------------------
