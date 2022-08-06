@@ -1,0 +1,40 @@
+'----------------------------------------------------------------------------------------------------
+'2022/07/27 00:58:07
+'----------------------------------------------------------------------------------------------------
+Public Function HasListObject(ByVal loName As String, Optional ByRef parent As ListObjects) As Boolean
+On Error GoTo Err
+
+    '引数 既定値判定
+    If parent Is Nothing Then
+        'ワークシート 判定
+        Dim actSh As Object
+        Set actSh = ThisWorkbook.ActiveSheet
+        If TypeName(actSh) = "Worksheet" Then
+            If actSh.Type = xlWorksheet Then
+                Set parent = actSh.ListObjects
+            Else
+                Exit Function
+            End If
+        Else
+            Exit Function
+        End If
+    End If
+
+    '全リストオブジェクト 確認
+    Dim lo As ListObject
+    For Each lo In parent
+        If lo.Name = loName Then
+            HasListObject = True
+            Exit Function
+        End If
+    Next lo
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "HasListObject")
+
+End Function
+'----------------------------------------------------------------------------------------------------

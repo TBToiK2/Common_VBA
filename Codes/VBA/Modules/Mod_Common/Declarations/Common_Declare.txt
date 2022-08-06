@@ -1,17 +1,9 @@
 '----------------------------------------------------------------------------------------------------
 '2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
-Public Sub ShowAllData(ByRef ws As Worksheet)
-On Error Resume Next
-
-    With ws
-        'フィルター 解除
-        If .FilterMode Then Call .ShowAllData
-
-        '行列 全表示
-        .Cells.EntireColumn.Hidden = False
-        .Cells.EntireRow.Hidden = False
-    End With
-
-End Sub
+#If VBA7 Then
+    Public Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
+#Else
+    Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
+#End If
 '----------------------------------------------------------------------------------------------------

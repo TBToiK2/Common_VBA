@@ -1,14 +1,11 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/29 04:11:11
+'2022/03/27 03:14:45
 '----------------------------------------------------------------------------------------------------
-Public Function ShowQuestionMsg(ByVal prompt As String, Optional ByVal title As String) As VbMsgBoxResult
+Public Function ReplaceCRLF(ByVal expression As String) As String
 On Error Resume Next
 
-    'タイトル 設定
-    If title <> "" Then title = ":" & title
-
-    'メッセージ 表示
-    ShowQuestionMsg = MsgBox(prompt, vbOKCancel + vbQuestion, "確認" & title)
+    'Carriage Return, Line Feed 削除
+    ReplaceCRLF = Replace(Replace(expression, vbCr, vbNullString), vbLf, vbNullString)
 
 End Function
 '----------------------------------------------------------------------------------------------------

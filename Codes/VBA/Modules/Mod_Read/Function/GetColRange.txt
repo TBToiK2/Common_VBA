@@ -1,0 +1,61 @@
+'----------------------------------------------------------------------------------------------------
+'2022/07/28 15:47:52
+'----------------------------------------------------------------------------------------------------
+Public Function GetColRange(ByRef ws As Worksheet, ByVal targetCol As Long, Optional ByVal firstRow As Long = 1, Optional ByVal lastRow As Variant, _
+                            Optional ByVal relativeFLG As Boolean) As Range
+On Error GoTo Err
+
+    If targetCol < 1 Or targetCol > MAX_COL Then
+        Call ShowErrMsg("targetColに指定された値が有効列数の範囲外です。" & "1以上" & MAX_COL & "以下で入力してください。", title:="GetColRange")
+        Exit Function
+    End If
+    If firstRow < 1 Or firstRow > MAX_ROW Then
+        Call ShowErrMsg("firstRowに指定された値が有効行数の範囲外です。" & "1以上" & MAX_ROW & "以下で入力してください。", title:="GetColRange")
+        Exit Function
+    End If
+
+    Dim targetLastRow As Long
+    If IsMissing(lastRow) Then
+
+        '最終行 取得
+        targetLastRow = GetLastRow(ws, targetCol)
+        If firstRow > targetLastRow Then Exit Function
+
+    Else
+
+        If Not IsNumber(lastRow) Then
+            Call ShowErrMsg("lastRowに指定された値は数値ではありません。" & "1以上" & MAX_ROW & "以下で入力してください。", title:="GetColRange")
+            Exit Function
+        Else
+            If relativeFLG Then
+                '最終行 取得
+                targetLastRow = firstRow + lastRow
+                If targetLastRow < 1 Or targetLastRow > MAX_ROW Then
+                    Call ShowErrMsg("指定された値が有効行数の範囲外です。" & "firstRow + lastRowが" & "1以上" & MAX_ROW & "以下となるよう入力してください。", title:="GetColRange")
+                    Exit Function
+                End If
+            Else
+                '最終行 取得
+                targetLastRow = lastRow
+                If targetLastRow < 1 Or targetLastRow > MAX_ROW Then
+                    Call ShowErrMsg("lastRowに指定された値が有効行数の範囲外です。" & "1以上" & MAX_ROW & "以下で入力してください。", title:="GetColRange")
+                    Exit Function
+                End If
+            End If
+        End If
+
+    End If
+
+    With ws
+        Set GetColRange = .Range(.Cells(firstRow, targetCol), .Cells(targetLastRow, targetCol))
+    End With
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "GetColRange")
+
+End Function
+'----------------------------------------------------------------------------------------------------

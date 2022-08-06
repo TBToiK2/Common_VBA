@@ -1,28 +1,22 @@
 '----------------------------------------------------------------------------------------------------
-Public Sub AfterProcess(ByVal Calculation As XlCalculation, Optional ByRef ExcelApp As Application)
+'2022/06/29 04:11:11
+'----------------------------------------------------------------------------------------------------
+Public Sub AfterProcess(ByVal calculation As XlCalculation, Optional ByRef excelApp As Excel.Application)
 
-    'オブジェクト有無 判定
-    If IsBlank(ExcelApp) Then
-        With Excel.Application
-            .Calculation = Calculation
-            .CutCopyMode = False
-            .ScreenUpdating = True
-            .DisplayAlerts = True
-            .EnableEvents = True
-        End With
-        DoEvents
-    Else
-        With ExcelApp
-            If .Workbooks.Count > 0 Then
-                .Calculation = Calculation
-            End If
-            .CutCopyMode = False
-            .ScreenUpdating = True
-            .DisplayAlerts = True
-            .EnableEvents = True
-        End With
-        DoEvents
-    End If
+    '引数 既定値判定
+    If excelApp Is Nothing Then Set excelApp = Excel.Application
+
+    '各プロセス 再開
+    With excelApp
+        If .Workbooks.Count > 0 Then
+            .Calculation = calculation
+        End If
+        .CutCopyMode = False
+        .ScreenUpdating = True
+        .DisplayAlerts = True
+        .EnableEvents = True
+        .StatusBar = False
+    End With
 
 End Sub
 '----------------------------------------------------------------------------------------------------

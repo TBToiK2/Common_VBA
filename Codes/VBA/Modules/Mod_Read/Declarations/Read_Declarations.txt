@@ -1,10 +1,10 @@
 Option Explicit
 '----------------------------------------------------------------------------------------------------
-'2022/07/27 00:58:07
+'2022/03/12 18:57:57
 '----------------------------------------------------------------------------------------------------
-Public Const MIN_ROW = 1
-Public Const MAX_ROW = 1048576
-Public Const MIN_COL = 1
-Public Const MAX_COL = 16384
-Public FSO As New FileSystemObject
+Public Enum EnumFileNameType
+    enFileName = 0
+    enBaseName = 1
+    enExtensionName = 2
+End Enum
 '----------------------------------------------------------------------------------------------------

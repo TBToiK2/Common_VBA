@@ -1,0 +1,51 @@
+'----------------------------------------------------------------------------------------------------
+'2022/06/28 01:24:56
+'----------------------------------------------------------------------------------------------------
+Public Function GetLastCol(ByRef ws As Worksheet, ByVal targetRow As Long) As Long
+On Error GoTo Err
+
+    If targetRow < 1 Or targetRow > MAX_ROW Then
+        Call ShowErrMsg("指定された値が有効行数の範囲外です。" & "1以上" & MAX_ROW & "以下で入力してください。", title:="GetLastCol")
+        Exit Function
+    End If
+
+    With ws
+
+        '使用範囲最終列 取得
+        With .UsedRange
+            Dim usedLastCol As Long
+            usedLastCol = .Columns(.Columns.Count).Column
+        End With
+
+        '使用範囲配列 取得
+        Dim usedRangeArr() As Variant
+        With .Range(.Cells(targetRow, 1), .Cells(targetRow, usedLastCol))
+            '配列 判定
+            If IsArray(.Value) Then
+                usedRangeArr = .Value
+            Else
+                ReDim usedRangeArr(1 To 1, 1 To 1)
+                usedRangeArr(1, 1) = .Value
+            End If
+        End With
+
+        '最終列 取得
+        Dim lastCol As Long
+        For lastCol = UBound(usedRangeArr, 2) To 1 Step -1
+            If CStr(usedRangeArr(1, lastCol)) <> "" Then
+                GetLastCol = lastCol
+                Exit Function
+            End If
+        Next lastCol
+
+    End With
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "GetLastCol")
+
+End Function
+'----------------------------------------------------------------------------------------------------

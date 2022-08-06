@@ -1,9 +1,0 @@
-'----------------------------------------------------------------------------------------------------
-Public Function ShowInfoMsg(ByVal Prompt As String) As Long
-On Error Resume Next
-
-    'メッセージ 表示
-    ShowInfoMsg = MsgBox(Prompt, vbOKOnly + vbInformation, "情報")
-
-End Function
-'----------------------------------------------------------------------------------------------------

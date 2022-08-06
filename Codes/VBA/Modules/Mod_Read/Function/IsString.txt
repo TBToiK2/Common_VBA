@@ -1,14 +1,13 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/29 04:11:11
+'2022/07/27 00:58:07
 '----------------------------------------------------------------------------------------------------
-Public Function ShowQuestionMsg(ByVal prompt As String, Optional ByVal title As String) As VbMsgBoxResult
+Public Function IsString(ByVal expression As Variant) As Boolean
 On Error Resume Next
 
-    'タイトル 設定
-    If title <> "" Then title = ":" & title
+    Dim str As String
+    str = CStr(expression)
 
-    'メッセージ 表示
-    ShowQuestionMsg = MsgBox(prompt, vbOKCancel + vbQuestion, "確認" & title)
+    IsString = Not Err.Number > 0
 
 End Function
 '----------------------------------------------------------------------------------------------------
