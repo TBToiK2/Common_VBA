@@ -1,8 +1,8 @@
 Option Explicit
 
-Dim SHL, FSO, ADOSRead, ADOSWrite
-Set SHL = CreateObject("Shell.Application")
+Dim FSO, WSH, ADOSRead, ADOSWrite
 Set FSO = CreateObject("Scripting.FileSystemObject")
+Set WSH = CreateObject("WScript.Shell")
 Set ADOSRead = CreateObject("ADODB.Stream")
 Set ADOSWrite = CreateObject("ADODB.Stream")
 
@@ -20,18 +20,44 @@ With ADOSWrite
     .LineSeparator = -1
 End With
 
+Dim dateTime, fullDateTime, dateTimeFmt
+dateTime = Now
+fullDateTime = DateValue(dateTime) & " " & Right("0" & TimeValue(dateTime), 8)
+dateTimeFmt = Replace(Replace(Replace(fullDateTime, "/", ""), ":", ""), " ", "")
+
 With FSO
 
-    Dim dateTime, fullDateTime, dateTimeFmt
-    dateTime = Now
-    fullDateTime = DateValue(dateTime) & " " & Right("0" & TimeValue(dateTime), 8)
-    dateTimeFmt = Replace(Replace(Replace(fullDateTime, "/", ""), ":", ""), " ", "")
-
-    Dim thisFilePath
+    Dim thisFilePath, driveName
     thisFilePath = .GetParentFolderName(WScript.ScriptFullName)
+    driveName = .GetDriveName(thisFilePath)
+
+    If RunCmd("rev-parse --git-dir") = "" Then
+        Call MsgBox(thisFilePath & "はGitリポジトリではありません。")
+        WScript.Quit
+    End If
+
+    Dim currentBranch
+    currentBranch = Replace(Replace(RunCmd("rev-parse --abbrev-ref HEAD"), vbLf, ""), vbCr, "")
+    If currentBranch <> "main" Then
+        Call MsgBox("現ブランチはmainブランチではありません。")
+        WScript.Quit
+    End If
+
+    Dim ver
+    ver = Replace(Replace(RunCmd("describe --exact-match"), vbLf, ""), vbCr, "")
+    If ver = "" Then
+        Call MsgBox("該当ブランチにタグが存在しません。")
+        WScript.Quit
+    End If
+
+    Dim basFolderSpec
+    basFolderSpec = .BuildPath(thisFilePath, "bas")
+    If Not .FolderExists(basFolderSpec) Then
+        Call .CreateFolder(basFolderSpec)
+    End If
 
     Dim saveToFolderSpec
-    saveToFolderSpec = .BuildPath(thisFilePath, "bas")
+    saveToFolderSpec = .BuildPath(basFolderSpec, ver)
     If Not .FolderExists(saveToFolderSpec) Then
         Call .CreateFolder(saveToFolderSpec)
         Dim newCreateFLG
@@ -63,7 +89,7 @@ With FSO
             With ADOSWrite
                 Call .Open
                     Call .WriteText("Attribute VB_Name = """ & folName & """", 1)
-                    Call .WriteText("'" & fullDateTime & "更新", 1)
+                    Call .WriteText("'" & ver, 1)
                     Call .SaveToFile(saveToFileSpec, 2)
                 Call .Close
             End With
@@ -84,6 +110,24 @@ With FSO
     End If
 
 End With
+
+Function RunCmd(gitCmd)
+
+    Dim WSHEX
+    Set WSHEX = WSH.Exec("cmd.exe /C " & driveName & " & git -C """ & thisFilePath & """ " & gitCmd)
+
+    If WSHEX.Status = 2 Then
+        Call MsgBox("コマンドの実行に失敗しました。")
+        WScript.Quit
+    End If
+
+    Do While WSHEX.Status = 0
+        Call WScript.Sleep(100)
+    Loop
+
+    RunCmd = WSHEX.StdOut.ReadAll
+
+End Function
 
 Sub MergeTextFiles(moduleFolderSpec, trgetFolderName)
 On Error Resume Next
