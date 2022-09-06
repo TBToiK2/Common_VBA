@@ -6,6 +6,15 @@ Set WSH = CreateObject("WScript.Shell")
 Set ADOSRead = CreateObject("ADODB.Stream")
 Set ADOSWrite = CreateObject("ADODB.Stream")
 
+Dim REG
+Set REG = CreateObject("VBScript.RegExp")
+With REG
+    .Global = False
+    .IgnoreCase = False
+    .Multiline = False
+    .Pattern = "^(release)/(.*)$"
+End With
+
 With ADOSRead
     .Mode = 3
     .Type = 2
@@ -38,15 +47,22 @@ With FSO
 
     Dim currentBranch
     currentBranch = Replace(Replace(RunCmd("rev-parse --abbrev-ref HEAD"), vbLf, ""), vbCr, "")
-    If currentBranch <> "main" Then
-        Call MsgBox("現ブランチはmainブランチではありません。")
+    'If currentBranch <> "main" Then
+        'Call MsgBox("現ブランチはmainブランチではありません。")
+        'WScript.Quit
+    'End If
+
+    Dim REGMatch
+    Set REGMatch = REG.Execute(currentBranch)
+    If REGMatch.Count = 0 Then
+        Call MsgBox("現ブランチはreleaseブランチではありません。")
         WScript.Quit
     End If
 
     Dim ver
-    ver = Replace(Replace(RunCmd("describe --exact-match"), vbLf, ""), vbCr, "")
+    ver = REGMatch(0).SubMatches(1)
     If ver = "" Then
-        Call MsgBox("該当ブランチにタグが存在しません。")
+        Call MsgBox("リリース名が設定されていません。")
         WScript.Quit
     End If
 
