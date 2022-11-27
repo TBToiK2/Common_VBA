@@ -47,11 +47,6 @@ With FSO
 
     Dim currentBranch
     currentBranch = Replace(Replace(RunCmd("rev-parse --abbrev-ref HEAD"), vbLf, ""), vbCr, "")
-    'If currentBranch <> "main" Then
-        'Call MsgBox("現ブランチはmainブランチではありません。")
-        'WScript.Quit
-    'End If
-
     Dim REGMatch
     Set REGMatch = REG.Execute(currentBranch)
     If REGMatch.Count = 0 Then

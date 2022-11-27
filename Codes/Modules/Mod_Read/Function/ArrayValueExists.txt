@@ -1,0 +1,31 @@
+'----------------------------------------------------------------------------------------------------
+'2022/11/27 20:53:38
+'----------------------------------------------------------------------------------------------------
+Public Function ArrayValueExists(ByVal targetArr As Variant, ByVal searchValue As Variant) As Boolean
+On Error GoTo Err
+
+    If Not IsArray(targetArr) Or IsBlank(targetArr) Then Exit Function
+
+    If IsArray(searchValue) Or IsObject(searchValue) Then Exit Function
+
+    Dim elmValue As Variant
+    '全値 確認
+    For Each elmValue In targetArr
+        '配列, オブジェクト 判定
+        If Not IsArray(elmValue) And Not IsObject(elmValue) Then
+            If searchValue = elmValue Then
+                ArrayValueExists = True
+                Exit Function
+            End If
+        End If
+    Next elmValue
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "ArrayValueExists")
+
+End Function
+'----------------------------------------------------------------------------------------------------
