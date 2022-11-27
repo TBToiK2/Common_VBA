@@ -34,7 +34,7 @@ On Error GoTo Err
 
                     Dim fileName As String
                     fileName = .GetFileName(targetFileName)
-                    If searchName = fileName Then
+                    If fileName Like searchName Then
                         ReDim Preserve fileSpecArr(fileCount)
                         fileSpecArr(fileCount) = .BuildPath(searchFilePath, targetFileName)
                         fileCount = fileCount + 1
@@ -49,7 +49,7 @@ On Error GoTo Err
 
                     Dim baseName As String
                     baseName = .GetBaseName(targetFileName)
-                    If searchName = baseName Then
+                    If baseName Like searchName Then
                         ReDim Preserve fileSpecArr(fileCount)
                         fileSpecArr(fileCount) = .BuildPath(searchFilePath, targetFileName)
                         fileCount = fileCount + 1
@@ -64,7 +64,7 @@ On Error GoTo Err
 
                     Dim extensionName As String
                     extensionName = .GetExtensionName(targetFileName)
-                    If searchName = extensionName Then
+                    If extensionName Like searchName Then
                         ReDim Preserve fileSpecArr(fileCount)
                         fileSpecArr(fileCount) = .BuildPath(searchFilePath, targetFileName)
                         fileCount = fileCount + 1
