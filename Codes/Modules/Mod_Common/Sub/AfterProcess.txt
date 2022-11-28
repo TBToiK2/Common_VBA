@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/29 04:11:11
+'2022/11/28 21:39:37
 '----------------------------------------------------------------------------------------------------
-Public Sub AfterProcess(ByVal calculation As XlCalculation, Optional ByRef excelApp As Excel.Application)
+Public Sub AfterProcess(ByVal calculation As XlCalculation, Optional ByRef excelApp As Excel.Application, Optional ByRef wbOpening As Boolean)
 
     '引数 既定値判定
     If excelApp Is Nothing Then Set excelApp = Excel.Application
@@ -11,7 +11,7 @@ Public Sub AfterProcess(ByVal calculation As XlCalculation, Optional ByRef excel
         If .Workbooks.Count > 0 Then
             .Calculation = calculation
         End If
-        .CutCopyMode = False
+        If Not isWbOpening Then .CutCopyMode = False
         .ScreenUpdating = True
         .DisplayAlerts = True
         .EnableEvents = True
