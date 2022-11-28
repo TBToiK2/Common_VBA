@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
 '2022/11/28 21:39:37
 '----------------------------------------------------------------------------------------------------
-Public Sub AfterProcess(ByVal calculation As XlCalculation, Optional ByRef excelApp As Excel.Application, Optional ByRef wbOpening As Boolean)
+Public Sub AfterProcess(ByVal calculation As XlCalculation, Optional ByRef excelApp As Excel.Application, Optional ByVal isWbOpening As Boolean)
 
     '引数 既定値判定
     If excelApp Is Nothing Then Set excelApp = Excel.Application
