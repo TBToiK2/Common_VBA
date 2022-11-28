@@ -12,7 +12,7 @@ With REG
     .Global = False
     .IgnoreCase = False
     .Multiline = False
-    .Pattern = "^(release)/(.*)$"
+    .Pattern = "^(release|hotfix)/(.*)$"
 End With
 
 With ADOSRead
@@ -50,7 +50,7 @@ With FSO
     Dim REGMatch
     Set REGMatch = REG.Execute(currentBranch)
     If REGMatch.Count = 0 Then
-        Call MsgBox("現ブランチはreleaseブランチではありません。")
+        Call MsgBox("現ブランチはreleaseまたはhotfixブランチではありません。")
         WScript.Quit
     End If
 
