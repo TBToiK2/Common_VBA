@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/07/27 00:58:07
+'2022/12/05 11:27:09
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -10,7 +10,7 @@
     'Major.Minor:1.0
         'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
         'ProgID:Scripting.FileSystemObject
-Public Function GetSearchFileCount(ByVal searchFilePath As String, ByVal searchName As String, Optional ByVal enFileNameType As EnumFileNameType) As Long
+Public Function GetSearchFileCount(ByVal searchFilePath As String, ByVal searchName As String, Optional ByVal enFileNameType As EnumFileNameType, Optional ByVal ignoreCase As Boolean) As Long
 On Error GoTo Err
 
     With FSO
@@ -59,7 +59,7 @@ On Error GoTo Err
 
                     Dim extensionName As String
                     extensionName = .GetExtensionName(targetFileName)
-                    If extensionName Like searchName Then
+                    If extensionName Like searchName Or (ignoreCase And (UCase(extensionName) Like UCase(searchName))) Then
                         fileCount = fileCount + 1
                     End If
 
