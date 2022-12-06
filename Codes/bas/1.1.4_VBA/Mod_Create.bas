@@ -1,10 +1,17 @@
+Attribute VB_Name = "Mod_Create"
+'1.1.4_VBA
+Option Explicit
+'----------------------------------------------------------------------------------------------------
+'2021/11/06 13:48:40
+'----------------------------------------------------------------------------------------------------
+
 '----------------------------------------------------------------------------------------------------
 '2022/12/06 02:51:33
 '----------------------------------------------------------------------------------------------------
 Public Function ArrayByType(ByVal arrType As VbVarType, ParamArray arr() As Variant) As Variant
 On Error Resume Next
 
-    'é…åˆ— åˆæœŸåˆ¤å®š
+    '”z—ñ ‰Šú”»’è
     If UBound(arr) = -1 Then
         ArrayByType = Array()
         Exit Function
@@ -147,16 +154,146 @@ On Error Resume Next
         #End If
 
         Case Else
-            Call ShowErrMsg("æŒ‡å®šã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿å‹ã¯ç„¡åŠ¹ã§ã™ã€‚", title:="ConvTrueFalse")
+            Call ShowErrMsg("w’è‚³‚ê‚½ƒf[ƒ^Œ^‚Í–³Œø‚Å‚·B", title:="ConvTrueFalse")
             Exit Function
     End Select
 
     Exit Function
 
-'ã‚¨ãƒ©ãƒ¼å‡¦ç†
+'ƒGƒ‰[ˆ—
 Err_Convert:
 
-    Call ShowErrMsg("æŒ‡å®šã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿å‹ã§ã¯ãªã„è¦ç´ ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚", title:="ConvTrueFalse")
+    Call ShowErrMsg("w’è‚³‚ê‚½ƒf[ƒ^Œ^‚Å‚Í‚È‚¢—v‘f‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B", title:="ConvTrueFalse")
+
+End Function
+'----------------------------------------------------------------------------------------------------
+
+'----------------------------------------------------------------------------------------------------
+'2022/07/27 00:58:07
+'----------------------------------------------------------------------------------------------------
+'QÆİ’è
+'LibraryName:Scripting
+'LIBID:{420B2830-E718-11CF-893D-00A0C9054228}
+    'ReferenceName:Microsoft Scripting Runtime
+    'FullPath(win32):C:\Windows\SysWOW64\scrrun.dll
+    'FullPath(win64):C:\Windows\System32\scrrun.dll
+    'Major.Minor:1.0
+        'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
+        'ProgID:Scripting.FileSystemObject
+Public Function BuildPath(ParamArray path() As Variant) As String
+On Error Resume Next
+
+    With FSO
+
+        Dim maxElement As Long
+        Dim element As Long
+        Dim pathParam As String
+        '‘æˆêˆø” ”z—ñ”»’è
+        If IsArray(path(0)) Then
+
+            Dim pathArr() As Variant
+            pathArr = path(0)
+
+            'ƒpƒ‰ƒ[ƒ^” ”»’è
+            maxElement = UBound(pathArr, 1)
+            Select Case maxElement
+                Case Is = -1
+                    Call ShowErrMsg("w’è‚³‚ê‚½”z—ñ‚É’l‚ªˆê‚Â‚à‘¶İ‚µ‚Ü‚¹‚ñB", title:="BuildPath")
+
+                Case Is = 0
+                    pathParam = CStr(pathArr(0))
+                    'ƒGƒ‰[ ”»’è
+                    If Err.Number > 0 Then GoTo Err_Array
+                    'ƒpƒX ì¬
+                    BuildPath = .BuildPath(pathParam, vbNullString)
+
+                Case Else
+                    For element = 0 To maxElement
+                        pathParam = CStr(pathArr(element))
+                        'ƒGƒ‰[ ”»’è
+                        If Err.Number > 0 Then GoTo Err_Array
+                        'ƒpƒX ì¬
+                        BuildPath = .BuildPath(BuildPath, pathParam)
+                    Next element
+
+            End Select
+
+        Else
+
+            'ƒpƒ‰ƒ[ƒ^” ”»’è
+            maxElement = UBound(path, 1)
+            Select Case maxElement
+                Case Is = 0
+                    'ƒpƒX ì¬
+                    BuildPath = .BuildPath(path(0), vbNullString)
+
+                Case Else
+                    For element = 0 To maxElement
+                        pathParam = CStr(path(element))
+                        'ƒGƒ‰[ ”»’è
+                        If Err.Number > 0 Then GoTo Err_Array
+                        'ƒpƒX ì¬
+                        BuildPath = .BuildPath(BuildPath, pathParam)
+                    Next element
+
+            End Select
+
+        End If
+
+    End With
+
+    Exit Function
+
+'ƒGƒ‰[ˆ—
+Err_Array:
+
+    Call ShowErrMsg("w’è‚³‚ê‚½”z—ñ“à‚É•¶š—ñ‚É•ÏŠ·‚Å‚«‚È‚¢—v‘f‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B", title:="BuildPath")
+
+    BuildPath = vbNullString
+
+End Function
+'----------------------------------------------------------------------------------------------------
+
+'----------------------------------------------------------------------------------------------------
+'2022/07/27 00:58:07
+'----------------------------------------------------------------------------------------------------
+'QÆİ’è
+'LibraryName:Scripting
+'LIBID:{420B2830-E718-11CF-893D-00A0C9054228}
+    'ReferenceName:Microsoft Scripting Runtime
+    'FullPath(win32):C:\Windows\SysWOW64\scrrun.dll
+    'FullPath(win64):C:\Windows\System32\scrrun.dll
+    'Major.Minor:1.0
+        'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
+        'ProgID:Scripting.FileSystemObject
+Public Function CreateBackupFile(ByVal fileSpec As String) As Boolean
+On Error GoTo Err
+
+    With FSO
+
+        'ƒtƒ@ƒCƒ‹‘¶İ Šm”F
+        If Not .FileExists(fileSpec) Then
+            Call ShowErrMsg("w’è‚³‚ê‚½ƒtƒ@ƒCƒ‹ƒfƒBƒŒƒNƒgƒŠ‚Í‘¶İ‚µ‚Ü‚¹‚ñB", title:="CreateBackupFile")
+            Exit Function
+        End If
+
+        'ƒtƒ@ƒCƒ‹–¼, Šg’£q æ“¾
+        Dim baseName As String, extensionName As String
+        baseName = .GetBaseName(fileSpec)
+        extensionName = .GetExtensionName(fileSpec)
+
+    End With
+
+    Call FileCopy(fileSpec, ThisWorkbook.Path & "\" & baseName & "_" & Format(Now, "yyyymmddhhmmss") & "." & extensionName)
+
+    CreateBackupFile = True
+
+    Exit Function
+
+'ƒGƒ‰[ˆ—
+Err:
+
+    Call ShowErrMsg("ƒtƒ@ƒCƒ‹‚ÌƒoƒbƒNƒAƒbƒv‚É¸”s‚µ‚Ü‚µ‚½B" & vbCrLf & Err.Description, Err.Number, "CreateBackupFile")
 
 End Function
 '----------------------------------------------------------------------------------------------------
