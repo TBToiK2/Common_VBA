@@ -1,7 +1,14 @@
+Attribute VB_Name = "Mod_Delete"
+'1.2.1_VBA
+Option Explicit
 '----------------------------------------------------------------------------------------------------
-'2023/02/22 17:10:31
+'2021/11/06 13:48:05
 '----------------------------------------------------------------------------------------------------
-'å‚ç…§è¨­å®š
+
+'----------------------------------------------------------------------------------------------------
+'2022/07/27 00:58:07
+'----------------------------------------------------------------------------------------------------
+'QÆİ’è
 'LibraryName:Scripting
 'LIBID:{420B2830-E718-11CF-893D-00A0C9054228}
     'ReferenceName:Microsoft Scripting Runtime
@@ -10,27 +17,27 @@
     'Major.Minor:1.0
         'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
         'ProgID:Scripting.FileSystemObject
-Public Sub AddAttr(ByVal spec As String, ByVal attr As FileAttribute)
+Public Sub DeleteAttr(ByVal spec As String, ByVal attr As FileAttribute)
 On Error GoTo Err
 
     With FSO
 
-        'å±æ€§ æ¯”è¼ƒ(ãƒ“ãƒƒãƒˆæ¼”ç®—)
+        '‘®« ”äŠr(ƒrƒbƒg‰‰Z)
         Dim afterAttr As FileAttribute
         If (GetAttr(spec) And vbDirectory) = vbDirectory Then
 
             Dim attrFolder As Folder
             Set attrFolder = .GetFolder(spec)
-            'ãƒ•ã‚©ãƒ«ãƒ€å±æ€§ æ¯”è¼ƒ(ãƒ“ãƒƒãƒˆæ¼”ç®—)
-            afterAttr = attrFolder.Attributes Or attr
+            'ƒtƒHƒ‹ƒ_‘®« ”äŠr(ƒrƒbƒg‰‰Z)
+            afterAttr = attrFolder.Attributes Xor attr
             attrFolder.Attributes = afterAttr
 
         Else
 
             Dim attrFile As File
             Set attrFile = .GetFile(spec)
-            'ãƒ•ã‚¡ã‚¤ãƒ«å±æ€§ æ¯”è¼ƒ(ãƒ“ãƒƒãƒˆæ¼”ç®—)
-            afterAttr = .GetFile(spec).Attributes Or attr
+            'ƒtƒ@ƒCƒ‹‘®« ”äŠr(ƒrƒbƒg‰‰Z)
+            afterAttr = .GetFile(spec).Attributes Xor attr
             attrFile.Attributes = afterAttr
 
         End If
@@ -39,10 +46,10 @@ On Error GoTo Err
 
     Exit Sub
 
-'ã‚¨ãƒ©ãƒ¼å‡¦ç†
+'ƒGƒ‰[ˆ—
 Err:
 
-    Call ShowErrMsg(Err.Description, Err.Number, "AddAttr")
+    Call ShowErrMsg(Err.Description, Err.Number, "DeleteAttr")
 
 End Sub
 '----------------------------------------------------------------------------------------------------
