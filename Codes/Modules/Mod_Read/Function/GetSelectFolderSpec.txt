@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/07/27 00:58:07
+'2024/11/27 15:36:44
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -13,12 +13,13 @@
 Public Function GetSelectFolderSpec(ByVal folderPath As String, Optional ByVal dialogTitle As String) As String
 On Error GoTo Err
 
-    'フォルダパス 存在確認
+    'フォルダーパス 存在確認
     If Not FSO.FolderExists(folderPath) Then
         Call ShowErrMsg("指定されたフォルダパスが存在しません。", title:="GetSelectFolderSpec")
         Exit Function
     End If
 
+    '引数 空白確認
     If dialogTitle = "" Then dialogTitle = "フォルダ 選択"
 
     'ダイアログボックス 設定
@@ -27,7 +28,7 @@ On Error GoTo Err
         .Title = dialogTitle
         .InitialFileName = FSO.BuildPath(folderPath, Application.PathSeparator)
 
-        'フォルダ選択状態 判定
+        'フォルダー選択状態 判定
         If .Show = -1 Then GetSelectFolderSpec = .SelectedItems(1)
     End With
 

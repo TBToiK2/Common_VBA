@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/07/27 00:58:07
+'2024/11/27 15:36:44
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -10,8 +10,8 @@
     'Major.Minor:1.0
         'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
         'ProgID:Scripting.FileSystemObject
-Public Function GetSelectFileSpec(ByVal filePath As String, Optional ByVal filterDescription As String, Optional ByVal filterExtentions As String, _
-                                  Optional ByVal multiSelect As Boolean, Optional ByVal dialogTitle As String) As String()
+Public Function GetSelectFileSpec(ByVal filePath As String, Optional ByVal filterDescriptions As String, Optional ByVal filterExtensions As String, _
+                                  Optional ByVal multiSelect As Boolean, Optional ByVal dialogTitle As String, Optional ByVal filterSeparateFLG As Boolean) As String()
 On Error GoTo Err
 
     'ファイルパス 存在確認
@@ -20,15 +20,59 @@ On Error GoTo Err
         Exit Function
     End If
 
-    If filterDescription = "" Then filterDescription = "すべてのファイル"
-    If filterExtentions = "" Then filterExtentions = "*.*"
+    '引数 空白確認
+    If filterDescriptions = "" Then filterDescriptions = "すべてのファイル"
+    If filterExtensions = "" Then filterExtensions = "*.*"
     If dialogTitle = "" Then dialogTitle = "ファイル 選択"
+
+    Dim filterDescriptionArr() As String, filterExtensionArr() As String
+    filterDescriptionArr = Split(filterDescriptions, ",")
+    filterExtensionArr = Split(filterExtensions, ",")
+
+    '配列 要素数比較
+    Dim filterDescriptionArrUpper As Long, filterExtensionArrUpper As Long
+    filterDescriptionArrUpper = UBound(filterDescriptionArr, 1)
+    filterExtensionArrUpper = UBound(filterExtensionArr, 1)
+    If filterDescriptionArrUpper <> filterExtensionArrUpper Then
+        Call ShowErrMsg("指定されたファイルの種類と拡張子の数が一致しません。", title:="GetSelectFileSpec")
+        Exit Function
+    End If
+
+    Dim filterArrUpper As Long
+    filterArrUpper = filterDescriptionArrUpper
+
+    '引数 解析
+    Dim filterArrIndx As Long
+    For filterArrIndx = 0 To filterArrUpper
+        '説明
+        If filterDescriptionArr(filterArrIndx) = "" Then filterDescriptionArr(filterArrIndx) = "すべてのファイル"
+
+        '拡張子
+        Dim bufArr As Variant, bufArrIndx As Long
+        bufArr = Split(IIf(filterExtensionArr(filterArrIndx) = "", "*", filterExtensionArr(filterArrIndx)), ";")
+        For bufArrIndx = 0 To UBound(bufArr, 1)
+            If bufArr(bufArrIndx) = "" Then bufArr(bufArrIndx) = "*"
+        Next bufArrIndx
+        filterExtensionArr(filterArrIndx) = "*." & Join(bufArr, ";*.")
+    Next filterArrIndx
+
+    'フィルター分割 確認
+    If Not filterSeparateFLG Then
+        filterDescriptionArr(0) = Join(filterDescriptionArr, ",")
+        ReDim Preserve filterDescriptionArr(0)
+        filterExtensionArr(0) = Join(filterExtensionArr, ";")
+        ReDim Preserve filterExtensionArr(0)
+
+        filterArrUpper = 0
+    End If
 
     'ダイアログボックス 設定
     With Application.FileDialog(msoFileDialogFilePicker)
         With .Filters
             Call .Clear
-            Call .Add(filterDescription, filterExtentions, 1)
+            For filterArrIndx = 0 To filterArrUpper
+                Call .Add(filterDescriptionArr(filterArrIndx), filterExtensionArr(filterArrIndx))
+            Next filterArrIndx
         End With
         .FilterIndex = 1
         .AllowMultiSelect = multiSelect
