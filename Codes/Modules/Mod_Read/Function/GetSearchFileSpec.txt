@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/12/05 11:27:13
+'2024/11/27 15:36:44
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -10,68 +10,70 @@
     'Major.Minor:1.0
         'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
         'ProgID:Scripting.FileSystemObject
-Public Function GetSearchFileSpec(ByVal searchFilePath As String, ByVal searchName As String, Optional ByVal enFileNameType As EnumFileNameType, Optional ByVal ignoreCase As Boolean) As String()
+Public Function GetSearchFileSpec(ByVal searchFilePath As String, ByVal searchNames As String, Optional ByVal enFileNameType As EnumFileNameType, Optional ByVal ignoreCase As Boolean) As String()
 On Error GoTo Err
 
     With FSO
 
-        Dim targetFiles As Files
+        '引数 解析
+        searchNames = Replace(searchNames, ";", ",")
+        Dim searchNameArr() As String
+        searchNameArr = Split(searchNames, ",")
+
+        Dim targetFiles As Files, targetFile As File
         Set targetFiles = .GetFolder(searchFilePath).Files
 
         If targetFiles.Count = 0 Then Exit Function
 
-        Dim targetFileName As String
-        targetFileName = Dir(.BuildPath(searchFilePath, "*"))
-
-        '検索ファイルディレクトリ 取得
+        '検索ファイルディレクトリー 取得
         Dim fileSpecArr() As String
-        Dim targetFile As File
+        Dim searchName As Variant
         Dim fileCount As Long
         Select Case enFileNameType
             'ファイル名
             Case enFileName
-                Do While targetFileName <> vbNullString
-
+                For Each targetFile In targetFiles
                     Dim fileName As String
-                    fileName = .GetFileName(targetFileName)
-                    If fileName Like searchName Then
-                        ReDim Preserve fileSpecArr(fileCount)
-                        fileSpecArr(fileCount) = .BuildPath(searchFilePath, targetFileName)
-                        fileCount = fileCount + 1
-                    End If
+                    fileName = .GetFileName(targetFile.Name)
 
-                    targetFileName = Dir()
-                Loop
+                    For Each searchName In searchNameArr
+                        If fileName Like searchName Then
+                            ReDim Preserve fileSpecArr(fileCount)
+                            fileSpecArr(fileCount) = targetFile.Path
+                            fileCount = fileCount + 1
+                        End If
+                    Next searchName
+                Next targetFile
 
             'ベース名
             Case enBaseName
-                Do While targetFileName <> vbNullString
-
+                For Each targetFile In targetFiles
                     Dim baseName As String
-                    baseName = .GetBaseName(targetFileName)
-                    If baseName Like searchName Then
-                        ReDim Preserve fileSpecArr(fileCount)
-                        fileSpecArr(fileCount) = .BuildPath(searchFilePath, targetFileName)
-                        fileCount = fileCount + 1
-                    End If
+                    baseName = .GetBaseName(targetFile.Name)
 
-                    targetFileName = Dir()
-                Loop
+                    For Each searchName In searchNameArr
+                        If baseName Like searchName Then
+                            ReDim Preserve fileSpecArr(fileCount)
+                            fileSpecArr(fileCount) = targetFile.Path
+                            fileCount = fileCount + 1
+                        End If
+                    Next searchName
+                Next targetFile
 
             '拡張子名
             Case enExtensionName
-                Do While targetFileName <> vbNullString
-
+                For Each targetFile In targetFiles
                     Dim extensionName As String
-                    extensionName = .GetExtensionName(targetFileName)
-                    If extensionName Like searchName Or (ignoreCase And (UCase(extensionName) Like UCase(searchName))) Then
-                        ReDim Preserve fileSpecArr(fileCount)
-                        fileSpecArr(fileCount) = .BuildPath(searchFilePath, targetFileName)
-                        fileCount = fileCount + 1
-                    End If
+                    extensionName = .GetExtensionName(targetFile.Name)
 
-                    targetFileName = Dir()
-                Loop
+                    For Each searchName In searchNameArr
+                        If extensionName Like searchName Or (ignoreCase And (UCase(extensionName) Like UCase(searchName))) Then
+                            ReDim Preserve fileSpecArr(fileCount)
+                            fileSpecArr(fileCount) = targetFile.Path
+                            fileCount = fileCount + 1
+                        End If
+                    Next searchName
+                Next targetFile
 
         End Select
 
