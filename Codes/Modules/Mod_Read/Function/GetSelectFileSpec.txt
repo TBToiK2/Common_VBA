@@ -10,8 +10,9 @@
     'Major.Minor:1.0
         'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
         'ProgID:Scripting.FileSystemObject
-Public Function GetSelectFileSpec(ByVal filePath As String, Optional ByVal filterDescriptions As String, Optional ByVal filterExtensions As String, _
-                                  Optional ByVal multiSelect As Boolean, Optional ByVal dialogTitle As String, Optional ByVal filterSeparateFLG As Boolean) As String()
+Public Function GetSelectFileSpec(ByVal filePath As String, Optional ByVal dialogTitle As String, _
+                                  Optional ByVal filterDescriptions As String, Optional ByVal filterExtensions As String, Optional ByVal filterSeparateFLG As Boolean, _
+                                  Optional ByVal multiSelect As Boolean) As String()
 On Error GoTo Err
 
     'ファイルパス 存在確認
@@ -21,9 +22,9 @@ On Error GoTo Err
     End If
 
     '引数 空白確認
+    If dialogTitle = "" Then dialogTitle = "ファイル 選択"
     If filterDescriptions = "" Then filterDescriptions = "すべてのファイル"
     If filterExtensions = "" Then filterExtensions = "*.*"
-    If dialogTitle = "" Then dialogTitle = "ファイル 選択"
 
     Dim filterDescriptionArr() As String, filterExtensionArr() As String
     filterDescriptionArr = Split(filterDescriptions, ",")
@@ -75,9 +76,9 @@ On Error GoTo Err
             Next filterArrIndx
         End With
         .FilterIndex = 1
-        .AllowMultiSelect = multiSelect
-        .Title = dialogTitle
         .InitialFileName = FSO.BuildPath(filePath, Application.PathSeparator)
+        .Title = dialogTitle
+        .AllowMultiSelect = multiSelect
 
         'ファイル選択状態 判定
         If .Show = -1 Then
