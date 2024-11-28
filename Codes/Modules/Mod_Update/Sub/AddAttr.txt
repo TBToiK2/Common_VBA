@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2023/02/22 17:10:31
+'2024/11/28 16:42:20
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -21,7 +21,7 @@ On Error GoTo Err
 
             Dim attrFolder As Folder
             Set attrFolder = .GetFolder(spec)
-            'フォルダ属性 比較(ビット演算)
+            'フォルダー属性 比較(ビット演算)
             afterAttr = attrFolder.Attributes Or attr
             attrFolder.Attributes = afterAttr
 

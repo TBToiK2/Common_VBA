@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/07/27 00:58:07
+'2024/11/28 16:42:20
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -13,7 +13,7 @@
 Public Function FolderExists(ByVal folderSpec As String) As Boolean
 On Error GoTo Err
 
-    'フォルダ 存在確認
+    'フォルダー 存在確認
     FolderExists = FSO.FolderExists(folderSpec)
 
     Exit Function

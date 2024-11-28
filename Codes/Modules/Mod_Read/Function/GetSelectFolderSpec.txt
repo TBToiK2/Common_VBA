@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2024/11/27 15:36:44
+'2024/11/28 16:42:20
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -15,7 +15,7 @@ On Error GoTo Err
 
     'フォルダーパス 存在確認
     If Not FSO.FolderExists(folderPath) Then
-        Call ShowErrMsg("指定されたフォルダパスが存在しません。", title:="GetSelectFolderSpec")
+        Call ShowErrMsg("指定されたフォルダーパスが存在しません。", title:="GetSelectFolderSpec")
         Exit Function
     End If
 
