@@ -20,7 +20,7 @@ On Error GoTo Err
     End If
 
     '引数 空白確認
-    If dialogTitle = "" Then dialogTitle = "フォルダ 選択"
+    If dialogTitle = "" Then dialogTitle = "フォルダー 選択"
 
     'ダイアログボックス 設定
     With Application.FileDialog(msoFileDialogFolderPicker)
