@@ -8,8 +8,8 @@
     'FullPath(win32):C:\Windows\SysWOW64\scrrun.dll
     'FullPath(win64):C:\Windows\System32\scrrun.dll
     'Major.Minor:1.0
-        'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
         'ProgID:Scripting.FileSystemObject
+        'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
 Public Function HasAttr(ByVal spec As String, ByVal attr As FileAttribute) As Boolean
 On Error GoTo Err
 

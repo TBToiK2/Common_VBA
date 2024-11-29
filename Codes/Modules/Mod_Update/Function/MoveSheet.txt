@@ -8,8 +8,8 @@
     'FullPath(win32):C:\Windows\SysWOW64\scrrun.dll
     'FullPath(win64):C:\Windows\System32\scrrun.dll
     'Major.Minor:1.0
-        'CLSID:{EE09B103-97E0-11CF-978F-00A02463E06F}
         'ProgID:Scripting.Dictionary
+        'CLSID:{EE09B103-97E0-11CF-978F-00A02463E06F}
 Public Function MoveSheet(ByRef moveSh As Object, Optional ByRef before As Variant, Optional ByRef after As Variant) As Object
 On Error GoTo Err
 
