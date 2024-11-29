@@ -1,7 +1,14 @@
+Attribute VB_Name = "Mod_Delete"
+'1.3.0_VBA
+Option Explicit
+'----------------------------------------------------------------------------------------------------
+'2021/11/06 13:48:05
+'----------------------------------------------------------------------------------------------------
+
 '----------------------------------------------------------------------------------------------------
 '2024/11/28 16:42:20
 '----------------------------------------------------------------------------------------------------
-'å‚ç…§è¨­å®š
+'QÆİ’è
 'LibraryName:Scripting
 'LIBID:{420B2830-E718-11CF-893D-00A0C9054228}
     'ReferenceName:Microsoft Scripting Runtime
@@ -15,13 +22,13 @@ On Error GoTo Err
 
     With FSO
 
-        'å±æ€§ æ¯”è¼ƒ(ãƒ“ãƒƒãƒˆæ¼”ç®—)
+        '‘®« ”äŠr(ƒrƒbƒg‰‰Z)
         Dim afterAttr As FileAttribute
         If (GetAttr(spec) And vbDirectory) = vbDirectory Then
 
             Dim attrFolder As Folder
             Set attrFolder = .GetFolder(spec)
-            'ãƒ•ã‚©ãƒ«ãƒ€ãƒ¼å±æ€§ æ¯”è¼ƒ(ãƒ“ãƒƒãƒˆæ¼”ç®—)
+            'ƒtƒHƒ‹ƒ_[‘®« ”äŠr(ƒrƒbƒg‰‰Z)
             afterAttr = attrFolder.Attributes Xor attr
             attrFolder.Attributes = afterAttr
 
@@ -29,7 +36,7 @@ On Error GoTo Err
 
             Dim attrFile As File
             Set attrFile = .GetFile(spec)
-            'ãƒ•ã‚¡ã‚¤ãƒ«å±æ€§ æ¯”è¼ƒ(ãƒ“ãƒƒãƒˆæ¼”ç®—)
+            'ƒtƒ@ƒCƒ‹‘®« ”äŠr(ƒrƒbƒg‰‰Z)
             afterAttr = .GetFile(spec).Attributes Xor attr
             attrFile.Attributes = afterAttr
 
@@ -39,7 +46,7 @@ On Error GoTo Err
 
     Exit Sub
 
-'ã‚¨ãƒ©ãƒ¼å‡¦ç†
+'ƒGƒ‰[ˆ—
 Err:
 
     Call ShowErrMsg(Err.Description, Err.Number, "DeleteAttr")
