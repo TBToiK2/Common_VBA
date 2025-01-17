@@ -1,0 +1,33 @@
+'----------------------------------------------------------------------------------------------------
+'2025/01/17 06:06:07
+'----------------------------------------------------------------------------------------------------
+'参照設定
+'LibraryName:VBIDE
+'LIBID:{0002E157-0000-0000-C000-000000000046}
+    'ReferenceName:Microsoft Visual Basic for Applications Extensibility 5.3
+    'FullPath(win32):C:\Program Files (x86)\Common Files\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB
+    'Major.Minor:5.3
+Public Function GetVBComponent(ByVal VBCName As String, ByVal VBCType As vbext_ComponentType, Optional ByRef parent As VBComponents) As VBComponent
+On Error GoTo Err
+
+    '引数 既定値判定
+    If parent Is Nothing Then Set parent = ThisWorkbook.VBProject.VBComponents
+
+    '全VBComponent 確認
+    Dim VBC As VBComponent
+    For Each VBC In parent
+        If VBC.Name = VBCName And VBC.Type = VBCType Then
+            Set GetVBComponent = VBC
+            Exit Function
+        End If
+    Next VBC
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "GetVBComponent")
+
+End Function
+'----------------------------------------------------------------------------------------------------
