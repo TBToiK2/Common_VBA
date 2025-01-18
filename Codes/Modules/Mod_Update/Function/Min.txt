@@ -1,0 +1,30 @@
+'----------------------------------------------------------------------------------------------------
+'2025/01/18 15:41:51
+'----------------------------------------------------------------------------------------------------
+Public Function Min(ParamArray expressions() As Variant) As Variant
+On Error GoTo Err
+
+    If IsMissing(expressions) Then
+        Call Err.Raise(450)
+    End If
+
+    Dim expression As Variant
+    For Each expression In expressions
+        '日付 シリアル値変換
+        If IsDate(expression) Then expression = CDbl(expression)
+        '数値比較
+        If IsNumeric(expression) And Not IsEmpty(expression) Then
+            Min = IIf(IsEmpty(Min), expression, IIf(Min < expression, Min, expression))
+        End If
+    Next expression
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "Min")
+    Min = Null
+
+End Function
+'----------------------------------------------------------------------------------------------------
