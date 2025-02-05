@@ -14,8 +14,12 @@ On Error GoTo Err
         If Not expression Is Nothing Then Exit Function
     '配列判定
     ElseIf IsArray(expression) Then
+On Error GoTo ArrayErr
         '空判定
-        If Not (Not expression) Then Exit Function
+        expression = UBound(expression)
+        Exit Function
+ArrayErr:
+On Error GoTo Err
     Else
         '空判定
         If CStr(expression) <> "" Then Exit Function
