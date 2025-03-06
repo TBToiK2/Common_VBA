@@ -1,0 +1,25 @@
+'----------------------------------------------------------------------------------------------------
+'2025/03/07 00:03:06
+'----------------------------------------------------------------------------------------------------
+Public Function CreateCollection(ParamArray collItems()) As Collection
+On Error GoTo Err
+
+    If IsMissing(collItems) Then Exit Function
+
+    Dim coll As New Collection
+    Dim collItem As Variant
+    For Each collItem In collItems
+        Call coll.Add(collItem)
+    Next collItem
+
+    Set CreateCollection = coll
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "CreateCollection")
+
+End Function
+'----------------------------------------------------------------------------------------------------
