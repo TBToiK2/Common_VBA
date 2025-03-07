@@ -1,0 +1,40 @@
+'----------------------------------------------------------------------------------------------------
+'2025/03/07 17:00:00
+'----------------------------------------------------------------------------------------------------
+Public Function ConcatColumnsValues(ByVal targetWs As Worksheet, ByVal firstRow As Long, ByVal lastRow As Long, ParamArray targetCols() As Variant) As String()
+On Error GoTo Err
+
+    If IsMissing(targetCols) Then Exit Function
+
+    Dim targetValueArr() As String
+    ReDim targetValueArr(firstRow To lastRow)
+
+    Dim targetRow As Long
+    For targetRow = firstRow To lastRow
+        Dim targetValue As String
+        targetValue = ""
+
+        Dim paramArrIndx As Long
+        For paramArrIndx = 0 To UBound(targetCols, 1)
+            If Not IsArray(targetCols(paramArrIndx)) Then targetCols(paramArrIndx) = Array(targetCols(paramArrIndx))
+
+            Dim targetCol As Variant
+            For Each targetCol In targetCols(paramArrIndx)
+                targetValue = targetValue & targetWs.Cells(targetRow, targetCol).Value
+            Next targetCol
+        Next paramArrIndx
+
+        targetValueArr(targetRow) = targetValue
+    Next targetRow
+
+    ConcatColumnsValues = targetValueArr
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "ConcatColumnsValues")
+
+End Function
+'----------------------------------------------------------------------------------------------------
