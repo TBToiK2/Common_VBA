@@ -1,0 +1,40 @@
+'----------------------------------------------------------------------------------------------------
+'2025/03/07 17:00:00
+'----------------------------------------------------------------------------------------------------
+Public Function ConcatRowsValues(ByVal targetWs As Worksheet, ByVal firstCol As Long, ByVal lastCol As Long, ParamArray targetRows() As Variant) As String()
+On Error GoTo Err
+
+    If IsMissing(targetRows) Then Exit Function
+
+    Dim targetValueArr() As String
+    ReDim targetValueArr(firstCol To lastCol)
+
+    Dim targetCol As Long
+    For targetCol = firstCol To lastCol
+        Dim targetValue As String
+        targetValue = ""
+
+        Dim paramArrIndx As Long
+        For paramArrIndx = 0 To UBound(targetRows, 1)
+            If Not IsArray(targetRows(paramArrIndx)) Then targetRows(paramArrIndx) = Array(targetRows(paramArrIndx))
+
+            Dim targetRow As Variant
+            For Each targetRow In targetRows(paramArrIndx)
+                targetValue = targetValue & targetWs.Cells(targetRow, targetCol).Value
+            Next targetRow
+        Next paramArrIndx
+
+        targetValueArr(targetCol) = targetValue
+    Next targetCol
+
+    ConcatRowsValues = targetValueArr
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "ConcatRowsValues")
+
+End Function
+'----------------------------------------------------------------------------------------------------
