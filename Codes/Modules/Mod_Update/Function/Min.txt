@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2025/01/18 15:41:51
+'2025/03/07 17:00:00
 '----------------------------------------------------------------------------------------------------
 Public Function Min(ParamArray expressions() As Variant) As Variant
 On Error GoTo Err
@@ -8,15 +8,27 @@ On Error GoTo Err
         Call Err.Raise(450)
     End If
 
-    Dim expression As Variant
-    For Each expression In expressions
-        '日付 シリアル値変換
-        If IsDate(expression) Then expression = CDbl(expression)
-        '数値比較
-        If IsNumeric(expression) And Not IsEmpty(expression) Then
-            Min = IIf(IsEmpty(Min), expression, IIf(Min < expression, Min, expression))
-        End If
-    Next expression
+    Dim numericArgFLG As Boolean
+
+    Dim paramArrIndx As Long
+    For paramArrIndx = 0 To UBound(expressions, 1)
+        If Not IsArray(expressions(paramArrIndx)) Then expressions(paramArrIndx) = Array(expressions(paramArrIndx))
+
+        Dim expression As Variant
+        For Each expression In expressions(paramArrIndx)
+            '日付 シリアル値変換
+            If IsDate(expression) Then expression = CDbl(expression)
+            '数値比較
+            If IsNumeric(expression) And Not IsEmpty(expression) Then
+                Min = IIf(IsEmpty(Min), expression, IIf(Min < expression, Min, expression))
+                numericArgFLG = True
+            End If
+        Next expression
+    Next paramArrIndx
+
+    If Not numericArgFLG Then
+        Call Err.Raise(450)
+    End If
 
     Exit Function
 
