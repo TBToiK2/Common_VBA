@@ -1,30 +1,45 @@
 '----------------------------------------------------------------------------------------------------
-'2025/03/07 17:00:00
+'2025/03/11 03:13:02
 '----------------------------------------------------------------------------------------------------
-Public Function ConcatRowsValues(ByVal targetWs As Worksheet, ByVal firstCol As Long, ByVal lastCol As Long, ParamArray targetRows() As Variant) As String()
+Public Function ConcatRowsValues(ByVal targetWs As Worksheet, ByVal firstCol As Long, ByVal lastCol As Long, ByVal separateFLG As Boolean, ParamArray targetRows() As Variant) As String()
 On Error GoTo Err
 
     If IsMissing(targetRows) Then Exit Function
 
+    Dim rowUpper As Long, colUpper As Long
+    If separateFLG Then rowUpper = UBound(targetRows, 1)
+    colUpper = lastCol - firstCol
+
     Dim targetValueArr() As String
-    ReDim targetValueArr(firstCol To lastCol)
+    ReDim targetValueArr(0 To colUpper, 0 To rowUpper)
 
     Dim targetCol As Long
     For targetCol = firstCol To lastCol
-        Dim targetValue As String
+        Dim targetValueArrIndx As Long, targetValue As String
+        targetValueArrIndx = 0
         targetValue = ""
 
         Dim paramArrIndx As Long
         For paramArrIndx = 0 To UBound(targetRows, 1)
-            If Not IsArray(targetRows(paramArrIndx)) Then targetRows(paramArrIndx) = Array(targetRows(paramArrIndx))
+            If IsArray(targetRows(paramArrIndx)) Then
+                Dim targetRow As Variant
+                For Each targetRow In targetRows(paramArrIndx)
+                    targetValue = targetValue & targetWs.Cells(targetRow, targetCol).Value
+                Next targetRow
+            Else
+                targetValue = targetValue & targetWs.Cells(targetRows(paramArrIndx), targetCol).Value
+            End If
 
-            Dim targetRow As Variant
-            For Each targetRow In targetRows(paramArrIndx)
-                targetValue = targetValue & targetWs.Cells(targetRow, targetCol).Value
-            Next targetRow
+            If separateFLG And targetValue <> "" Then
+                targetValueArr(targetCol - firstCol, targetValueArrIndx) = targetValue
+                targetValueArrIndx = targetValueArrIndx + 1
+                targetValue = ""
+            End If
         Next paramArrIndx
 
-        targetValueArr(targetCol) = targetValue
+        If targetValue <> "" Then
+            targetValueArr(targetCol - firstCol, 0) = targetValue
+        End If
     Next targetCol
 
     ConcatRowsValues = targetValueArr
