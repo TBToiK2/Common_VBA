@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/06/28 01:24:56
+'2025/03/12 15:12:20
 '----------------------------------------------------------------------------------------------------
-Public Function GetLastCol(ByRef ws As Worksheet, ByVal targetRow As Long) As Long
+Public Function GetLastCol(ByRef targetWs As Worksheet, ByVal targetRow As Long) As Long
 On Error GoTo Err
 
     If targetRow < 1 Or targetRow > MAX_ROW Then
@@ -9,7 +9,7 @@ On Error GoTo Err
         Exit Function
     End If
 
-    With ws
+    With targetWs
 
         '使用範囲最終列 取得
         With .UsedRange
