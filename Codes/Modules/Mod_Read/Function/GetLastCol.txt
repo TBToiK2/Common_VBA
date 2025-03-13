@@ -1,44 +1,52 @@
 '----------------------------------------------------------------------------------------------------
-'2025/03/12 15:12:20
+'2025/03/13 12:51:10
 '----------------------------------------------------------------------------------------------------
-Public Function GetLastCol(ByRef targetWs As Worksheet, ByVal targetRow As Long) As Long
+Public Function GetLastCol(ByRef targetWs As Worksheet, ParamArray targetRows() As Variant) As Long
 On Error GoTo Err
 
-    If targetRow < 1 Or targetRow > MAX_ROW Then
-        Call ShowErrMsg("指定された値が有効行数の範囲外です。" & "1以上" & MAX_ROW & "以下で入力してください。", title:="GetLastCol")
-        Exit Function
-    End If
+    If IsMissing(targetRows) Then Exit Function
+
+    Dim lastCol As Long
 
     With targetWs
+        Dim usedLastCol As Long
 
         '使用範囲最終列 取得
         With .UsedRange
-            Dim usedLastCol As Long
             usedLastCol = .Columns(.Columns.Count).Column
         End With
 
-        '使用範囲配列 取得
-        Dim usedRangeArr() As Variant
-        With .Range(.Cells(targetRow, 1), .Cells(targetRow, usedLastCol))
-            '配列 判定
-            If IsArray(.Value) Then
-                usedRangeArr = .Value
-            Else
-                ReDim usedRangeArr(1 To 1, 1 To 1)
-                usedRangeArr(1, 1) = .Value
-            End If
-        End With
-
         '最終列 取得
-        Dim lastCol As Long
-        For lastCol = UBound(usedRangeArr, 2) To 1 Step -1
-            If CStr(usedRangeArr(1, lastCol)) <> "" Then
-                GetLastCol = lastCol
-                Exit Function
-            End If
-        Next lastCol
+        Dim paramArrIndx As Long
+        For paramArrIndx = 0 To UBound(targetRows, 1)
+            Dim rangeIndx As Long, usedRowRange As Range, usedCell As Range
 
+            If IsArray(targetRows(paramArrIndx)) Then
+                Dim targetRow As Variant
+                For Each targetRow In targetRows(paramArrIndx)
+                    Set usedRowRange = .Range(.Cells(targetRow, 1), .Cells(targetRow, usedLastCol))
+                    For rangeIndx = usedRowRange.Count To 1 Step -1
+                        Set usedCell = usedRowRange.Item(rangeIndx)
+                        If CStr(usedCell.Value) <> "" And usedCell.Column > lastCol Then
+                            lastCol = usedCell.Column
+                            Exit For
+                        End If
+                    Next rangeIndx
+                Next targetRow
+            Else
+                Set usedRowRange = .Range(.Cells(targetRows(paramArrIndx), 1), .Cells(targetRows(paramArrIndx), usedLastCol))
+                For rangeIndx = usedRowRange.Count To 1 Step -1
+                    Set usedCell = usedRowRange.Item(rangeIndx)
+                    If CStr(usedCell.Value) <> "" And usedCell.Column > lastCol Then
+                        lastCol = usedCell.Column
+                        Exit For
+                    End If
+                Next rangeIndx
+            End If
+        Next paramArrIndx
     End With
+
+    GetLastCol = lastCol
 
     Exit Function
 
