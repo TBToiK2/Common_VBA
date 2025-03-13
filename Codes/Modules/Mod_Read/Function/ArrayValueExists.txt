@@ -1,17 +1,15 @@
 '----------------------------------------------------------------------------------------------------
-'2022/12/06 12:51:33
+'2025/03/13 03:29:12
 '----------------------------------------------------------------------------------------------------
-Public Function ArrayValueExists(ByVal targetArr As Variant, ByVal searchValue As Variant) As Boolean
+Public Function ArrayValueExists(ByRef targetArr As Variant, ByRef searchValue As Variant) As Boolean
 On Error GoTo Err
 
     'ターゲット引数 配列判定
     If Not IsArray(targetArr) Then Exit Function
 
 On Error Resume Next
-
-    'ターゲット引数 空白配列判定
-    If UBound(targetArr) = -1 Then Exit Function
-
+    'ターゲット引数 空判定
+    If LBound(targetArr, 1) > UBound(targetArr, 1) Then Exit Function
 On Error GoTo Err
 
     '検索引数 配列, オブジェクト判定

@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/07/27 00:58:07
+'2025/03/13 03:29:12
 '----------------------------------------------------------------------------------------------------
-Public Function IsBlank(ByVal expression As Variant) As Boolean
+Public Function IsBlank(ByRef expression As Variant) As Boolean
 On Error GoTo Err
 
     'Null判定
@@ -16,8 +16,7 @@ On Error GoTo Err
     ElseIf IsArray(expression) Then
 On Error GoTo ArrayErr
         '空判定
-        expression = UBound(expression)
-        Exit Function
+        If LBound(expression, 1) <= UBound(expression, 1) Then Exit Function
 ArrayErr:
 On Error GoTo Err
     Else
