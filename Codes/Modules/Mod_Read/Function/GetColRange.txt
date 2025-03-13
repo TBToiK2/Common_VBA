@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/07/28 15:47:52
+'2025/03/12 15:12:20
 '----------------------------------------------------------------------------------------------------
-Public Function GetColRange(ByRef ws As Worksheet, ByVal targetCol As Long, Optional ByVal firstRow As Long = 1, Optional ByVal lastRow As Variant, _
+Public Function GetColRange(ByRef targetWs As Worksheet, ByVal targetCol As Long, Optional ByVal firstRow As Long = 1, Optional ByVal lastRow As Variant, _
                             Optional ByVal relativeFLG As Boolean) As Range
 On Error GoTo Err
 
@@ -18,7 +18,7 @@ On Error GoTo Err
     If IsMissing(lastRow) Then
 
         '最終行 取得
-        targetLastRow = GetLastRow(ws, targetCol)
+        targetLastRow = GetLastRow(targetWs, targetCol)
         If firstRow > targetLastRow Then Exit Function
 
     Else
@@ -46,7 +46,7 @@ On Error GoTo Err
 
     End If
 
-    With ws
+    With targetWs
         Set GetColRange = .Range(.Cells(firstRow, targetCol), .Cells(targetLastRow, targetCol))
     End With
 

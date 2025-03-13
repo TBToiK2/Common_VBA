@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2022/07/27 00:58:07
+'2025/03/13 03:29:12
 '----------------------------------------------------------------------------------------------------
-Public Function IsString(ByVal expression As Variant) As Boolean
+Public Function IsString(ByRef expression As Variant) As Boolean
 On Error Resume Next
 
     Dim str As String
