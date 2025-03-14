@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2025/03/13 03:29:12
+'2025/03/14 16:32:20
 '----------------------------------------------------------------------------------------------------
 Public Function ConcatColumnsValues(ByRef targetWs As Worksheet, ByVal firstRow As Long, ByVal lastRow As Long, ByVal separateFLG As Boolean, ParamArray targetCols() As Variant) As String()
 On Error GoTo Err
@@ -11,7 +11,11 @@ On Error GoTo Err
     If separateFLG Then colUpper = UBound(targetCols, 1)
 
     Dim targetValueArr() As String
-    ReDim targetValueArr(0 To rowUpper, 0 To colUpper)
+    If separateFLG Then
+        ReDim targetValueArr(0 To rowUpper, 0 To colUpper)
+    Else
+        ReDim targetValueArr(0 To rowUpper)
+    End If
 
     Dim targetRow As Long
     For targetRow = firstRow To lastRow
@@ -38,7 +42,7 @@ On Error GoTo Err
         Next paramArrIndx
 
         If targetValue <> "" Then
-            targetValueArr(targetRow - firstRow, 0) = targetValue
+            targetValueArr(targetRow - firstRow) = targetValue
         End If
     Next targetRow
 
