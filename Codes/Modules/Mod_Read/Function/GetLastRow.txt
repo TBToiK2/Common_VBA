@@ -31,7 +31,7 @@ On Error GoTo Err
                     Dim usedCell As Range
                     Set usedCell = usedColRange.Item(rangeIndx)
                     If CStr(usedCell.Value) <> "" And usedCell.Row > lastRow Then
-                        lastRow = usedCell.Column
+                        lastRow = usedCell.Row
                         Exit For
                     End If
                 Next rangeIndx
