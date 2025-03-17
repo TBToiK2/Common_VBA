@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2025/03/13 12:51:10
+'2025/03/18 01:16:05
 '----------------------------------------------------------------------------------------------------
 Public Function GetLastCol(ByRef targetWs As Worksheet, ParamArray targetRows() As Variant) As Long
 On Error GoTo Err
@@ -17,33 +17,26 @@ On Error GoTo Err
         End With
 
         '最終列 取得
-        Dim paramArrIndx As Long
-        For paramArrIndx = 0 To UBound(targetRows, 1)
-            Dim rangeIndx As Long, usedRowRange As Range, usedCell As Range
+        Dim targetRowsElm As Variant
+        For Each targetRowsElm In targetRows
+            If Not IsArray(targetRowsElm) Then targetRowsElm = Array(targetRowsElm)
 
-            If IsArray(targetRows(paramArrIndx)) Then
-                Dim targetRow As Variant
-                For Each targetRow In targetRows(paramArrIndx)
-                    Set usedRowRange = .Range(.Cells(targetRow, 1), .Cells(targetRow, usedLastCol))
-                    For rangeIndx = usedRowRange.Count To 1 Step -1
-                        Set usedCell = usedRowRange.Item(rangeIndx)
-                        If CStr(usedCell.Value) <> "" And usedCell.Column > lastCol Then
-                            lastCol = usedCell.Column
-                            Exit For
-                        End If
-                    Next rangeIndx
-                Next targetRow
-            Else
-                Set usedRowRange = .Range(.Cells(targetRows(paramArrIndx), 1), .Cells(targetRows(paramArrIndx), usedLastCol))
+            Dim targetRow As Variant
+            For Each targetRow In targetRowsElm
+                Dim usedRowRange As Range
+                Set usedRowRange = .Range(.Cells(targetRow, 1), .Cells(targetRow, usedLastCol))
+
+                Dim rangeIndx As Long
                 For rangeIndx = usedRowRange.Count To 1 Step -1
+                    Dim usedCell As Range
                     Set usedCell = usedRowRange.Item(rangeIndx)
                     If CStr(usedCell.Value) <> "" And usedCell.Column > lastCol Then
                         lastCol = usedCell.Column
                         Exit For
                     End If
                 Next rangeIndx
-            End If
-        Next paramArrIndx
+            Next targetRow
+        Next targetRowsElm
     End With
 
     GetLastCol = lastCol

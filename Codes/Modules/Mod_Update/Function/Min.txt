@@ -1,21 +1,19 @@
 '----------------------------------------------------------------------------------------------------
-'2025/03/07 17:00:00
+'2025/03/18 01:16:05
 '----------------------------------------------------------------------------------------------------
 Public Function Min(ParamArray expressions() As Variant) As Variant
 On Error GoTo Err
 
-    If IsMissing(expressions) Then
-        Call Err.Raise(450)
-    End If
+    If IsMissing(expressions) Then Call Err.Raise(450)
 
     Dim numericArgFLG As Boolean
 
-    Dim paramArrIndx As Long
-    For paramArrIndx = 0 To UBound(expressions, 1)
-        If Not IsArray(expressions(paramArrIndx)) Then expressions(paramArrIndx) = Array(expressions(paramArrIndx))
+    Dim expressionsElm As Variant
+    For Each expressionsElm In expressions
+        If Not IsArray(expressionsElm) Then expressionsElm = Array(expressionsElm)
 
         Dim expression As Variant
-        For Each expression In expressions(paramArrIndx)
+        For Each expression In expressionsElm
             '日付 シリアル値変換
             If IsDate(expression) Then expression = CDbl(expression)
             '数値比較
@@ -24,11 +22,9 @@ On Error GoTo Err
                 numericArgFLG = True
             End If
         Next expression
-    Next paramArrIndx
+    Next expressionsElm
 
-    If Not numericArgFLG Then
-        Call Err.Raise(450)
-    End If
+    If Not numericArgFLG Then Call Err.Raise(450)
 
     Exit Function
 

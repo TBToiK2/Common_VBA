@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2025/03/13 12:51:10
+'2025/03/18 01:16:05
 '----------------------------------------------------------------------------------------------------
 Public Function GetLastRow(ByRef targetWs As Worksheet, ParamArray targetCols() As Variant) As Long
 On Error GoTo Err
@@ -17,33 +17,26 @@ On Error GoTo Err
         End With
 
         '最終行 取得
-        Dim paramArrIndx As Long
-        For paramArrIndx = 0 To UBound(targetCols, 1)
-            Dim rangeIndx As Long, usedColRange As Range, usedCell As Range
+        Dim targetColsElm As Variant
+        For Each targetColsElm In targetCols
+            If Not IsArray(targetColsElm) Then targetColsElm = Array(targetColsElm)
 
-            If IsArray(targetCols(paramArrIndx)) Then
-                Dim targetCol As Variant
-                For Each targetCol In targetCols(paramArrIndx)
-                    Set usedColRange = .Range(.Cells(1, targetCol), .Cells(usedLastRow, targetCol))
-                    For rangeIndx = usedColRange.Count To 1 Step -1
-                        Set usedCell = usedColRange.Item(rangeIndx)
-                        If CStr(usedCell.Value) <> "" And usedCell.Row > lastRow Then
-                            lastRow = usedCell.Row
-                            Exit For
-                        End If
-                    Next rangeIndx
-                Next targetCol
-            Else
-                Set usedColRange = .Range(.Cells(1, targetCols(paramArrIndx)), .Cells(usedLastRow, targetCols(paramArrIndx)))
+            Dim targetCol As Variant
+            For Each targetCol In targetColsElm
+                Dim usedColRange As Range
+                Set usedColRange = .Range(.Cells(1, targetCol), .Cells(usedLastRow, targetCol))
+
+                Dim rangeIndx As Long
                 For rangeIndx = usedColRange.Count To 1 Step -1
+                    Dim usedCell As Range
                     Set usedCell = usedColRange.Item(rangeIndx)
                     If CStr(usedCell.Value) <> "" And usedCell.Row > lastRow Then
-                        lastRow = usedCell.Row
+                        lastRow = usedCell.Column
                         Exit For
                     End If
                 Next rangeIndx
-            End If
-        Next paramArrIndx
+            Next targetCol
+        Next targetColsElm
     End With
 
     GetLastRow = lastRow
