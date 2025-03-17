@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2024/11/28 16:42:20
+'2025/03/18 01:16:05
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -14,27 +14,21 @@ Public Sub DeleteAttr(ByVal spec As String, ByVal attr As FileAttribute)
 On Error GoTo Err
 
     With FSO
-
         '属性 比較(ビット演算)
         Dim afterAttr As FileAttribute
         If (GetAttr(spec) And vbDirectory) = vbDirectory Then
-
             Dim attrFolder As Folder
             Set attrFolder = .GetFolder(spec)
             'フォルダー属性 比較(ビット演算)
             afterAttr = attrFolder.Attributes Xor attr
             attrFolder.Attributes = afterAttr
-
         Else
-
             Dim attrFile As File
             Set attrFile = .GetFile(spec)
             'ファイル属性 比較(ビット演算)
             afterAttr = .GetFile(spec).Attributes Xor attr
             attrFile.Attributes = afterAttr
-
         End If
-
     End With
 
     Exit Sub

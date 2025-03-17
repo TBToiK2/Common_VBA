@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2024/11/28 16:42:20
+'2025/03/18 01:16:05
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -14,7 +14,6 @@ Public Function GetSearchFileCount(ByVal searchFilePath As String, ByVal searchN
 On Error GoTo Err
 
     With FSO
-
         '引数 解析
         searchNames = Replace(searchNames, ";", ",")
         Dim searchNameArr() As String
@@ -41,7 +40,6 @@ On Error GoTo Err
                         End If
                     Next searchName
                 Next targetFile
-
             'ベース名
             Case enBaseName
                 For Each targetFile In targetFiles
@@ -54,7 +52,6 @@ On Error GoTo Err
                         End If
                     Next searchName
                 Next targetFile
-
             '拡張子名
             Case enExtensionName
                 For Each targetFile In targetFiles
@@ -67,9 +64,7 @@ On Error GoTo Err
                         End If
                     Next searchName
                 Next targetFile
-
         End Select
-
     End With
 
     GetSearchFileCount = fileCount

@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2025/03/14 16:32:20
+'2025/03/18 01:16:05
 '----------------------------------------------------------------------------------------------------
 Public Function ConcatRowsValues(ByRef targetWs As Worksheet, ByVal firstCol As Long, ByVal lastCol As Long, ByVal separateFLG As Boolean, ParamArray targetRows() As Variant) As String()
 On Error GoTo Err
@@ -23,23 +23,21 @@ On Error GoTo Err
         targetValueArrIndx = 0
         targetValue = ""
 
-        Dim paramArrIndx As Long
-        For paramArrIndx = 0 To UBound(targetRows, 1)
-            If IsArray(targetRows(paramArrIndx)) Then
-                Dim targetRow As Variant
-                For Each targetRow In targetRows(paramArrIndx)
-                    targetValue = targetValue & targetWs.Cells(targetRow, targetCol).Value
-                Next targetRow
-            Else
-                targetValue = targetValue & targetWs.Cells(targetRows(paramArrIndx), targetCol).Value
-            End If
+        Dim targetRowsElm As Variant
+        For Each targetRowsElm In targetRows
+            If Not IsArray(targetRowsElm) Then targetRowsElm = Array(targetRowsElm)
+
+            Dim targetRow As Variant
+            For Each targetRow In targetRowsElm
+                targetValue = targetValue & targetWs.Cells(targetRow, targetCol).Value
+            Next targetRow
 
             If separateFLG And targetValue <> "" Then
                 targetValueArr(targetCol - firstCol, targetValueArrIndx) = targetValue
                 targetValueArrIndx = targetValueArrIndx + 1
                 targetValue = ""
             End If
-        Next paramArrIndx
+        Next targetRowsElm
 
         If targetValue <> "" Then
             targetValueArr(targetCol - firstCol) = targetValue

@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/07/27 00:58:07
+'2025/03/18 01:16:05
 '----------------------------------------------------------------------------------------------------
 Public Function GetSheet(ByVal shName As String, Optional ByRef parentWb As Workbook, Optional ByVal shType As XlSheetType, Optional ByVal codeNameFLG As Boolean) As Object
 On Error GoTo Err
@@ -22,7 +22,6 @@ On Error GoTo Err
                     Exit Function
                 End If
             Next sh
-
         Case xlDialogSheet, xlExcel4IntlMacroSheet, xlExcel4MacroSheet
             Set parent = IIf(shType = xlDialogSheet, parentWb.DialogSheets, IIf(shType = xlExcel4IntlMacroSheet, parentWb.Excel4IntlMacroSheets, parentWb.Excel4MacroSheets))
             '全シート 確認
@@ -32,7 +31,6 @@ On Error GoTo Err
                     Exit Function
                 End If
             Next sh
-
         Case Else
             '全シート 確認
             For Each sh In parentWb.Sheets
@@ -41,7 +39,6 @@ On Error GoTo Err
                     Exit Function
                 End If
             Next sh
-
     End Select
 
     Exit Function

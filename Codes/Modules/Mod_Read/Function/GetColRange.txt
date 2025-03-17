@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2025/03/12 15:12:20
+'2025/03/18 01:16:05
 '----------------------------------------------------------------------------------------------------
 Public Function GetColRange(ByRef targetWs As Worksheet, ByVal targetCol As Long, Optional ByVal firstRow As Long = 1, Optional ByVal lastRow As Variant, _
                             Optional ByVal relativeFLG As Boolean) As Range
@@ -16,13 +16,10 @@ On Error GoTo Err
 
     Dim targetLastRow As Long
     If IsMissing(lastRow) Then
-
         '最終行 取得
         targetLastRow = GetLastRow(targetWs, targetCol)
         If firstRow > targetLastRow Then Exit Function
-
     Else
-
         If Not IsNumber(lastRow) Then
             Call ShowErrMsg("lastRowに指定された値は数値ではありません。" & "1以上" & MAX_ROW & "以下で入力してください。", title:="GetColRange")
             Exit Function
@@ -43,7 +40,6 @@ On Error GoTo Err
                 End If
             End If
         End If
-
     End If
 
     With targetWs
