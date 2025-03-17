@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2024/11/28 16:42:20
+'2025/03/18 01:16:05
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -14,20 +14,15 @@ Public Function GetFileName(ByVal fileSpec As String, Optional ByVal enFileNameT
 On Error GoTo Err
 
     With FSO
-
         'ファイル名 取得
         Select Case enFileNameType
             Case enFileName
                 GetFileName = .GetFileName(fileSpec)
-
             Case enBaseName
                 GetFileName = .GetBaseName(fileSpec)
-
             Case enExtensionName
                 GetFileName = .GetExtensionName(fileSpec)
-
         End Select
-
     End With
 
     Exit Function
