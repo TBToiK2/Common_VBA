@@ -1,31 +1,31 @@
 '----------------------------------------------------------------------------------------------------
-'2025/03/13 03:29:12
+'2025/03/19 03:46:22
 '----------------------------------------------------------------------------------------------------
 Public Function ArrayValueExists(ByRef targetArr As Variant, ByRef searchValue As Variant) As Boolean
 On Error GoTo Err
 
-    'ターゲット引数 配列判定
     If Not IsArray(targetArr) Then Exit Function
 
-On Error Resume Next
-    'ターゲット引数 空判定
-    If LBound(targetArr, 1) > UBound(targetArr, 1) Then Exit Function
-On Error GoTo Err
+    Select Case ArrayDimensionsCount(targetArr)
+        Case Is > 1
+            Call ShowErrMsg("2次元配列以上は無効です。", title:="ArrayValueExists")
+            Exit Function
+        Case 0
+            Exit Function
+    End Select
 
-    '検索引数 配列, オブジェクト判定
     If IsArray(searchValue) Or IsObject(searchValue) Then Exit Function
 
-    Dim elmValue As Variant
     '全値 確認
-    For Each elmValue In targetArr
-        '配列, オブジェクト 判定
-        If Not IsArray(elmValue) And Not IsObject(elmValue) Then
-            If searchValue = elmValue Then
+    Dim elm As Variant
+    For Each elm In targetArr
+        If Not IsArray(elm) And Not IsObject(elm) Then
+            If searchValue = elm Then
                 ArrayValueExists = True
                 Exit Function
             End If
         End If
-    Next elmValue
+    Next elm
 
     Exit Function
 

@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2025/03/13 03:29:12
+'2025/03/19 03:46:22
 '----------------------------------------------------------------------------------------------------
 Public Function IsBlank(ByRef expression As Variant) As Boolean
 On Error GoTo Err
@@ -14,12 +14,39 @@ On Error GoTo Err
         If Not expression Is Nothing Then Exit Function
     '配列判定
     ElseIf IsArray(expression) Then
-On Error GoTo ArrayErr
+        Select Case ArrayDimensionsCount(expression)
+            Case Is > 1
+                Call ShowErrMsg("現在この関数では2次元配列以上は無効です。", title:="IsBlank")
+                Exit Function
+            Case 0
+                IsBlank = True
+                Exit Function
+        End Select
+        Select Case VarType(expression) - vbArray
+            Case vbEmpty, vbNull, vbError, vbDataObject, vbUserDefinedType
+                Call ShowErrMsg("現在この関数ではサポートされていない型です。", title:="IsBlank")
+                Exit Function
+        End Select
+
         '空判定
-        If LBound(expression, 1) <= UBound(expression, 1) Then Exit Function
-ArrayErr:
-On Error GoTo Err
+        Dim elm As Variant
+        For Each elm In expression
+            If IsArray(elm) Then
+                '再帰
+                If Not IsBlank(elm) Then Exit Function
+            ElseIf IsObject(elm) Then
+                If Not elm Is Nothing Then Exit Function
+            Else
+                If elm <> Empty Then Exit Function
+            End If
+        Next elm
     Else
+        Select Case VarType(expression)
+            Case vbDataObject, vbUserDefinedType
+                Call ShowErrMsg("現在この関数ではサポートされていない型です。", title:="IsBlank")
+                Exit Function
+        End Select
+
         '空判定
         If CStr(expression) <> "" Then Exit Function
     End If
