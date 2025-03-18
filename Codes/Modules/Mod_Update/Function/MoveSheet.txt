@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2024/11/28 16:42:20
+'2025/03/18 01:16:05
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -42,7 +42,6 @@ On Error GoTo Err
         End If
 
         Exit Function
-
     'after未指定
     ElseIf IsMissing(after) Then
         Select Case TypeName(before)
@@ -56,7 +55,6 @@ On Error GoTo Err
                 Call ShowErrMsg("beforeにはシートオブジェクトを指定してください。", title:="MoveSheet")
                 Exit Function
         End Select
-
     'before未指定
     ElseIf IsMissing(before) Then
         Select Case TypeName(after)
@@ -70,7 +68,6 @@ On Error GoTo Err
                 Call ShowErrMsg("afterにはシートオブジェクトを指定してください。", title:="MoveSheet")
                 Exit Function
         End Select
-
     'before, after指定
     Else
         Call ShowErrMsg("beforeとafterは同時に指定できません。", title:="MoveSheet")

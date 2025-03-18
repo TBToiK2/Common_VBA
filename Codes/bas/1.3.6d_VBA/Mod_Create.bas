@@ -1,3 +1,11 @@
+Attribute VB_Name = "Mod_Create"
+'1.3.6d_VBA
+Option Explicit
+Option Private Module
+'----------------------------------------------------------------------------------------------------
+'2025/03/18 04:27:44
+'----------------------------------------------------------------------------------------------------
+
 '----------------------------------------------------------------------------------------------------
 '2025/03/13 12:51:10
 '----------------------------------------------------------------------------------------------------
@@ -143,16 +151,124 @@ On Error Resume Next
         #End If
 
         Case Else
-            Call ShowErrMsg("æŒ‡å®šã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿åž‹ã¯ç„¡åŠ¹ã§ã™ã€‚", title:="ArrayByType")
+            Call ShowErrMsg("Žw’è‚³‚ê‚½ƒf[ƒ^Œ^‚Í–³Œø‚Å‚·B", title:="ArrayByType")
             Exit Function
     End Select
 
     Exit Function
 
-'ã‚¨ãƒ©ãƒ¼å‡¦ç†
+'ƒGƒ‰[ˆ—
 Err_Convert:
 
-    Call ShowErrMsg("æŒ‡å®šã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿åž‹ã§ã¯ãªã„è¦ç´ ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚", title:="ArrayByType")
+    Call ShowErrMsg("Žw’è‚³‚ê‚½ƒf[ƒ^Œ^‚Å‚Í‚È‚¢—v‘f‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B", title:="ArrayByType")
+
+End Function
+'----------------------------------------------------------------------------------------------------
+
+'----------------------------------------------------------------------------------------------------
+'2025/03/18 01:16:05
+'----------------------------------------------------------------------------------------------------
+'ŽQÆÝ’è
+'LibraryName:Scripting
+'LIBID:{420B2830-E718-11CF-893D-00A0C9054228}
+    'ReferenceName:Microsoft Scripting Runtime
+    'FullPath(win32):C:\Windows\SysWOW64\scrrun.dll
+    'FullPath(win64):C:\Windows\System32\scrrun.dll
+    'Major.Minor:1.0
+        'ProgID:Scripting.FileSystemObject
+        'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
+Public Function BuildPath(ParamArray paths() As Variant) As String
+On Error GoTo Err
+
+    If IsMissing(paths) Then Exit Function
+
+    Dim pathsElm As Variant
+    For Each pathsElm In paths
+        If Not IsArray(pathsElm) Then pathsElm = Array(pathsElm)
+
+        Dim path As Variant
+        For Each path In pathsElm
+            BuildPath = FSO.BuildPath(BuildPath, CStr(path))
+        Next path
+    Next pathsElm
+
+    Exit Function
+
+'ƒGƒ‰[ˆ—
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "BuildPath")
+    BuildPath = ""
+
+End Function
+'----------------------------------------------------------------------------------------------------
+
+'----------------------------------------------------------------------------------------------------
+'2025/03/18 01:16:05
+'----------------------------------------------------------------------------------------------------
+'ŽQÆÝ’è
+'LibraryName:Scripting
+'LIBID:{420B2830-E718-11CF-893D-00A0C9054228}
+    'ReferenceName:Microsoft Scripting Runtime
+    'FullPath(win32):C:\Windows\SysWOW64\scrrun.dll
+    'FullPath(win64):C:\Windows\System32\scrrun.dll
+    'Major.Minor:1.0
+        'ProgID:Scripting.FileSystemObject
+        'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
+Public Function CreateBackupFile(ByVal sourceFileSpec As String, Optional ByVal destinationFilePath As String) As Boolean
+On Error GoTo Err
+
+    If destinationFilePath = "" Then destinationFilePath = ThisWorkbook.Path
+
+    With FSO
+        'ƒtƒ@ƒCƒ‹‘¶Ý Šm”F
+        If Not .FileExists(sourceFileSpec) Then
+            Call ShowErrMsg("Žw’è‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Í‘¶Ý‚µ‚Ü‚¹‚ñB", title:="CreateBackupFile")
+            Exit Function
+        End If
+
+        'ƒtƒ@ƒCƒ‹–¼, Šg’£Žq Žæ“¾
+        Dim baseName As String, extensionName As String
+        baseName = .GetBaseName(sourceFileSpec)
+        extensionName = .GetExtensionName(sourceFileSpec)
+    End With
+
+    Call FileCopy(sourceFileSpec, destinationFilePath & "\" & baseName & "_" & Format(Now, "yyyymmddhhmmss") & "." & extensionName)
+
+    CreateBackupFile = True
+
+    Exit Function
+
+'ƒGƒ‰[ˆ—
+Err:
+
+    Call ShowErrMsg("ƒtƒ@ƒCƒ‹‚ÌƒoƒbƒNƒAƒbƒv‚ÉŽ¸”s‚µ‚Ü‚µ‚½B" & vbCrLf & Err.Description, Err.Number, "CreateBackupFile")
+
+End Function
+'----------------------------------------------------------------------------------------------------
+
+'----------------------------------------------------------------------------------------------------
+'2025/03/07 00:03:06
+'----------------------------------------------------------------------------------------------------
+Public Function CreateCollection(ParamArray collItems()) As Collection
+On Error GoTo Err
+
+    If IsMissing(collItems) Then Exit Function
+
+    Dim coll As New Collection
+    Dim collItem As Variant
+    For Each collItem In collItems
+        Call coll.Add(collItem)
+    Next collItem
+
+    Set CreateCollection = coll
+
+    Exit Function
+
+'ƒGƒ‰[ˆ—
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "CreateCollection")
 
 End Function
 '----------------------------------------------------------------------------------------------------

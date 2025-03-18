@@ -1,0 +1,34 @@
+'----------------------------------------------------------------------------------------------------
+'2025/03/19 03:46:22
+'----------------------------------------------------------------------------------------------------
+Public Function ArrayDimensionsCount(ByRef targetArr As Variant) As Long
+On Error GoTo Err
+
+    ArrayDimensionsCount = -1
+
+    If Not IsArray(targetArr) Then Exit Function
+
+    Dim dimsCount As Long, buf As Long
+
+On Error Resume Next
+    If LBound(targetArr, 1) > UBound(targetArr, 1) Then
+        dimsCount = dimsCount + 1
+    Else
+        Do
+            dimsCount = dimsCount + 1
+            buf = UBound(targetArr, dimsCount)
+        Loop While Err.Number = 0
+    End If
+On Error GoTo Err
+
+    ArrayDimensionsCount = dimsCount - 1
+
+    Exit Function
+
+'エラー処理
+Err:
+
+    Call ShowErrMsg(Err.Description, Err.Number, "ArrayDimensionsCount")
+
+End Function
+'----------------------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2024/11/28 16:42:20
+'2025/03/18 01:16:05
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -10,76 +10,28 @@
     'Major.Minor:1.0
         'ProgID:Scripting.FileSystemObject
         'CLSID:{0D43FE01-F093-11CF-8940-00A0C9054228}
-Public Function BuildPath(ParamArray path() As Variant) As String
-On Error Resume Next
+Public Function BuildPath(ParamArray paths() As Variant) As String
+On Error GoTo Err
 
-    With FSO
+    If IsMissing(paths) Then Exit Function
 
-        Dim maxElement As Long
-        Dim element As Long
-        Dim pathParam As String
-        '第一引数 配列判定
-        If IsArray(path(0)) Then
+    Dim pathsElm As Variant
+    For Each pathsElm In paths
+        If Not IsArray(pathsElm) Then pathsElm = Array(pathsElm)
 
-            Dim pathArr() As Variant
-            pathArr = path(0)
-
-            'パラメータ数 判定
-            maxElement = UBound(pathArr, 1)
-            Select Case maxElement
-                Case Is = -1
-                    Call ShowErrMsg("指定された配列に値が一つも存在しません。", title:="BuildPath")
-
-                Case Is = 0
-                    pathParam = CStr(pathArr(0))
-                    'エラー 判定
-                    If Err.Number > 0 Then GoTo Err_Array
-                    'パス 作成
-                    BuildPath = .BuildPath(pathParam, vbNullString)
-
-                Case Else
-                    For element = 0 To maxElement
-                        pathParam = CStr(pathArr(element))
-                        'エラー 判定
-                        If Err.Number > 0 Then GoTo Err_Array
-                        'パス 作成
-                        BuildPath = .BuildPath(BuildPath, pathParam)
-                    Next element
-
-            End Select
-
-        Else
-
-            'パラメータ数 判定
-            maxElement = UBound(path, 1)
-            Select Case maxElement
-                Case Is = 0
-                    'パス 作成
-                    BuildPath = .BuildPath(path(0), vbNullString)
-
-                Case Else
-                    For element = 0 To maxElement
-                        pathParam = CStr(path(element))
-                        'エラー 判定
-                        If Err.Number > 0 Then GoTo Err_Array
-                        'パス 作成
-                        BuildPath = .BuildPath(BuildPath, pathParam)
-                    Next element
-
-            End Select
-
-        End If
-
-    End With
+        Dim path As Variant
+        For Each path In pathsElm
+            BuildPath = FSO.BuildPath(BuildPath, CStr(path))
+        Next path
+    Next pathsElm
 
     Exit Function
 
 'エラー処理
-Err_Array:
+Err:
 
-    Call ShowErrMsg("指定された配列内に文字列に変換できない要素が含まれています。", title:="BuildPath")
-
-    BuildPath = vbNullString
+    Call ShowErrMsg(Err.Description, Err.Number, "BuildPath")
+    BuildPath = ""
 
 End Function
 '----------------------------------------------------------------------------------------------------

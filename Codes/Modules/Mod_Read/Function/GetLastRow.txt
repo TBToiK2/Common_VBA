@@ -1,44 +1,45 @@
 '----------------------------------------------------------------------------------------------------
-'2025/03/12 15:12:20
+'2025/03/18 01:16:05
 '----------------------------------------------------------------------------------------------------
-Public Function GetLastRow(ByRef targetWs As Worksheet, ByVal targetCol As Long) As Long
+Public Function GetLastRow(ByRef targetWs As Worksheet, ParamArray targetCols() As Variant) As Long
 On Error GoTo Err
 
-    If targetCol < 1 Or targetCol > MAX_COL Then
-        Call ShowErrMsg("指定された値が有効列数の範囲外です。" & "1以上" & MAX_COL & "以下で入力してください。", title:="GetLastRow")
-        Exit Function
-    End If
+    If IsMissing(targetCols) Then Exit Function
+
+    Dim lastRow As Long
 
     With targetWs
+        Dim usedLastRow As Long
 
         '使用範囲最終行 取得
         With .UsedRange
-            Dim usedLastRow As Long
             usedLastRow = .Rows(.Rows.Count).Row
         End With
 
-        '使用範囲配列 取得
-        Dim usedRangeArr() As Variant
-        With .Range(.Cells(1, targetCol), .Cells(usedLastRow, targetCol))
-            '配列 判定
-            If IsArray(.Value) Then
-                usedRangeArr = .Value
-            Else
-                ReDim usedRangeArr(1 To 1, 1 To 1)
-                usedRangeArr(1, 1) = .Value
-            End If
-        End With
-
         '最終行 取得
-        Dim lastRow As Long
-        For lastRow = UBound(usedRangeArr, 1) To 1 Step -1
-            If CStr(usedRangeArr(lastRow, 1)) <> "" Then
-                GetLastRow = lastRow
-                Exit Function
-            End If
-        Next lastRow
+        Dim targetColsElm As Variant
+        For Each targetColsElm In targetCols
+            If Not IsArray(targetColsElm) Then targetColsElm = Array(targetColsElm)
 
+            Dim targetCol As Variant
+            For Each targetCol In targetColsElm
+                Dim usedColRange As Range
+                Set usedColRange = .Range(.Cells(1, targetCol), .Cells(usedLastRow, targetCol))
+
+                Dim rangeIndx As Long
+                For rangeIndx = usedColRange.Count To 1 Step -1
+                    Dim usedCell As Range
+                    Set usedCell = usedColRange.Item(rangeIndx)
+                    If CStr(usedCell.Value) <> "" And usedCell.Row > lastRow Then
+                        lastRow = usedCell.Row
+                        Exit For
+                    End If
+                Next rangeIndx
+            Next targetCol
+        Next targetColsElm
     End With
+
+    GetLastRow = lastRow
 
     Exit Function
 

@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2024/11/28 16:42:20
+'2025/03/18 01:16:05
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:Scripting
@@ -14,19 +14,14 @@ Public Function HasAttr(ByVal spec As String, ByVal attr As FileAttribute) As Bo
 On Error GoTo Err
 
     With FSO
-
         '属性 比較(ビット演算)
         If (GetAttr(spec) And vbDirectory) = vbDirectory Then
-
             'フォルダー属性 比較(ビット演算)
             HasAttr = (.GetFolder(spec).Attributes And attr) = attr
-
         Else
             'ファイル属性 比較(ビット演算)
             HasAttr = (.GetFile(spec).Attributes And attr) = attr
-
         End If
-
     End With
 
     Exit Function
