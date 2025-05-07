@@ -1,7 +1,7 @@
 '----------------------------------------------------------------------------------------------------
-'2025/03/19 03:46:22
+'2025/04/08 16:18:57
 '----------------------------------------------------------------------------------------------------
-Public Function ConvTrueFalse(ByVal expression As String, ByRef return As Boolean) As Boolean
+Public Function ConvTrueFalse(ByVal expression As String, ByRef result As Boolean) As Boolean
 On Error GoTo Err
 
     '真偽判定用配列 作成
@@ -13,7 +13,7 @@ On Error GoTo Err
     'True 判定
     For Each t In trueArr
         If StrComp(expression, t, vbTextCompare) = 0 Then
-            return = True
+            result = True
             ConvTrueFalse = True
             Exit Function
         End If
@@ -22,7 +22,7 @@ On Error GoTo Err
     Dim f As Variant
     For Each f In falseArr
         If StrComp(expression, f, vbTextCompare) = 0 Then
-            return = False
+            result = False
             ConvTrueFalse = True
             Exit Function
         End If

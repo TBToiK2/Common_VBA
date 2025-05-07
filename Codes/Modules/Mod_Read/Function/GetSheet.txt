@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2025/03/18 01:16:05
+'2025/05/07 22:59:18
 '----------------------------------------------------------------------------------------------------
 Public Function GetSheet(ByVal shName As String, Optional ByRef parentWb As Workbook, Optional ByVal shType As XlSheetType, Optional ByVal codeNameFLG As Boolean) As Object
 On Error GoTo Err
@@ -7,39 +7,56 @@ On Error GoTo Err
     '引数 既定値判定
     If parentWb Is Nothing Then Set parentWb = ThisWorkbook
 
-    Dim parent As Sheets
+    '全シート 確認
     Dim sh As Object
-    Dim targetName As String
-    'シートタイプ 判定
-    Select Case shType
-        Case xlChart, xlWorksheet
-            Set parent = IIf(shType = xlChart, parentWb.Charts, parentWb.Worksheets)
-            '全シート 確認
-            For Each sh In parent
-                targetName = IIf(codeNameFLG, sh.CodeName, sh.Name)
-                If targetName = shName Then
-                    Set GetSheet = sh
-                    Exit Function
-                End If
-            Next sh
-        Case xlDialogSheet, xlExcel4IntlMacroSheet, xlExcel4MacroSheet
-            Set parent = IIf(shType = xlDialogSheet, parentWb.DialogSheets, IIf(shType = xlExcel4IntlMacroSheet, parentWb.Excel4IntlMacroSheets, parentWb.Excel4MacroSheets))
-            '全シート 確認
-            For Each sh In parent
-                If sh.Name = shName Then
-                    Set GetSheet = sh
-                    Exit Function
-                End If
-            Next sh
-        Case Else
-            '全シート 確認
-            For Each sh In parentWb.Sheets
-                If sh.Name = shName Then
-                    Set GetSheet = sh
-                    Exit Function
-                End If
-            Next sh
-    End Select
+    For Each sh In parentWb.Sheets
+        Dim errNo As Long
+        errNo = 0
+
+        If shType <> 0 Then
+On Error Resume Next
+            Dim shTypeBuf As XlSheetType
+            shTypeBuf = sh.Type
+            errNo = Err.Number
+On Error GoTo Err
+            'エラー判定
+            If errNo <> 0 Then
+                Call Err.Clear
+                GoTo Skip_Sheet
+            End If
+
+            'シートタイプ 判定
+            If shType <> shTypeBuf Then GoTo Skip_Sheet
+        End If
+
+        If codeNameFLG Then
+On Error Resume Next
+            Dim codeNameBuf As String
+            codeNameBuf = sh.CodeName
+            errNo = Err.Number
+On Error GoTo Err
+            'エラー 判定
+            If errNo <> 0 Then
+                Call Err.Clear
+                GoTo Skip_Sheet
+            End If
+
+            'CodeName 判定
+            If shName = codeNameBuf Then
+                Set GetSheet = sh
+                Exit Function
+            End If
+        Else
+            'Name 判定
+            If shName = sh.Name Then
+                Set GetSheet = sh
+                Exit Function
+            End If
+        End If
+
+Skip_Sheet:
+
+    Next sh
 
     Exit Function
 

@@ -1,5 +1,5 @@
 '----------------------------------------------------------------------------------------------------
-'2022/12/05 10:56:29
+'2025/05/07 17:16:52
 '----------------------------------------------------------------------------------------------------
 '参照設定
 'LibraryName:VBIDE
@@ -7,13 +7,13 @@
     'ReferenceName:Microsoft Visual Basic for Applications Extensibility 5.3
     'FullPath(win32):C:\Program Files (x86)\Common Files\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB
     'Major.Minor:5.3
-Public Sub CopyVBComponent(ByRef source As VBProject, ByRef destination As VBProject, ByVal VBCType As vbext_ComponentType, _
-                           ByVal sourceVBCName As String, Optional ByVal destinationVBCName As String, Optional ByVal overwrite As Boolean)
+Public Function CopyVBComponent(ByRef source As VBProject, ByRef destination As VBProject, ByVal VBCType As vbext_ComponentType, _
+                           ByVal sourceVBCName As String, Optional ByVal destinationVBCName As String, Optional ByVal overwrite As Boolean) As Boolean
 On Error GoTo Err
 
     If source Is destination Then
         Call ShowErrMsg("コピー元とコピー先のVBProjectオブジェクトが同じです。", title:="CopyVBComponent")
-        Exit Sub
+        Exit Function
     End If
 
     'コピー先VBComponents名 空白確認
@@ -22,7 +22,7 @@ On Error GoTo Err
     'コピー元VBComponents 存在確認
     If Not HasVBComponent(sourceVBCName, VBCType, source.VBComponents) Then
         Call ShowErrMsg("コピー元に指定したVBComponent名が存在しません。", title:="CopyVBComponent")
-        Exit Sub
+        Exit Function
     End If
 
     'コピー先VBComponents 存在確認
@@ -30,14 +30,14 @@ On Error GoTo Err
     If HasVBComponent(destinationVBCName, VBCType, destination.VBComponents) Then
         If Not overwrite Then
             Call ShowErrMsg("指定したVBComponent名は既にコピー先に存在しています。", title:="CopyVBComponent")
-            Exit Sub
+            Exit Function
         End If
 
         Set destinationVBC = destination.VBComponents(destinationVBCName)
     Else
         If VBCType = vbext_ct_ActiveXDesigner Or VBCType = vbext_ct_Document Then
             Call ShowErrMsg("指定した型のVBComponentオブジェクトは上書きでのみコピー可能です。", title:="CopyVBComponent")
-            Exit Sub
+            Exit Function
         End If
 
         Set destinationVBC = destination.VBComponents.Add(VBCType)
@@ -47,19 +47,21 @@ On Error GoTo Err
     'VBComponent CodeModuleコピー
     Dim moduleCode As String
     With source.VBComponents(sourceVBCName).CodeModule
-        moduleCode = .Lines(1, .CountOfLines)
+        If .CountOfLines > 0 Then moduleCode = .Lines(1, .CountOfLines)
     End With
     With destinationVBC.CodeModule
-        Call .DeleteLines(1, .CountOfLines)
-        Call .AddFromString(moduleCode)
+        If .CountOfLines > 0 Then Call .DeleteLines(1, .CountOfLines)
+        If moduleCode <> "" Then Call .AddFromString(moduleCode)
     End With
 
-    Exit Sub
+    CopyVBComponent = True
+
+    Exit Function
 
 'エラー処理
 Err:
 
     Call ShowErrMsg(Err.Description, Err.Number, "CopyVBComponent")
 
-End Sub
+End Function
 '----------------------------------------------------------------------------------------------------
