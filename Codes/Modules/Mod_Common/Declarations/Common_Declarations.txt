@@ -7,6 +7,8 @@ Public Const MIN_ROW = 1
 Public Const MAX_ROW = 1048576
 Public Const MIN_COL = 1
 Public Const MAX_COL = 16384
+Public Const MIN_DATE = #1/1/100#
+Public Const MAX_DATE = #12/31/9999#
 Public FSO As New FileSystemObject
 Public REG As New RegExp
 '----------------------------------------------------------------------------------------------------
